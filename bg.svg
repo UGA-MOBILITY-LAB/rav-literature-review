@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMax slice" role="img" aria-hidden="true">
+  <!-- generative scenario grid (top): scenarios being sampled -->
+  <g fill="#BA0C2F" fill-opacity="0.05">
+    <circle cx="180" cy="70" r="2.4"/><circle cx="300" cy="70" r="2.4"/><circle cx="420" cy="70" r="2.4"/><circle cx="540" cy="70" r="2.4"/><circle cx="660" cy="70" r="2.4"/><circle cx="780" cy="70" r="2.4"/><circle cx="900" cy="70" r="2.4"/><circle cx="1020" cy="70" r="2.4"/><circle cx="1140" cy="70" r="2.4"/><circle cx="1260" cy="70" r="2.4"/><circle cx="1380" cy="70" r="2.4"/>
+    <circle cx="180" cy="150" r="2.4"/><circle cx="300" cy="150" r="2.4"/><circle cx="420" cy="150" r="2.4"/><circle cx="540" cy="150" r="2.4"/><circle cx="660" cy="150" r="2.4"/><circle cx="780" cy="150" r="2.4"/><circle cx="900" cy="150" r="2.4"/><circle cx="1020" cy="150" r="2.4"/><circle cx="1140" cy="150" r="2.4"/><circle cx="1260" cy="150" r="2.4"/><circle cx="1380" cy="150" r="2.4"/>
+    <circle cx="180" cy="230" r="2.4"/><circle cx="300" cy="230" r="2.4"/><circle cx="420" cy="230" r="2.4"/><circle cx="540" cy="230" r="2.4"/><circle cx="660" cy="230" r="2.4"/><circle cx="780" cy="230" r="2.4"/><circle cx="900" cy="230" r="2.4"/><circle cx="1020" cy="230" r="2.4"/><circle cx="1140" cy="230" r="2.4"/><circle cx="1260" cy="230" r="2.4"/><circle cx="1380" cy="230" r="2.4"/>
+    <circle cx="180" cy="310" r="2.4"/><circle cx="300" cy="310" r="2.4"/><circle cx="420" cy="310" r="2.4"/><circle cx="540" cy="310" r="2.4"/><circle cx="660" cy="310" r="2.4"/><circle cx="780" cy="310" r="2.4"/><circle cx="900" cy="310" r="2.4"/><circle cx="1020" cy="310" r="2.4"/><circle cx="1140" cy="310" r="2.4"/><circle cx="1260" cy="310" r="2.4"/><circle cx="1380" cy="310" r="2.4"/>
+  </g>
+  <!-- a few generated "scenario tiles" highlighted in the grid -->
+  <g fill="none" stroke="#BA0C2F" stroke-opacity="0.10" stroke-width="2">
+    <rect x="528" y="58" width="24" height="24" rx="4"/>
+    <rect x="888" y="138" width="24" height="24" rx="4"/>
+    <rect x="1248" y="218" width="24" height="24" rx="4"/>
+  </g>
+  <!-- street scene line-art -->
+  <g fill="none" stroke="#BA0C2F" stroke-opacity="0.09" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="120" y1="430" x2="1480" y2="430" stroke-opacity="0.05"/>
+    <!-- building silhouettes flanking the street -->
+    <path d="M 150 430 V 300 H 210 V 360 H 250 V 430"/>
+    <path d="M 270 430 V 340 H 330 V 430"/>
+    <path d="M 1350 430 V 290 H 1410 V 350 H 1450 V 430"/>
+    <path d="M 1280 430 V 350 H 1330 V 430"/>
+    <!-- road edges receding to vanishing point (800,434) -->
+    <path d="M 410 900 L 772 436"/>
+    <path d="M 1190 900 L 828 436"/>
+    <!-- dashed centre line, segments shrinking toward the horizon -->
+    <path d="M 800 880 L 800 812" stroke-width="5"/>
+    <path d="M 800 742 L 800 690" stroke-width="4"/>
+    <path d="M 800 638 L 800 600" stroke-width="3.4"/>
+    <path d="M 800 560 L 800 534" stroke-width="2.8"/>
+    <path d="M 800 504 L 800 486" stroke-width="2.2"/>
+    <path d="M 800 470 L 800 458" stroke-width="1.8"/>
+  </g>
+  <!-- ego vehicle (side view) with perception fan -->
+  <g fill="none" stroke="#BA0C2F" stroke-opacity="0.12" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M 470 720 q 8 -48 64 -56 l 96 -6 q 34 -2 58 24 l 44 36 q 40 6 60 26 q 12 12 12 30 l 0 8 q 0 8 -10 8 l -402 0 q -10 0 -10 -8 l 0 -52 q 0 -22 26 -38 z"/>
+    <path d="M 556 666 l 78 -4 q 22 -1 38 17 l 30 26 l -176 0 q 0 -32 30 -39 z"/>
+    <circle cx="556" cy="784" r="30"/>
+    <circle cx="744" cy="784" r="30"/>
+  </g>
+  <!-- perception / sensing fan sweeping forward -->
+  <g fill="none" stroke="#BA0C2F" stroke-opacity="0.08" stroke-width="1.8" stroke-linecap="round">
+    <path d="M 800 690 L 1020 560"/>
+    <path d="M 800 690 L 1060 628"/>
+    <path d="M 800 690 L 1070 700"/>
+    <path d="M 800 690 L 1050 772"/>
+    <path d="M 1004 566 A 270 270 0 0 1 1042 778" stroke-opacity="0.06"/>
+  </g>
+  <!-- a second, generated vehicle further up the road -->
+  <g fill="none" stroke="#BA0C2F" stroke-opacity="0.08" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M 752 548 q 4 -20 28 -23 l 44 -3 q 16 -1 26 11 l 20 16 q 18 3 26 12 q 6 6 6 14 l 0 4 q 0 4 -5 4 l -182 0 q -5 0 -5 -4 l 0 -24 q 0 -10 11 -17 z" stroke-dasharray="5 4"/>
+    <circle cx="792" cy="576" r="13"/><circle cx="876" cy="576" r="13"/>
+  </g>
+</svg>

@@ -3,661 +3,216 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Rural Autonomous Vehicles — TRAVELS Literature Review</title>
+<title>Rural Autonomous Vehicles &mdash; TRAVELS Literature Review</title>
 <meta name="description" content="Companion website for the TRAVELS project literature review: linking Rural Autonomous Vehicle (RAV) challenges to research evidence and AV pilots.">
-<style>
-:root{
-  --bg:#faf9f7; --card:#ffffff; --ink:#1a1f2b; --muted:#5b6472;
-  --red:#ba0c2f; --red-dark:#8d0a24; --line:#e6e2da; --soft:#f3f0ea;
-  --c1:#0e5a8a; --c2:#2e7fb5; --c3:#ba0c2f; --c4:#e0742a; --c5:#7a2b8f; --c6:#3d7a37;
-  --good:#3d7a37; --mid:#d99114; --gap:#ba0c2f;
-  --serif:Georgia,'Times New Roman',serif;
-  --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
-}
-*{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.6;font-size:16px}
-a{color:var(--red);text-decoration:none}
-a:hover{text-decoration:underline}
-
-/* Nav */
-nav{position:sticky;top:0;z-index:50;background:rgba(250,249,247,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
-.nav-inner{max-width:1120px;margin:0 auto;padding:10px 20px;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
-.brand{font-family:var(--serif);font-weight:bold;font-size:17px;display:flex;align-items:center;gap:9px}
-.brand .dot{width:12px;height:12px;border-radius:3px;background:var(--red)}
-.nav-links{display:flex;gap:4px;flex-wrap:wrap;margin-left:auto}
-.nav-links a{font-size:13.5px;color:var(--muted);padding:6px 10px;border-radius:6px}
-.nav-links a:hover{background:var(--soft);color:var(--ink);text-decoration:none}
-
-main{max-width:1120px;margin:0 auto;padding:0 20px}
-section{padding:52px 0 8px;scroll-margin-top:64px}
-h1,h2,h3{font-family:var(--serif);line-height:1.25}
-h2{font-size:29px;margin:0 0 6px}
-.kicker{text-transform:uppercase;letter-spacing:2px;font-size:12px;color:var(--red);font-weight:600;margin-bottom:8px}
-.lede{color:var(--muted);max-width:780px;margin:4px 0 20px;font-size:15px}
-
-/* Hero */
-header.hero{border-bottom:1px solid var(--line);background:linear-gradient(180deg,#fff 0%,var(--bg) 100%)}
-.hero-inner{max-width:1120px;margin:0 auto;padding:64px 20px 44px}
-.hero .kicker{margin-bottom:12px}
-.hero h1{font-size:clamp(32px,5vw,50px);margin:0 0 12px;letter-spacing:-.5px}
-.hero h1 em{font-style:normal;color:var(--red)}
-.hero .sub{font-size:clamp(16px,2vw,20px);color:var(--muted);font-family:var(--serif);max-width:820px;margin:0 0 14px}
-.hero .team{color:var(--muted);font-size:14.5px;margin-bottom:24px}
-.stats{display:flex;gap:12px;flex-wrap:wrap}
-.stat{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:11px 18px;min-width:112px}
-.stat b{display:block;font-size:25px;font-family:var(--serif);color:var(--red)}
-.stat span{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
-
-/* Panels */
-.panel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin:18px 0}
-.panel svg{width:100%;height:auto;display:block}
-.fw-node{cursor:pointer}
-.fw-node rect{transition:all .15s}
-.fw-node:hover rect,.fw-node.active rect{stroke-width:2.5;filter:brightness(1.04)}
-.desc{min-height:66px;border-top:1px dashed var(--line);margin-top:12px;padding:11px 6px 2px;font-size:14px;color:var(--muted)}
-.desc b{color:var(--ink)}
-
-/* Evidence map */
-.emap{display:grid;grid-template-columns:210px 1fr;gap:0;border:1px solid var(--line);border-radius:14px;background:var(--card);overflow:hidden}
-.emap .mrow{display:contents}
-.emap .mlab{padding:14px 16px;border-bottom:1px solid var(--line);font-size:13.5px;font-weight:700;display:flex;align-items:center;gap:8px}
-.emap .mlab .sw{width:10px;height:10px;border-radius:3px;flex-shrink:0}
-.emap .mcells{padding:10px 14px;border-bottom:1px solid var(--line);display:flex;flex-wrap:wrap;gap:7px;align-items:center}
-.emap .mrow:last-child .mlab,.emap .mrow:last-child .mcells{border-bottom:none}
-.pill{border-radius:20px;padding:4px 13px;font-size:12.5px;cursor:pointer;border:1.5px solid;background:#fff;transition:all .12s;white-space:nowrap}
-.pill.g{color:var(--good);border-color:var(--good)}
-.pill.m{color:var(--mid);border-color:var(--mid)}
-.pill.r{color:var(--gap);border-color:var(--gap)}
-.pill:hover,.pill.on{color:#fff}
-.pill.g:hover,.pill.g.on{background:var(--good)}
-.pill.m:hover,.pill.m.on{background:var(--mid)}
-.pill.r:hover,.pill.r.on{background:var(--gap)}
-.legend{display:flex;gap:18px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin:12px 2px 4px}
-.legend i{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:6px;vertical-align:-1px}
-.emap-detail{border:1px solid var(--line);border-radius:12px;background:var(--soft);padding:14px 18px;margin-top:12px;font-size:14px;min-height:84px}
-.emap-detail .tag{display:inline-block;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;border-radius:4px;padding:1px 8px;color:#fff;margin-right:8px}
-.emap-detail .row{margin:6px 0}
-.emap-detail .row b{color:var(--ink)}
-@media(max-width:720px){.emap{grid-template-columns:1fr}.emap .mlab{border-bottom:none;padding-bottom:2px}}
-
-/* Charts */
-.charts{display:grid;grid-template-columns:1.1fr 1fr .8fr;gap:16px}
-@media(max-width:900px){.charts{grid-template-columns:1fr}}
-.chart-card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
-.chart-card h3{font-size:15px;margin:0 0 12px;font-family:var(--sans)}
-.bar-row{display:flex;align-items:center;gap:9px;margin:7px 0;font-size:12.5px}
-.bar-row .lbl{width:150px;text-align:right;color:var(--muted);flex-shrink:0;cursor:pointer}
-.bar-row .lbl:hover{color:var(--ink)}
-.bar-row .bar{height:19px;border-radius:4px;min-width:2px;transition:width .6s ease}
-.bar-row .val{color:var(--muted);font-weight:600}
-.year-chart{display:flex;align-items:flex-end;gap:4px;height:150px;padding-top:8px}
-.ycol{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:4px;min-width:0}
-.ycol .yb{width:100%;background:var(--c1);border-radius:3px 3px 0 0;transition:height .6s ease}
-.ycol .yl{font-size:10px;color:var(--muted);transform:rotate(-45deg);margin-top:6px;white-space:nowrap}
-.ycol .yv{font-size:10.5px;color:var(--muted)}
-.type-rows .bar{background:var(--c5)}
-
-/* Explorer */
-.explorer-tools{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:14px 0 4px}
-.explorer-tools input[type=search]{flex:1;min-width:200px;padding:9px 14px;border:1px solid var(--line);border-radius:9px;font-size:14px;background:var(--card)}
-.explorer-tools input[type=search]:focus{outline:2px solid var(--red);border-color:transparent}
-.chips{display:flex;gap:6px;flex-wrap:wrap}
-.chip{border:1px solid var(--line);background:var(--card);border-radius:20px;padding:4px 12px;font-size:12.5px;color:var(--muted);cursor:pointer}
-.chip.on{background:var(--ink);border-color:var(--ink);color:#fff}
-.reset-btn{border:1px solid var(--line);background:var(--card);border-radius:8px;padding:6px 14px;font-size:13px;color:var(--muted);cursor:pointer}
-.reset-btn:hover{border-color:var(--red);color:var(--red)}
-.explorer-note{font-size:12.5px;color:var(--muted);font-style:italic;margin:8px 2px}
-#scatter .pt{cursor:pointer;transition:opacity .15s}
-#scatter .pt.dim{opacity:.13}
-#scatter .pt.hot{stroke:#1a1f2b;stroke-width:2}
-.shape-legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12.5px;color:var(--muted);margin-top:8px;align-items:center}
-.shape-legend svg{width:14px;height:14px;vertical-align:-2px;margin-right:4px}
-#exp-count{font-size:13px;color:var(--muted);margin:6px 2px}
-
-/* Tooltip */
-#tooltip{position:fixed;z-index:99;max-width:400px;background:var(--ink);color:#f4f2ee;font-size:12.5px;line-height:1.5;padding:10px 13px;border-radius:9px;pointer-events:none;opacity:0;transition:opacity .12s;box-shadow:0 8px 24px rgba(0,0,0,.28)}
-#tooltip .tt-mods{color:#c9c4bb;font-size:11.5px;margin-top:4px}
-#tooltip .tt-open{color:#f4b8c4;font-size:11px;margin-top:4px;font-style:italic}
-
-/* Pilots strip */
-.pilots{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-@media(max-width:820px){.pilots{grid-template-columns:1fr}}
-.pilot-card{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--c6);border-radius:12px;padding:16px 20px;font-size:14px}
-.pilot-card h3{margin:0 0 2px;font-size:17px}
-.pilot-card .loc{color:var(--muted);font-size:13px;margin-bottom:8px}
-.pilot-card .facts{display:flex;gap:14px;flex-wrap:wrap;margin-top:6px}
-.pilot-card .facts span{background:var(--soft);border:1px solid var(--line);border-radius:6px;padding:3px 10px;font-size:12.5px;color:var(--muted)}
-
-/* References */
-ol.reflist{list-style:none;margin:10px 0 0;padding:0;columns:1}
-ol.reflist li{display:flex;gap:10px;padding:9px 10px;border-bottom:1px solid var(--line);font-size:13.5px;scroll-margin-top:80px;border-radius:8px}
-ol.reflist li .no{color:var(--red);font-weight:700;min-width:34px;font-family:var(--serif)}
-ol.reflist li.hl{background:#fdf3e3}
-.ref-links a{font-size:12.5px;margin-right:10px;white-space:nowrap}
-.ref-tags span{display:inline-block;font-size:10.5px;background:var(--soft);border:1px solid var(--line);color:var(--muted);border-radius:4px;padding:0 7px;margin:3px 4px 0 0}
-.cite-n{display:inline-block;background:var(--soft);border:1px solid var(--line);border-radius:5px;padding:0 5px;font-size:12px;color:var(--red);cursor:pointer;font-weight:600}
-.cite-n:hover{background:var(--red);color:#fff;border-color:var(--red)}
-
-/* Cite */
-.citebox{background:var(--ink);color:#eceae5;border-radius:12px;padding:20px 24px;font-family:var(--serif);font-size:15.5px;line-height:1.7}
-.copy-btn{margin-top:12px;background:var(--red);border:none;color:#fff;font-size:14px;padding:9px 18px;border-radius:8px;cursor:pointer}
-.copy-btn:hover{background:var(--red-dark)}
-
-footer{border-top:1px solid var(--line);margin-top:64px;padding:24px 20px 38px;color:var(--muted);font-size:13px;text-align:center}
-</style>
+<link rel="stylesheet" href="style.css?v=1">
 </head>
 <body>
-<div id="tooltip" role="tooltip"></div>
+<a class="skip-link" href="#main">Skip to content</a>
 
-<nav>
-  <div class="nav-inner">
-    <span class="brand"><span class="dot"></span>UGA Mobility Lab · TRAVELS</span>
-    <div class="nav-links">
-      <a href="#framework">Framework</a>
-      <a href="#evidence">Evidence Map</a>
-      <a href="#statistics">Statistics</a>
-      <a href="#explorer">Explorer</a>
-      <a href="#pilots">Pilots</a>
-      <a href="#references">References</a>
-      <a href="#cite">Cite</a>
-    </div>
-  </div>
-</nav>
-
-<header class="hero">
-  <div class="hero-inner">
-    <div class="kicker">TRAVELS Project · Literature Review Companion</div>
-    <h1>Rural Autonomous Vehicles: <em>From Challenges to Evidence</em></h1>
-    <p class="sub">Mapping every RAV challenge to its research evidence.</p>
-    <p class="team">TRAVELS Project Team · College of Engineering, University of Georgia · June 2026</p>
-    <div class="stats">
-      <div class="stat"><b>45</b><span>references</span></div>
-      <div class="stat"><b>6</b><span>modules</span></div>
-      <div class="stat"><b>27</b><span>sub-themes</span></div>
-      <div class="stat"><b>2</b><span>field pilots</span></div>
-      <div class="stat"><b>2018–2026</b><span>coverage</span></div>
-    </div>
+<header class="site-header">
+  <div class="container nav-row">
+    <a class="wordmark" href="#overview"><img class="logo-img" src="logo.png" alt="UGA Mobility Lab"><span class="wordmark-fallback">UGA Mobility Lab</span></a>
+    <nav aria-label="Page sections">
+      <ul class="nav-pills">
+        <li><a class="pill" href="#overview">Overview</a></li>
+        <li><a class="pill" href="#framework">Framework</a></li>
+        <li><a class="pill" href="#evidence">Evidence</a></li>
+        <li><a class="pill" href="#statistics">Statistics</a></li>
+        <li><a class="pill" href="#explorer">Explorer</a></li>
+        <li><a class="pill" href="#papers">References</a></li>
+        <li><a class="pill" href="#cite">Cite</a></li>
+      </ul>
+    </nav>
   </div>
 </header>
 
 <main id="main">
 
-<!-- FRAMEWORK -->
-<section id="framework">
-  <div class="kicker">The Two-Tier Framework</div>
-  <h2>Six modules, one rural AV system</h2>
-  <p class="lede"><b>Hover</b> a module for its role · <b>click</b> to filter the explorer.</p>
-  <div class="panel">
-    <svg viewBox="0 0 1000 360" xmlns="http://www.w3.org/2000/svg" aria-label="RAV two-tier framework diagram">
-      <defs>
-        <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-          <path d="M0,0 L10,5 L0,10 z" fill="#9aa2ad"/>
-        </marker>
-      </defs>
-      <text x="20" y="52" font-size="13" letter-spacing="2" fill="#0e5a8a" font-weight="bold">TIER 1 · EXISTING RAV TECHNOLOGY</text>
-      <text x="20" y="205" font-size="13" letter-spacing="2" fill="#ba0c2f" font-weight="bold">TIER 2 · ADVANCED AV TECHNOLOGY</text>
-      <g class="fw-node" data-fw="m1">
-        <rect x="20" y="66" width="300" height="72" rx="12" fill="#eaf2f8" stroke="#0e5a8a" stroke-width="1.5"/>
-        <text x="170" y="97" text-anchor="middle" font-size="16" font-weight="bold" fill="#0e5a8a">Autonomous Driving</text>
-        <text x="170" y="119" text-anchor="middle" font-size="12.5" fill="#41556b">perception · localization · routing · fusion</text>
-      </g>
-      <g class="fw-node" data-fw="m2">
-        <rect x="360" y="66" width="300" height="72" rx="12" fill="#e8f1f7" stroke="#2e7fb5" stroke-width="1.5"/>
-        <text x="510" y="97" text-anchor="middle" font-size="16" font-weight="bold" fill="#2e7fb5">Automated Pick-up &amp; Dispatch</text>
-        <text x="510" y="119" text-anchor="middle" font-size="12.5" fill="#41556b">on-demand dispatch · ADA pick-up</text>
-      </g>
-      <g class="fw-node" data-fw="m6">
-        <rect x="720" y="66" width="260" height="226" rx="12" fill="#eef5ec" stroke="#3d7a37" stroke-width="1.5"/>
-        <text x="850" y="102" text-anchor="middle" font-size="15" font-weight="bold" fill="#3d7a37">Field Pilots</text>
-        <text x="850" y="130" text-anchor="middle" font-size="12.5" fill="#43503f">goMARTI · Grand Rapids, MN</text>
-        <text x="850" y="150" text-anchor="middle" font-size="12.5" fill="#43503f">ADASTEC · Sleeping Bear Dunes</text>
-        <text x="850" y="186" text-anchor="middle" font-size="11.5" fill="#6a7566">on-demand &amp; fixed-route</text>
-        <text x="850" y="204" text-anchor="middle" font-size="11.5" fill="#6a7566">service models tested</text>
-        <text x="850" y="222" text-anchor="middle" font-size="11.5" fill="#6a7566">in the field</text>
-      </g>
-      <g class="fw-node" data-fw="m3">
-        <rect x="20" y="220" width="205" height="72" rx="12" fill="#faedef" stroke="#ba0c2f" stroke-width="1.5"/>
-        <text x="122" y="251" text-anchor="middle" font-size="15" font-weight="bold" fill="#ba0c2f">AV-Friendly</text>
-        <text x="122" y="271" text-anchor="middle" font-size="15" font-weight="bold" fill="#ba0c2f">Infrastructure</text>
-      </g>
-      <g class="fw-node" data-fw="m4">
-        <rect x="245" y="220" width="205" height="72" rx="12" fill="#fcf1e8" stroke="#e0742a" stroke-width="1.5"/>
-        <text x="347" y="251" text-anchor="middle" font-size="15" font-weight="bold" fill="#e0742a">Multi-Channel</text>
-        <text x="347" y="271" text-anchor="middle" font-size="15" font-weight="bold" fill="#e0742a">Communication</text>
-      </g>
-      <g class="fw-node" data-fw="m5">
-        <rect x="470" y="220" width="205" height="72" rx="12" fill="#f4ecf6" stroke="#7a2b8f" stroke-width="1.5"/>
-        <text x="572" y="251" text-anchor="middle" font-size="15" font-weight="bold" fill="#7a2b8f">Cooperative Driving</text>
-        <text x="572" y="271" text-anchor="middle" font-size="15" font-weight="bold" fill="#7a2b8f">Automation</text>
-      </g>
-      <line x1="340" y1="102" x2="358" y2="102" stroke="#9aa2ad" stroke-width="1.6" marker-end="url(#arr)"/>
-      <line x1="170" y1="140" x2="170" y2="218" stroke="#9aa2ad" stroke-width="1.6" marker-end="url(#arr)"/>
-      <line x1="510" y1="140" x2="510" y2="218" stroke="#9aa2ad" stroke-width="1.6" marker-end="url(#arr)"/>
-      <line x1="662" y1="102" x2="718" y2="102" stroke="#9aa2ad" stroke-width="1.6" marker-end="url(#arr)"/>
-      <line x1="677" y1="256" x2="718" y2="256" stroke="#9aa2ad" stroke-width="1.6" marker-end="url(#arr)"/>
-      <text x="500" y="336" text-anchor="middle" font-size="12" fill="#9aa2ad" font-style="italic">existing technology carries the service · advanced technology extends it · pilots validate it</text>
-    </svg>
-    <div class="desc" id="fw-desc"><b>Hover a module</b> — each maps a rural challenge to its evidence base, and to what the TRAVELS project must still build.</div>
-  </div>
-</section>
-
-<!-- EVIDENCE MAP -->
-<section id="evidence">
-  <div class="kicker">Evidence Map</div>
-  <h2>Solved · adapt · open</h2>
-  <p class="lede"><b>Hover</b> a pill → finding · references · rural gap.</p>
-  <div class="legend">
-    <span><i style="background:var(--good)"></i>Reusable now</span>
-    <span><i style="background:var(--mid)"></i>Needs rural adaptation</span>
-    <span><i style="background:var(--gap)"></i>Open gap — RAV must build it</span>
-  </div>
-  <div class="emap" id="emap"></div>
-  <div class="emap-detail" id="emap-detail"><span style="color:var(--muted)">Hover a sub-theme to see its literature finding, supporting references, and the rural gap RAV must close.</span></div>
-</section>
-
-<!-- STATISTICS -->
-<section id="statistics">
-  <div class="kicker">Statistics</div>
-  <h2>At a glance</h2>
-  <div class="charts">
-    <div class="chart-card"><h3>References per module</h3><div id="chart-mod"></div></div>
-    <div class="chart-card"><h3>References per year</h3><div class="year-chart" id="chart-year"></div></div>
-    <div class="chart-card"><h3>Source type</h3><div id="chart-type" class="type-rows"></div></div>
-  </div>
-</section>
-
-<!-- EXPLORER -->
-<section id="explorer">
-  <div class="kicker">Reference Explorer</div>
-  <h2>Explore the 45 references</h2>
-  <p class="lede">x = year · row = module · colour = module · shape = source type.</p>
-  <div class="explorer-tools">
-    <input id="exp-search" type="search" placeholder="Search title, author, venue…" aria-label="Search references">
-    <div class="chips" id="exp-chips"></div>
-    <button class="reset-btn" id="exp-reset">Reset</button>
-  </div>
-  <div id="exp-count"></div>
-  <div class="panel" style="padding:8px 10px">
-    <svg id="scatter" viewBox="0 0 1060 480" xmlns="http://www.w3.org/2000/svg" aria-label="Reference scatter plot"></svg>
-  </div>
-  <div class="shape-legend" id="shape-legend"></div>
-  <p class="explorer-note">hover = preview · click = jump to list · double-click = open paper</p>
-</section>
-
-<!-- PILOTS -->
-<section id="pilots">
-  <div class="kicker">Pilot Deployments</div>
-  <h2>Two pilots in the field</h2>
-  <div class="pilots">
-    <div class="pilot-card">
-      <h3>goMARTI</h3>
-      <div class="loc">Grand Rapids, Minnesota · on-demand <span class="cite-n" data-r="14">[14]</span><span class="cite-n" data-r="15">[15]</span></div>
-      <div class="facts"><span>~97 stops</span><span>on-demand · app / 211</span><span>free rides</span><span>safety operator</span><span style="color:var(--gap);border-color:var(--gap)">gap: driver-out</span></div>
+  <section id="overview" class="section">
+    <div class="container">
+      <p class="kicker">Literature review companion site</p>
+      <h1>Rural Autonomous Vehicles</h1>
+      <p class="subtitle">A Literature Review Linking RAV Challenges to Research Evidence and AV Pilots</p>
+      <p class="authors">TRAVELS Project Team &middot; College of Engineering, University of Georgia</p>
+      <div class="stat-chips" aria-label="Review statistics">
+        <span class="stat-chip"><strong id="stat-count">45</strong> references</span>
+        <span class="stat-chip"><strong id="stat-cats">6</strong> RAV modules</span>
+        <span class="stat-chip"><strong id="stat-years">2018&ndash;2026</strong> coverage</span>
+        <span class="stat-chip"><strong>2</strong> field pilots</span>
+      </div>
     </div>
-    <div class="pilot-card">
-      <h3>ADASTEC Pilot</h3>
-      <div class="loc">Sleeping Bear Dunes National Lakeshore · fixed route <span class="cite-n" data-r="16">[16]</span></div>
-      <div class="facts"><span>~4 round trips/day</span><span>fixed scenic route</span><span>reserved free seats</span><span>safety operator</span><span style="color:var(--gap);border-color:var(--gap)">gap: headway optimization</span></div>
+  </section>
+
+  <section id="cite" class="section alt">
+    <div class="container">
+      <div class="section-head">
+        <h2>Citation</h2>
+      </div>
+      <div class="card cite-card">
+        <p>For use in publications and presentations please cite this review as follows:</p>
+        <blockquote id="cite-text">TRAVELS Project Team. &ldquo;Rural Autonomous Vehicles: A Literature Review Linking RAV Challenges to Research Evidence and AV Pilots.&rdquo; College of Engineering, University of Georgia, June 2026.</blockquote>
+        <button type="button" id="copy-cite" class="btn-primary">Copy citation</button>
+      </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- REFERENCES -->
-<section id="references">
-  <div class="kicker">Bibliography</div>
-  <h2>References</h2>
-  <p class="lede">Follows the explorer filters above.</p>
-  <div id="ref-count" style="font-size:13.5px;color:var(--muted)"></div>
-  <ol class="reflist" id="reflist"></ol>
-</section>
+  <section id="framework" class="section">
+    <div class="container">
+      <div class="section-head">
+        <h2>The Two-Tier Framework</h2>
+      </div>
+      <p class="section-lede">Existing technology <em>carries</em> the rural service today; advanced, infrastructure-integrated technology <em>extends</em> it; two field pilots <em>validate</em> it. <span class="lede-hint">Hover or tap a module.</span></p>
+      <div class="card thesis-card">
+        <div class="thesis-scroll">
+          <svg class="thesis-svg" viewBox="0 0 1000 330" role="img" aria-label="Interactive two-tier RAV framework: existing technology modules feed advanced modules, validated by field pilots.">
+            <defs>
+              <marker id="t-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#9aa0a6"></path></marker>
+            </defs>
+            <text x="8" y="18" class="tier-label" fill="#1F4E94">TIER 1 &middot; EXISTING RAV TECHNOLOGY</text>
+            <text x="8" y="190" class="tier-label" fill="#BA0C2F">TIER 2 &middot; ADVANCED AV TECHNOLOGY</text>
 
-<!-- CITE -->
-<section id="cite">
-  <div class="kicker">Citation</div>
-  <h2>Cite this review</h2>
-  <div class="citebox" id="citebox">TRAVELS Project Team. "Rural Autonomous Vehicles: A Literature Review Linking RAV Challenges to Research Evidence and AV Pilots." College of Engineering, University of Georgia, June 2026.</div>
-  <button class="copy-btn" id="copy-cite">Copy citation</button>
-</section>
+            <line class="flow" x1="318" y1="66" x2="360" y2="66" marker-end="url(#t-arrow)"></line>
+            <line class="flow" x1="160" y1="96" x2="160" y2="200" marker-end="url(#t-arrow)"></line>
+            <line class="flow" x1="500" y1="96" x2="500" y2="200" marker-end="url(#t-arrow)"></line>
+            <line class="flow" x1="682" y1="66" x2="724" y2="66" marker-end="url(#t-arrow)"></line>
+            <line class="flow" x1="682" y1="236" x2="724" y2="236" marker-end="url(#t-arrow)"></line>
+
+            <g class="fw-pillar" data-cat="Autonomous Driving" tabindex="0" role="button" aria-label="Autonomous Driving module">
+              <rect x="8" y="40" width="304" height="52" rx="10" fill="#1F4E94"></rect>
+              <text x="160" y="61" class="chip-kicker">DRIVE</text>
+              <text x="160" y="79" class="chip-main">Autonomous Driving</text>
+            </g>
+            <g class="fw-pillar" data-cat="Pick-up &amp; Dispatch" tabindex="0" role="button" aria-label="Automated Pick-up and Dispatch module">
+              <rect x="366" y="40" width="310" height="52" rx="10" fill="#00A3AD"></rect>
+              <text x="521" y="61" class="chip-kicker">SERVE</text>
+              <text x="521" y="79" class="chip-main">Pick-up &amp; Dispatch</text>
+            </g>
+            <g class="fw-pillar" data-cat="Infrastructure" tabindex="0" role="button" aria-label="AV-Friendly Infrastructure module">
+              <rect x="8" y="210" width="200" height="52" rx="10" fill="#BA0C2F"></rect>
+              <text x="108" y="231" class="chip-kicker">ROAD</text>
+              <text x="108" y="249" class="chip-main">Infrastructure</text>
+            </g>
+            <g class="fw-pillar" data-cat="Communication" tabindex="0" role="button" aria-label="Multi-Channel Communication module">
+              <rect x="238" y="210" width="204" height="52" rx="10" fill="#E08A3C"></rect>
+              <text x="340" y="231" class="chip-kicker">CONNECT</text>
+              <text x="340" y="249" class="chip-main">Communication</text>
+            </g>
+            <g class="fw-pillar" data-cat="Cooperative Driving" tabindex="0" role="button" aria-label="Cooperative Driving Automation module">
+              <rect x="472" y="210" width="204" height="52" rx="10" fill="#7E6BB0"></rect>
+              <text x="574" y="231" class="chip-kicker">COOPERATE</text>
+              <text x="574" y="249" class="chip-main">Cooperative Driving</text>
+            </g>
+            <g class="fw-pillar" data-cat="Pilots" tabindex="0" role="button" aria-label="Field pilots: goMARTI and ADASTEC">
+              <rect x="730" y="40" width="262" height="222" rx="10" fill="#4B8B3B"></rect>
+              <text x="861" y="76" class="chip-kicker">VALIDATE</text>
+              <text x="861" y="98" class="chip-main">Field Pilots</text>
+              <text x="861" y="140" class="chip-sub">goMARTI &middot; Grand Rapids, MN</text>
+              <text x="861" y="160" class="chip-sub">on-demand &middot; ~97 stops</text>
+              <text x="861" y="196" class="chip-sub">ADASTEC &middot; Sleeping Bear Dunes</text>
+              <text x="861" y="216" class="chip-sub">fixed route &middot; ~4 trips/day</text>
+            </g>
+            <text x="500" y="310" class="loop-label">existing technology carries the service &middot; advanced technology extends it &middot; pilots validate it</text>
+          </svg>
+        </div>
+        <div class="thesis-detail" id="thesis-detail" aria-live="polite">
+          <span class="td-tag">Two tiers, one system</span>
+          <p class="td-text">Existing technology carries the service today; advanced, infrastructure-integrated technology extends it; two field pilots ground it in practice. Hover a module.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="evidence" class="section alt">
+    <div class="container">
+      <div class="section-head">
+        <h2>Evidence Map</h2>
+        <span class="date-pill">27 sub-themes</span>
+      </div>
+      <p class="section-lede">Research sub-themes coloured by maturity for rural deployment. <span class="lede-hint">Hover a pill.</span></p>
+      <div class="card">
+        <div class="elegend">
+          <span><i style="background:#4B8B3B"></i>Reusable now</span>
+          <span><i style="background:#D99114"></i>Needs rural adaptation</span>
+          <span><i style="background:#BA0C2F"></i>Open gap &mdash; RAV must build it</span>
+        </div>
+        <div class="emap" id="emap"></div>
+        <div class="emap-detail" id="emap-detail" aria-live="polite">Hover a sub-theme for its supporting references and the rural gap RAV must close.</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="statistics" class="section">
+    <div class="container">
+      <div class="section-head">
+        <h2>Statistics</h2>
+        <span class="date-pill" id="stats-range">2018~2026</span>
+      </div>
+      <div class="stats-grid">
+        <div class="card">
+          <h3>References per RAV module</h3>
+          <svg id="cat-bars" role="img" aria-label="Horizontal bar chart of reference counts per RAV module"></svg>
+        </div>
+        <div class="card">
+          <h3>References per year</h3>
+          <svg id="year-bars" role="img" aria-label="Vertical bar chart of reference counts per publication year"></svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="explorer" class="section alt">
+    <div class="container">
+      <div class="section-head">
+        <h2>Reference Explorer</h2>
+        <span class="date-pill" id="explorer-range">2018~2026</span>
+      </div>
+      <div class="card toolbar" id="toolbar">
+        <div class="dd-row" id="dd-row">
+          <!-- dropdowns injected by app.js -->
+          <button type="button" id="reset-btn" class="reset-btn">Reset</button>
+        </div>
+        <div class="search-row">
+          <input type="search" id="search" placeholder="Search title, author, or venue&hellip;" aria-label="Search references by title, author, or venue">
+          <span class="count" id="count" role="status" aria-live="polite">Showing 45 of 45 references</span>
+        </div>
+      </div>
+      <div class="card chart-card">
+        <div class="legend" id="legend"></div>
+        <div class="chart-wrap">
+          <div class="chart-scroll">
+            <svg id="scatter" role="img" aria-label="Scatter chart of all references, positioned by publication year and RAV module"></svg>
+          </div>
+          <div class="tooltip" id="tooltip" hidden></div>
+        </div>
+        <p class="chart-note"><em>Hover a point to preview its evidence neighbourhood (references co-cited in the same evidence-table sub-theme); click a point to pin it; Esc or a click on the chart background releases it. Double-click a point to open the paper. Markers: shape = source type, colour = RAV module.</em></p>
+      </div>
+    </div>
+  </section>
+
+  <section id="papers" class="section">
+    <div class="container">
+      <div class="section-head">
+        <h2>Reference List</h2>
+        <span class="date-pill" id="papers-range">2018~2026</span>
+      </div>
+      <p class="section-lede">All references from the review bibliography, grouped by RAV module. Lists respect the filters and search above.</p>
+      <div id="paper-groups"></div>
+    </div>
+  </section>
 
 </main>
 
-<footer>
-  TRAVELS Project Team · College of Engineering, University of Georgia<br>
-  Data extracted from the review's evidence tables and bibliography (June 2026).
+<footer class="site-footer">
+  <div class="container">
+    <p>TRAVELS Project Team &middot; College of Engineering, University of Georgia</p>
+    <p class="footer-muted">Data extracted from the review's evidence tables and bibliography.</p>
+  </div>
 </footer>
 
-<script>
-/* ================= DATA ================= */
-const MODS={m1:'Autonomous Driving',m2:'Pick-up & Dispatch',m3:'Infrastructure',m4:'Communication',m5:'Cooperative Driving',m6:'Pilots'};
-const MCOLOR={m1:'#0e5a8a',m2:'#2e7fb5',m3:'#ba0c2f',m4:'#e0742a',m5:'#7a2b8f',m6:'#3d7a37'};
-const TYPES={j:'Journal',c:'Conference',a:'arXiv preprint',g:'Government report',i:'Industry / press'};
-
-const REFS=[
- {n:1,t:'Review of Autonomous Vehicles in Rural Areas: Challenges, Opportunities, and Solutions, Applied Sciences, 15(8), art. 4195, 2025.',y:2025,ty:'j',doi:'10.3390/app15084195',m:['m1']},
- {n:2,t:'Building the Future of Transportation: A Comprehensive Survey on AV Perception, Localization, and Mapping, Sensors, 25(7), art. 2004, 2025.',y:2025,ty:'j',doi:'10.3390/s25072004',m:['m1']},
- {n:3,t:'Y. Zhang et al., Perception and Sensing for AVs under Adverse Weather Conditions: A Survey, ISPRS J. Photogramm. Remote Sens., 196, pp. 146-177, 2023.',y:2023,ty:'j',doi:'10.1016/j.isprsjprs.2022.12.021',m:['m1']},
- {n:4,t:'S. Ahmadi, G. Tack, D. Harabor, P. Kilby, M. Jalili, "Efficient Energy-Optimal Path Planning for Electric Vehicles Considering Vehicle Dynamics," 2024.',y:2024,ty:'a',arxiv:'2411.12964',m:['m1']},
- {n:5,t:'Optimization of On-Demand Shared Autonomous Vehicle Deployments Utilizing Reinforcement Learning, Sensors, 22(21), art. 8317, 2022.',y:2022,ty:'j',doi:'10.3390/s22218317',m:['m1','m2']},
- {n:6,t:'Automated Vehicles and People Living with a Disability, Sustainability, 17(13), art. 5941, 2025.',y:2025,ty:'j',doi:'10.3390/su17135941',m:['m2']},
- {n:7,t:'E. Thonhofer et al., "Infrastructure-Based Digital Twins for Cooperative, Connected, Automated Driving and Smart Road Services," IEEE Open J. Intelligent Transportation Systems, 4, 2023.',y:2023,ty:'j',doi:'10.1109/OJITS.2023.3266800',m:['m3']},
- {n:8,t:'Zuken, "How are Satellites Bringing Low-Latency Internet to Autonomous Vehicles?," 2023; Traffic Technology Today, "How LEO satellites could begin a new era in ITS," 2025.',y:2023,ty:'i',m:['m3','m4']},
- {n:9,t:'Z. Zhao, S. Dinh-Van, Y. K. Mo, S. Khastgir, M. D. Higgins, "Toward Safe and Energy-Efficient 5G NR V2X Communications in Rural Environments," 2025.',y:2025,ty:'a',arxiv:'2510.12539',m:['m4']},
- {n:10,t:'Toward autonomous vehicles: A survey on cooperative vehicle-infrastructure system, iScience, 27(5), art. 109751, 2024.',y:2024,ty:'j',doi:'10.1016/j.isci.2024.109751',m:['m5']},
- {n:11,t:'A. Dehman, B. Farooq, "Are Work Zones and Connected Automated Vehicles Ready for a Harmonious Coexistence? A Scoping Review and Research Agenda," Transportation Research Part C, 133, art. 103422, 2021.',y:2021,ty:'j',doi:'10.1016/j.trc.2021.103422',m:['m5']},
- {n:12,t:'U.S. DOT ITS Joint Program Office, Automated Vehicles and Adverse Weather: Final Report, ROSA-P 43772.',y:2021,ty:'g',url:'https://rosap.ntl.bts.gov/view/dot/43772',ul:'ROSA-P',m:['m5']},
- {n:13,t:'Federal Highway Administration, Cooperative Automation Driving System (C-ADS) with Road Weather, CARMA Program.',y:2023,ty:'g',url:'https://highways.dot.gov/media/34431',ul:'FHWA',m:['m5']},
- {n:14,t:'May Mobility, "Service Deployment Case Study: goMARTI in Grand Rapids, Minnesota," 2024.',y:2024,ty:'i',m:['m6']},
- {n:15,t:'MnDOT, Minnesota’s Autonomous Rural Transit Initiative (goMARTI) Pilot Project Report, Mar. 2025.',y:2025,ty:'g',m:['m6']},
- {n:16,t:'ADASTEC Corp., press release, Sleeping Bear Dunes FMVSS-compliant automated bus, Jul. 29, 2024.',y:2024,ty:'i',m:['m1','m2','m6']},
- {n:17,t:'S. Yao et al., "Radar-Camera Fusion for Object Detection and Semantic Segmentation in Autonomous Driving: A Comprehensive Review," 2023.',y:2023,ty:'a',arxiv:'2304.10410',m:['m1']},
- {n:18,t:'D. Feng et al., "Deep Multi-Modal Object Detection and Semantic Segmentation for Autonomous Driving: Datasets, Methods, and Challenges," IEEE Trans. Intelligent Transportation Systems, 22(3), pp. 1341-1360, 2020.',y:2020,ty:'j',doi:'10.1109/TITS.2020.2972974',m:['m1']},
- {n:19,t:'H. Qian, M. Wang, M. Zhu, H. Wang, "A Review of Multi-Sensor Fusion in Autonomous Driving," Sensors, 25(19), art. 6033, 2025.',y:2025,ty:'j',doi:'10.3390/s25196033',m:['m1']},
- {n:20,t:'H. Liu, C. Wu, H. Wang, "Real-Time Object Detection Using LiDAR and Camera Fusion for Autonomous Driving," Scientific Reports, 13, art. 8056, 2023.',y:2023,ty:'j',doi:'10.1038/s41598-023-35170-z',m:['m1']},
- {n:21,t:'J. Wang, Z. Wu, Y. Liang, J. Tang, H. Chen, "Perception Methods for Adverse Weather Based on Vehicle Infrastructure Cooperation System: A Review," Sensors, 24(2), art. 374, 2024.',y:2024,ty:'j',doi:'10.3390/s24020374',m:['m1','m5']},
- {n:22,t:'M. Ning et al., "CoInfra: A Large-Scale Cooperative Infrastructure Perception System and Dataset for Vehicle-Infrastructure Cooperation in Adverse Weather," 2025.',y:2025,ty:'a',arxiv:'2507.02245',m:['m1']},
- {n:23,t:'S. Zheng, J. Wang, C. Rizos, W. Ding, A. El-Mowafy, "Simultaneous Localization and Mapping (SLAM) for Autonomous Driving: Concept and Analysis," Remote Sensing, 15(4), art. 1156, 2023.',y:2023,ty:'j',doi:'10.3390/rs15041156',m:['m1']},
- {n:24,t:'C. Debeunne, D. Vivet, "A Review of Visual-LiDAR Fusion based Simultaneous Localization and Mapping," Sensors, 20(7), art. 2068, 2020.',y:2020,ty:'j',doi:'10.3390/s20072068',m:['m1']},
- {n:25,t:'P. Chen, Z. Luo, X. Jiang, Z. Yin, J. Li, "Maps for Autonomous Driving: Full-process Survey and Frontiers," 2025.',y:2025,ty:'a',arxiv:'2509.12632',m:['m1','m3']},
- {n:26,t:'Y. Chen, G. Wu, R. Sun, A. Dubey, A. Laszka, P. Pugliese, "A Review and Outlook of Energy Consumption Estimation Models for Electric Vehicles," 2020.',y:2020,ty:'a',arxiv:'2003.12873',m:['m1']},
- {n:27,t:'K. Ahn, Y. Bichiou, M. Farag, H. A. Rakha, "Multi-objective Eco-Routing Model Development and Evaluation for Battery Electric Vehicles," 2021.',y:2021,ty:'a',arxiv:'2104.09336',m:['m1']},
- {n:28,t:'S. Narayanan, E. Chaniotakis, C. Antoniou, "Shared Autonomous Vehicle Services: A Comprehensive Review," Transportation Research Part C, 111, pp. 255-293, 2020.',y:2020,ty:'j',doi:'10.1016/j.trc.2019.12.008',m:['m2']},
- {n:29,t:'F. Carrese et al., "The Integration of Shared Autonomous Vehicles in Public Transportation Services: A Systematic Review," Sustainability, 15(17), art. 13023, 2023.',y:2023,ty:'j',doi:'10.3390/su151713023',m:['m2']},
- {n:30,t:'M. T. M. Ng et al., "Semi-on-Demand Transit Feeders with Shared Autonomous Vehicles and Reinforcement-Learning-Based Zonal Dispatching Control," IEEE ITSC 2024.',y:2024,ty:'c',arxiv:'2509.01883',m:['m1','m2']},
- {n:31,t:'On-Demand Microtransit: A Rural Solution to Public Transit?, Planning (American Planning Association), Fall 2022.',y:2022,ty:'i',m:['m1','m2']},
- {n:32,t:'D. Katare et al., "A Survey on Approximate Edge AI for Energy Efficient Autonomous Driving Services," IEEE Communications Surveys & Tutorials, 2023.',y:2023,ty:'j',arxiv:'2304.14271',m:['m4']},
- {n:33,t:'T. Huang et al., "V2X Cooperative Perception for Autonomous Driving: Recent Advances and Challenges," 2023.',y:2023,ty:'a',arxiv:'2310.03525',m:['m4']},
- {n:34,t:'U.-S. Jung, C. Mun, "Performance Evaluation of Cooperative Driving Automation Services Enabled by Edge Roadside Units," Sensors, 26(2), art. 504, 2026.',y:2026,ty:'j',doi:'10.3390/s26020504',m:['m5']},
- {n:35,t:'Z. Zhang et al., "Review on the Impacts of Cooperative Automated Driving on Transportation and Environment," Transportation Research Part D, 115, art. 103607, 2023.',y:2023,ty:'j',doi:'10.1016/j.trd.2023.103607',m:['m5']},
- {n:36,t:'B. Coll-Perales et al., "Prototyping and Evaluation of Infrastructure-Assisted Transition of Control for Cooperative Automated Vehicles," IEEE Trans. Intelligent Transportation Systems, 2021.',y:2021,ty:'j',arxiv:'2103.13826',m:['m5']},
- {n:37,t:'K. Wang et al., "Digital Twins for Autonomous Driving: A Comprehensive Implementation and Demonstration," 2024.',y:2024,ty:'c',arxiv:'2401.08653',m:['m3']},
- {n:38,t:'C. Creß, Z. Bing, A. C. Knoll, "Intelligent Transportation Systems Using External Infrastructure: A Literature Survey," 2021.',y:2021,ty:'a',arxiv:'2112.05615',m:['m3']},
- {n:39,t:'A. Elamin, A. El-Rabbany, "UAV-Based Image and LiDAR Fusion for Pavement Crack Segmentation," Sensors, 23(23), art. 9315, 2023.',y:2023,ty:'j',doi:'10.3390/s23239315',m:['m3']},
- {n:40,t:'Z. Mu et al., "Cooperative Platooning with Mixed Traffic on Urban Arterial Roads," IEEE Intelligent Vehicles Symposium (IV), 2022.',y:2022,ty:'c',doi:'10.1109/IV51971.2022.9827105',m:['m5']},
- {n:41,t:'S. C. Calvert, B. van Arem, "Cooperative Adaptive Cruise Control and Intelligent Traffic Signal Interaction: A Field Operational Test with Platooning on a Suburban Arterial in Real Traffic," IET Intelligent Transport Systems, 14(12), pp. 1665-1672, 2020.',y:2020,ty:'j',doi:'10.1049/iet-its.2019.0742',m:['m5']},
- {n:42,t:'Federal Railroad Administration, Automated Vehicles at Highway-Rail Grade Crossings: Final Report, U.S. DOT, 2018.',y:2018,ty:'g',m:['m5']},
- {n:43,t:'Federal Railroad Administration / Volpe Center, Rail Crossing Violation Warning (RCVW) Application - Phase II, U.S. DOT, 2021.',y:2021,ty:'g',m:['m5']},
- {n:44,t:'R. Sedar et al., "A Comprehensive Survey of V2X Cybersecurity Mechanisms and Future Research Paths," IEEE Open J. Communications Society, 4, pp. 325-391, 2023.',y:2023,ty:'j',doi:'10.1109/OJCOMS.2023.3239115',m:['m4']},
- {n:45,t:'A. Alnasser, H. Sun, J. Jiang, "Cyber Security Challenges and Solutions for V2X Communications: A Survey," Computer Networks, 151, pp. 52-67, 2019.',y:2019,ty:'j',arxiv:'1901.01053',m:['m4']}
-];
-const byN=Object.fromEntries(REFS.map(r=>[r.n,r]));
-
-/* Sub-theme maturity data: s = g(reusable) | m(adapt) | r(gap) */
-const THEMES=[
- {mod:'m1',name:'Single-sensor limits',s:'r',refs:[1,18,20],find:'A single camera/sensor gives a narrow, easily degraded view: short range, glare failure, occlusion on faded, unpaved roads.',gap:'Direct rural perception data is scarce — RAV must collect rural-specific data.'},
- {mod:'m1',name:'Multi-sensor fusion',s:'m',refs:[2,17,18,19,20],find:'Camera+radar+LiDAR fusion outperforms any single sensor in complex scenes.',gap:'Validated mainly on dense urban networks — re-tune for sparse rural geometry.'},
- {mod:'m1',name:'Adverse-weather perception',s:'m',refs:[3,21,22],find:'Adverse-weather methods recover accuracy in glare/rain/fog/snow; cooperative perception extends reliability.',gap:'Onboard-only perception still degrades — lean on infrastructure-cooperative perception.'},
- {mod:'m1',name:'GNSS/LiDAR failure modes',s:'m',refs:[1,2],find:'GNSS drifts under canopy and in valleys; sparse rural geometry leaves LiDAR-only matching ambiguous.',gap:'No single positioning source is reliable rurally — sources must be fused.'},
- {mod:'m1',name:'Vision+LiDAR+HD-map localization',s:'m',refs:[2,23,24,25],find:'Localization against an HD-map prior sustains lane-level / centimeter positioning in GNSS-challenged settings.',gap:'Rural HD maps are largely missing and costly to maintain — build and refresh them.'},
- {mod:'m1',name:'Energy & terrain routing',s:'m',refs:[1,4,26,27],find:'Energy- and terrain-aware routing keeps plans within the EV’s effective range on hilly, unpaved terrain.',gap:'Range/terrain models not calibrated for rural unpaved grades — calibrate on real routes.'},
- {mod:'m1',name:'On-demand vs fixed routing',s:'m',refs:[5,16,30,31],find:'Dynamic on-demand routing serves low-density demand; fixed-route trades flexibility for predictability.',gap:'Neither mode alone fits rural demand — combine on-demand with fixed thin-demand runs.'},
- {mod:'m1',name:'Sensor-level fusion',s:'g',refs:[17,18,19],find:'Sensor fusion of raw camera, radar, and LiDAR streams is well covered.',gap:'Reusable directly for the perception pipeline.'},
- {mod:'m1',name:'Heterogeneous data fusion',s:'r',refs:[2,19,25],find:'Reconciles sources of differing reliability, frame, and update rate into one real-time estimate.',gap:'Rarely tuned for rural data quality/latency — engineer the onboard reconciliation layer.'},
- {mod:'m2',name:'On-demand dispatch & matching',s:'g',refs:[5,28,29,30,31],find:'RL dispatchers, OR-based fleet methods, and microtransit cut rider wait in low-density service.',gap:'Mature — reuse RL dispatch and rider-app matching rather than build from scratch.'},
- {mod:'m2',name:'ADA pick-up (unattended door)',s:'r',refs:[6,31],find:'Inclusive-design work shows automated ramp, docking, and securement — but no standardized regulation.',gap:'Unattended ADA door/ramp/securement is unsolved — RAV must engineer and help standardize it.'},
- {mod:'m2',name:'Fixed-route scheduling',s:'r',refs:[16],find:'Covered only through the ADASTEC fixed scenic-route pilot.',gap:'Headway/timetable optimization for thin-demand rural fixed routes is a gap.'},
- {mod:'m3',name:'Roadside sensing & digital twins',s:'m',refs:[7,37,38],find:'Infrastructure-based digital twins give a high-precision, continuously refreshed view of the road.',gap:'Demonstrated in well-mapped settings — build a digital layer for roads that can’t be upgraded in time.'},
- {mod:'m3',name:'Physical road assessment',s:'m',refs:[39],find:'Vehicle- and UAV-mounted LiDAR and imaging assess pavement, markings, and signage.',gap:'No rural prioritization workflow — use surveys to pick which roads to physically upgrade.'},
- {mod:'m3',name:'Rural HD maps & road info',s:'r',refs:[8,25],find:'Roadmaps treat up-to-date HD maps and road-condition information as core enablers.',gap:'Rural HD maps and road-condition feeds are largely missing — create them as shared infrastructure.'},
- {mod:'m4',name:'Rural V2X coverage',s:'r',refs:[9],find:'Rural V2X is constrained by dead zones, latency, and weak operator incentives.',gap:'Connectivity gaps are the baseline constraint — tolerate intermittent links.'},
- {mod:'m4',name:'Edge computing at RSUs',s:'m',refs:[32,33],find:'Edge computing at roadside units cuts latency and reliance on a distant cloud.',gap:'Edge RSUs are sparse rurally — keep time-critical work on edge units.'},
- {mod:'m4',name:'Multi-channel links (C-V2X+LEO)',s:'m',refs:[8],find:'Combining C-V2X, cellular, and LEO satellite keeps the vehicle-to-cloud link alive across blackspots.',gap:'No single link holds across rural terrain — switch channels by coverage.'},
- {mod:'m4',name:'V2X cybersecurity',s:'g',refs:[44,45],find:'Surveys catalog the attacks these channels face and available countermeasures.',gap:'Apply the surveyed countermeasures across all channels before field deployment.'},
- {mod:'m5',name:'Cooperative perception',s:'m',refs:[10,35],find:'Shared vehicle–infrastructure perception widens field of view and improves robustness.',gap:'Validated in dense corridors — deploy roadside sensing along sparse rural routes.'},
- {mod:'m5',name:'Edge RSU CDA & handover',s:'m',refs:[34,36],find:'Edge-RSU CDA services and infrastructure-assisted transition of control quantify safety gains.',gap:'Needs dense RSU coverage — place edge RSUs where help is most likely needed.'},
- {mod:'m5',name:'CACC & platooning',s:'m',refs:[40,41],find:'CACC and platooning coordinate speed and signal interaction on mixed-traffic arterials.',gap:'Demonstrated on urban/suburban arterials — adapt to low-volume rural arterials.'},
- {mod:'m5',name:'Work / school zones',s:'r',refs:[11],find:'Connected-AV warning and trajectory methods address zone conflict points.',gap:'Passive crossings and unsignalized rural conflict points are largely unsolved.'},
- {mod:'m5',name:'Rail grade crossings',s:'m',refs:[42,43],find:'USDOT/FRA studies (incl. RCVW) show V2I warnings at highway-rail grade crossings.',gap:'Demonstrated at instrumented crossings — extend to passive, uninstrumented rural crossings.'},
- {mod:'m5',name:'Extreme-weather driving',s:'r',refs:[12,13,21],find:'USDOT testing documents weather effects; FHWA road-weather work supports rerouting.',gap:'Onboard-only driving still fails in extreme rural weather — sense, predict, reroute cooperatively.'},
- {mod:'m6',name:'goMARTI (on-demand)',s:'g',refs:[14,15],find:'On-demand door-to-door shuttle across ~97 stops, app/211 booking, safety operator on board.',gap:'Extend toward higher-speed, longer-range, driver-out operation on open rural roads.'},
- {mod:'m6',name:'ADASTEC (fixed route)',s:'g',refs:[16],find:'Fixed scenic route, ~4 scheduled round trips daily, reserved free seats, safety operator.',gap:'Add headway/timetable optimization and reduce operator reliance.'}
-];
-
-/* ================= TOOLTIP ================= */
-const tip=document.getElementById('tooltip');
-function showTip(html){tip.innerHTML=html;tip.style.opacity=1;}
-function hideTip(){tip.style.opacity=0;}
-document.addEventListener('mousemove',e=>{
-  if(tip.style.opacity!=='1')return;
-  const x=Math.min(e.clientX+14,window.innerWidth-tip.offsetWidth-10);
-  const y=Math.min(e.clientY+16,window.innerHeight-tip.offsetHeight-10);
-  tip.style.left=x+'px';tip.style.top=y+'px';
-});
-
-/* ================= FRAMEWORK ================= */
-const FW_TEXT={
- m1:'<b>Autonomous Driving</b> — fusion, HD-map localization, energy-aware routing carry rural driving. Missing: rural data and testing.',
- m2:'<b>Pick-up &amp; Dispatch</b> — reuses RL dispatch and app matching; the unsolved piece is the unattended ADA door, ramp, and securement.',
- m3:'<b>AV-Friendly Infrastructure</b> — survey which rural roads to upgrade physically; digital-twin the roads that can’t be fixed in time.',
- m4:'<b>Multi-Channel Communication</b> — C-V2X + cellular + LEO satellite switched by coverage; edge RSUs for latency; V2X security built in.',
- m5:'<b>Cooperative Driving Automation</b> — shared perception extends a low-speed rural AV to arterials, zones, crossings, and bad weather.',
- m6:'<b>Field Pilots</b> — goMARTI (on-demand, ~97 stops) and ADASTEC (fixed scenic route) validate the service models with safety operators.'
-};
-const fwDesc=document.getElementById('fw-desc');
-document.querySelectorAll('.fw-node').forEach(n=>{
-  const k=n.dataset.fw;
-  n.addEventListener('mouseenter',()=>{fwDesc.innerHTML=FW_TEXT[k]+' <i>Click to filter the explorer.</i>';
-    document.querySelectorAll('.fw-node').forEach(x=>x.classList.toggle('active',x===n));});
-  n.addEventListener('click',()=>{setModFilter(k);document.getElementById('explorer').scrollIntoView({behavior:'smooth'});});
-});
-
-/* ================= EVIDENCE MAP ================= */
-const emap=document.getElementById('emap');
-const edetail=document.getElementById('emap-detail');
-Object.keys(MODS).forEach(k=>{
-  const lab=document.createElement('div');lab.className='mlab';
-  lab.innerHTML=`<span class="sw" style="background:${MCOLOR[k]}"></span>${MODS[k]}`;
-  const cells=document.createElement('div');cells.className='mcells';
-  THEMES.filter(t=>t.mod===k).forEach(t=>{
-    const p=document.createElement('button');
-    p.className='pill '+t.s;p.textContent=t.name;
-    const stat=t.s==='g'?['Reusable now','var(--good)']:t.s==='m'?['Needs rural adaptation','var(--mid)']:['Open gap','var(--gap)'];
-    p.addEventListener('mouseenter',()=>{
-      document.querySelectorAll('.pill.on').forEach(x=>x.classList.remove('on'));p.classList.add('on');
-      edetail.innerHTML=`<span class="tag" style="background:${stat[1]}">${stat[0]}</span><b>${t.name}</b> · ${MODS[t.mod]}
-        <div class="row"><b>Finding:</b> ${t.find} ${t.refs.map(n=>`<span class="cite-n" data-r="${n}">[${n}]</span>`).join(' ')}</div>
-        <div class="row"><b>Rural gap → RAV priority:</b> ${t.gap}</div>`;
-    });
-    cells.appendChild(p);
-  });
-  const row=document.createElement('div');row.className='mrow';
-  row.appendChild(lab);row.appendChild(cells);emap.appendChild(row);
-});
-
-/* ================= STATE & FILTERS ================= */
-let fMod='all', fQuery='';
-function refVisible(r){
-  if(fMod!=='all'&&!r.m.includes(fMod))return false;
-  if(fQuery&&!r.t.toLowerCase().includes(fQuery))return false;
-  return true;
-}
-function setModFilter(k){
-  fMod=k;
-  document.querySelectorAll('#exp-chips .chip').forEach(c=>c.classList.toggle('on',c.dataset.k===k));
-  applyFilters();
-}
-const chipsEl=document.getElementById('exp-chips');
-[['all','All'],...Object.entries(MODS)].forEach(([k,v])=>{
-  const b=document.createElement('button');
-  b.className='chip'+(k==='all'?' on':'');b.textContent=v;b.dataset.k=k;
-  if(k!=='all')b.style.cssText=`border-color:${MCOLOR[k]};color:${MCOLOR[k]}`;
-  b.onclick=()=>{setModFilter(k);
-    if(k!=='all'){b.style.background=MCOLOR[k];b.style.color='#fff';}};
-  chipsEl.appendChild(b);
-});
-function restyleChips(){
-  chipsEl.querySelectorAll('.chip').forEach(c=>{
-    const k=c.dataset.k;
-    if(k==='all'){c.style.cssText='';return;}
-    if(c.classList.contains('on'))c.style.cssText=`border-color:${MCOLOR[k]};background:${MCOLOR[k]};color:#fff`;
-    else c.style.cssText=`border-color:${MCOLOR[k]};color:${MCOLOR[k]};background:var(--card)`;
-  });
-}
-document.getElementById('exp-search').addEventListener('input',e=>{fQuery=e.target.value.toLowerCase();applyFilters();});
-document.getElementById('exp-reset').addEventListener('click',()=>{
-  fQuery='';document.getElementById('exp-search').value='';setModFilter('all');
-});
-
-/* ================= SCATTER ================= */
-const svg=document.getElementById('scatter');
-const NS='http://www.w3.org/2000/svg';
-const W=1060,H=480,L=170,R=30,T=24,B=44;
-const Y0=2018,Y1=2026;
-const rows=Object.keys(MODS);
-const rowH=(H-T-B)/rows.length;
-function xOf(year,slot,total){
-  const bw=(W-L-R)/(Y1-Y0+1);
-  const x0=L+(year-Y0)*bw;
-  return x0+bw*( (slot+1)/(total+1) );
-}
-function shapeEl(ty,x,y,fill){
-  let el;
-  if(ty==='j'){el=document.createElementNS(NS,'circle');el.setAttribute('cx',x);el.setAttribute('cy',y);el.setAttribute('r',7);}
-  else if(ty==='c'){el=document.createElementNS(NS,'rect');el.setAttribute('x',x-6);el.setAttribute('y',y-6);el.setAttribute('width',12);el.setAttribute('height',12);el.setAttribute('rx',2);}
-  else if(ty==='a'){el=document.createElementNS(NS,'path');el.setAttribute('d',`M ${x} ${y-7.5} L ${x+7} ${y+5.5} L ${x-7} ${y+5.5} Z`);}
-  else if(ty==='g'){el=document.createElementNS(NS,'path');el.setAttribute('d',`M ${x} ${y-8} L ${x+7} ${y} L ${x} ${y+8} L ${x-7} ${y} Z`);}
-  else{el=document.createElementNS(NS,'path');el.setAttribute('d',`M ${x-7} ${y-6} h14 l-7 12 Z`);el.setAttribute('transform',`rotate(180 ${x} ${y})`);}
-  el.setAttribute('fill',fill);el.setAttribute('fill-opacity','0.88');
-  return el;
-}
-function buildScatter(){
-  svg.innerHTML='';
-  // grid: year columns
-  const bw=(W-L-R)/(Y1-Y0+1);
-  for(let y=Y0;y<=Y1;y++){
-    const x=L+(y-Y0)*bw;
-    const ln=document.createElementNS(NS,'line');
-    ln.setAttribute('x1',x);ln.setAttribute('x2',x);ln.setAttribute('y1',T);ln.setAttribute('y2',H-B);
-    ln.setAttribute('stroke','#eee9e0');svg.appendChild(ln);
-    const tx=document.createElementNS(NS,'text');
-    tx.setAttribute('x',x+bw/2);tx.setAttribute('y',H-B+24);tx.setAttribute('text-anchor','middle');
-    tx.setAttribute('font-size','12.5');tx.setAttribute('fill','#8a8f98');tx.textContent=y;svg.appendChild(tx);
-  }
-  // row bands + labels
-  rows.forEach((k,i)=>{
-    const y=T+i*rowH;
-    if(i%2===0){
-      const bd=document.createElementNS(NS,'rect');
-      bd.setAttribute('x',L);bd.setAttribute('y',y);bd.setAttribute('width',W-L-R);bd.setAttribute('height',rowH);
-      bd.setAttribute('fill','#f7f5f0');svg.appendChild(bd);
-    }
-    const tx=document.createElementNS(NS,'text');
-    tx.setAttribute('x',L-12);tx.setAttribute('y',y+rowH/2+4);tx.setAttribute('text-anchor','end');
-    tx.setAttribute('font-size','13');tx.setAttribute('font-weight','600');tx.setAttribute('fill',MCOLOR[k]);
-    tx.textContent=MODS[k];tx.style.cursor='pointer';
-    tx.addEventListener('click',()=>setModFilter(k));
-    svg.appendChild(tx);
-  });
-  // points: group per (module,year)
-  rows.forEach((k,i)=>{
-    const yMid=T+i*rowH+rowH/2;
-    for(let y=Y0;y<=Y1;y++){
-      const group=REFS.filter(r=>r.m.includes(k)&&r.y===y);
-      group.forEach((r,j)=>{
-        const x=xOf(y,j,group.length);
-        const yy=yMid+(group.length>1?((j%2===0?-1:1)*Math.min(10,4+3*Math.floor(j/2))):0);
-        const el=shapeEl(r.ty,x,yy,MCOLOR[k]);
-        el.classList.add('pt');el.dataset.n=r.n;el.dataset.mod=k;
-        el.addEventListener('mouseenter',()=>{
-          document.querySelectorAll(`#scatter .pt[data-n="${r.n}"]`).forEach(p=>p.classList.add('hot'));
-          showTip(`<b>[${r.n}]</b> ${r.t}<div class="tt-mods">${TYPES[r.ty]} · supports: ${r.m.map(m=>MODS[m]).join(', ')}</div><div class="tt-open">click → reference list · double-click → open paper</div>`);
-        });
-        el.addEventListener('mouseleave',()=>{
-          document.querySelectorAll('#scatter .pt.hot').forEach(p=>p.classList.remove('hot'));hideTip();
-        });
-        el.addEventListener('click',()=>jumpToRef(r.n));
-        el.addEventListener('dblclick',()=>{
-          const u=r.doi?`https://doi.org/${r.doi}`:r.arxiv?`https://arxiv.org/abs/${r.arxiv}`:r.url;
-          if(u)window.open(u,'_blank');
-        });
-        svg.appendChild(el);
-      });
-    }
-  });
-  updateScatter();
-}
-function updateScatter(){
-  let vis=new Set(REFS.filter(refVisible).map(r=>r.n));
-  document.querySelectorAll('#scatter .pt').forEach(p=>{
-    const on=vis.has(+p.dataset.n)&&(fMod==='all'||p.dataset.mod===fMod);
-    p.classList.toggle('dim',!on);
-  });
-  document.getElementById('exp-count').textContent=`Showing ${vis.size} of ${REFS.length} references`;
-}
-/* shape legend */
-document.getElementById('shape-legend').innerHTML='<b style="color:var(--muted)">Shape:</b> '+Object.entries(TYPES).map(([k,v])=>{
-  const s={j:'<circle cx="7" cy="7" r="6" fill="#8a8f98"/>',c:'<rect x="1.5" y="1.5" width="11" height="11" rx="2" fill="#8a8f98"/>',a:'<path d="M7 1 L13 12 L1 12 Z" fill="#8a8f98"/>',g:'<path d="M7 0.5 L13 7 L7 13.5 L1 7 Z" fill="#8a8f98"/>',i:'<path d="M1 12 h12 l-6 -11 Z" fill="#8a8f98"/>'}[k];
-  return `<span><svg viewBox="0 0 14 14">${s}</svg>${v}</span>`;
-}).join('');
-
-/* ================= REFERENCE LIST ================= */
-const reflist=document.getElementById('reflist');
-function refLinks(r){
-  let h='';
-  if(r.doi)h+=`<a href="https://doi.org/${r.doi}" target="_blank" rel="noopener">doi:${r.doi}</a>`;
-  if(r.arxiv)h+=`<a href="https://arxiv.org/abs/${r.arxiv}" target="_blank" rel="noopener">arXiv:${r.arxiv}</a>`;
-  if(r.url)h+=`<a href="${r.url}" target="_blank" rel="noopener">${r.ul||'link'}</a>`;
-  return h;
-}
-function renderRefs(){
-  reflist.innerHTML='';let shown=0;
-  REFS.forEach(r=>{
-    if(!refVisible(r))return;shown++;
-    const li=document.createElement('li');li.id='ref-'+r.n;
-    li.innerHTML=`<span class="no">[${r.n}]</span><div>${r.t}
-      <div class="ref-links">${refLinks(r)}</div>
-      <div class="ref-tags">${r.m.map(m=>`<span>${MODS[m]}</span>`).join('')}<span>${TYPES[r.ty]}</span></div></div>`;
-    reflist.appendChild(li);
-  });
-  document.getElementById('ref-count').textContent=`Showing ${shown} of ${REFS.length} references`;
-}
-function applyFilters(){restyleChips();updateScatter();renderRefs();}
-function jumpToRef(n){
-  fMod='all';fQuery='';document.getElementById('exp-search').value='';
-  document.querySelectorAll('#exp-chips .chip').forEach(c=>c.classList.toggle('on',c.dataset.k==='all'));
-  applyFilters();
-  const li=document.getElementById('ref-'+n);
-  if(li){li.scrollIntoView({behavior:'smooth',block:'center'});
-    document.querySelectorAll('.reflist li.hl').forEach(x=>x.classList.remove('hl'));
-    li.classList.add('hl');setTimeout(()=>li.classList.remove('hl'),2600);}
-}
-/* citation chips (evidence map details, pilots) */
-document.addEventListener('mouseover',e=>{
-  const c=e.target.closest('.cite-n');if(!c)return;
-  const r=byN[+c.dataset.r];if(r)showTip(`<b>[${r.n}]</b> ${r.t}`);
-});
-document.addEventListener('mouseout',e=>{if(e.target.closest&&e.target.closest('.cite-n'))hideTip();});
-document.addEventListener('click',e=>{
-  const c=e.target.closest('.cite-n');if(!c)return;jumpToRef(+c.dataset.r);
-});
-
-/* ================= CHARTS ================= */
-const modCounts=Object.keys(MODS).map(k=>[k,REFS.filter(r=>r.m.includes(k)).length]);
-const maxM=Math.max(...modCounts.map(x=>x[1]));
-document.getElementById('chart-mod').innerHTML=modCounts.map(([k,v])=>
- `<div class="bar-row"><span class="lbl" data-k="${k}">${MODS[k]}</span><span class="bar" style="width:${(v/maxM*100*0.62).toFixed(1)}%;background:${MCOLOR[k]}"></span><span class="val">${v}</span></div>`).join('');
-document.querySelectorAll('#chart-mod .lbl').forEach(l=>l.addEventListener('click',()=>{setModFilter(l.dataset.k);document.getElementById('explorer').scrollIntoView({behavior:'smooth'});}));
-const years={};REFS.forEach(r=>{years[r.y]=(years[r.y]||0)+1;});
-const maxY=Math.max(...Object.values(years));
-let yh='';
-for(let y=2018;y<=2026;y++){
-  const v=years[y]||0;
-  yh+=`<div class="ycol"><span class="yv">${v||''}</span><span class="yb" style="height:${(v/maxY*104).toFixed(0)}px"></span><span class="yl">${y}</span></div>`;
-}
-document.getElementById('chart-year').innerHTML=yh;
-const tCounts=Object.keys(TYPES).map(k=>[TYPES[k],REFS.filter(r=>r.ty===k).length]).sort((a,b)=>b[1]-a[1]);
-const maxT=Math.max(...tCounts.map(x=>x[1]));
-document.getElementById('chart-type').innerHTML=tCounts.map(([l,v])=>
- `<div class="bar-row"><span class="lbl" style="width:120px">${l}</span><span class="bar" style="width:${(v/maxT*100*0.5).toFixed(1)}%"></span><span class="val">${v}</span></div>`).join('');
-
-/* ================= INIT & CITE ================= */
-buildScatter();renderRefs();
-document.getElementById('copy-cite').addEventListener('click',function(){
-  navigator.clipboard.writeText(document.getElementById('citebox').textContent.trim()).then(()=>{
-    this.textContent='Copied ✓';setTimeout(()=>this.textContent='Copy citation',1800);
-  });
-});
-</script>
+<script src="data.js"></script>
+<script src="edges.js"></script>
+<script src="app.js?v=1"></script>
 </body>
 </html>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
