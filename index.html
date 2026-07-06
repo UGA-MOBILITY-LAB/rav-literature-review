@@ -169,7 +169,7 @@ footer{border-top:1px solid var(--line);margin-top:64px;padding:24px 20px 38px;c
   <div class="hero-inner">
     <div class="kicker">TRAVELS Project · Literature Review Companion</div>
     <h1>Rural Autonomous Vehicles: <em>From Challenges to Evidence</em></h1>
-    <p class="sub">A literature review linking each RAV challenge — for both existing and advanced AV technology — to relevant research and AV pilots.</p>
+    <p class="sub">Mapping every RAV challenge to its research evidence.</p>
     <p class="team">TRAVELS Project Team · College of Engineering, University of Georgia · June 2026</p>
     <div class="stats">
       <div class="stat"><b>45</b><span>references</span></div>
@@ -187,7 +187,7 @@ footer{border-top:1px solid var(--line);margin-top:64px;padding:24px 20px 38px;c
 <section id="framework">
   <div class="kicker">The Two-Tier Framework</div>
   <h2>Six modules, one rural AV system</h2>
-  <p class="lede">Existing technology carries the service today; advanced, infrastructure-integrated technology extends it; two field pilots ground it in practice. <b>Hover a module</b> for its role, <b>click</b> to filter the explorer below.</p>
+  <p class="lede"><b>Hover</b> a module for its role · <b>click</b> to filter the explorer.</p>
   <div class="panel">
     <svg viewBox="0 0 1000 360" xmlns="http://www.w3.org/2000/svg" aria-label="RAV two-tier framework diagram">
       <defs>
@@ -245,8 +245,8 @@ footer{border-top:1px solid var(--line);margin-top:64px;padding:24px 20px 38px;c
 <!-- EVIDENCE MAP -->
 <section id="evidence">
   <div class="kicker">Evidence Map</div>
-  <h2>What is solved, what needs adapting, what is open</h2>
-  <p class="lede">26 research sub-themes from the review's evidence tables, colored by maturity for rural deployment. <b>Hover or tap a pill</b> for the literature finding and the rural gap.</p>
+  <h2>Solved · adapt · open</h2>
+  <p class="lede"><b>Hover</b> a pill → finding · references · rural gap.</p>
   <div class="legend">
     <span><i style="background:var(--good)"></i>Reusable now</span>
     <span><i style="background:var(--mid)"></i>Needs rural adaptation</span>
@@ -259,7 +259,7 @@ footer{border-top:1px solid var(--line);margin-top:64px;padding:24px 20px 38px;c
 <!-- STATISTICS -->
 <section id="statistics">
   <div class="kicker">Statistics</div>
-  <h2>The evidence base at a glance</h2>
+  <h2>At a glance</h2>
   <div class="charts">
     <div class="chart-card"><h3>References per module</h3><div id="chart-mod"></div></div>
     <div class="chart-card"><h3>References per year</h3><div class="year-chart" id="chart-year"></div></div>
@@ -270,8 +270,8 @@ footer{border-top:1px solid var(--line);margin-top:64px;padding:24px 20px 38px;c
 <!-- EXPLORER -->
 <section id="explorer">
   <div class="kicker">Reference Explorer</div>
-  <h2>45 references, mapped</h2>
-  <p class="lede">Every reference plotted by <b>publication year</b> (x) and the <b>RAV module</b> it supports (row). Colour = module · shape = source type. A reference supporting several modules appears in each row.</p>
+  <h2>Explore the 45 references</h2>
+  <p class="lede">x = year · row = module · colour = module · shape = source type.</p>
   <div class="explorer-tools">
     <input id="exp-search" type="search" placeholder="Search title, author, venue…" aria-label="Search references">
     <div class="chips" id="exp-chips"></div>
@@ -282,25 +282,23 @@ footer{border-top:1px solid var(--line);margin-top:64px;padding:24px 20px 38px;c
     <svg id="scatter" viewBox="0 0 1060 480" xmlns="http://www.w3.org/2000/svg" aria-label="Reference scatter plot"></svg>
   </div>
   <div class="shape-legend" id="shape-legend"></div>
-  <p class="explorer-note">Hover a point to preview its citation; click a point to jump to it in the reference list; double-click to open the paper (DOI / arXiv / source).</p>
+  <p class="explorer-note">hover = preview · click = jump to list · double-click = open paper</p>
 </section>
 
 <!-- PILOTS -->
 <section id="pilots">
   <div class="kicker">Pilot Deployments</div>
-  <h2>Two rural pilots already in the field</h2>
+  <h2>Two pilots in the field</h2>
   <div class="pilots">
     <div class="pilot-card">
       <h3>goMARTI</h3>
       <div class="loc">Grand Rapids, Minnesota · on-demand <span class="cite-n" data-r="14">[14]</span><span class="cite-n" data-r="15">[15]</span></div>
-      Door-to-door service booked via app or 211, safety operator on board.
-      <div class="facts"><span>~97 stops</span><span>on-demand</span><span>free rides</span><span>gap: driver-out, open roads</span></div>
+      <div class="facts"><span>~97 stops</span><span>on-demand · app / 211</span><span>free rides</span><span>safety operator</span><span style="color:var(--gap);border-color:var(--gap)">gap: driver-out</span></div>
     </div>
     <div class="pilot-card">
       <h3>ADASTEC Pilot</h3>
       <div class="loc">Sleeping Bear Dunes National Lakeshore · fixed route <span class="cite-n" data-r="16">[16]</span></div>
-      Fixed scenic route on a set daily schedule, seats reserved in advance.
-      <div class="facts"><span>~4 round trips/day</span><span>fixed route</span><span>free seats</span><span>gap: headway optimization</span></div>
+      <div class="facts"><span>~4 round trips/day</span><span>fixed scenic route</span><span>reserved free seats</span><span>safety operator</span><span style="color:var(--gap);border-color:var(--gap)">gap: headway optimization</span></div>
     </div>
   </div>
 </section>
@@ -309,7 +307,7 @@ footer{border-top:1px solid var(--line);margin-top:64px;padding:24px 20px 38px;c
 <section id="references">
   <div class="kicker">Bibliography</div>
   <h2>References</h2>
-  <p class="lede">The list respects the filters and search in the explorer above. Click any citation number on the page to jump here.</p>
+  <p class="lede">Follows the explorer filters above.</p>
   <div id="ref-count" style="font-size:13.5px;color:var(--muted)"></div>
   <ol class="reflist" id="reflist"></ol>
 </section>
