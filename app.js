@@ -103,6 +103,14 @@
   var paperScope = null;
   var scopeLabel = "";
 
+  function clearRecommendationActive() {
+    var cards = document.querySelectorAll(".recommendation-card");
+    for (var i = 0; i < cards.length; i++) {
+      cards[i].classList.remove("is-active");
+      cards[i].setAttribute("aria-pressed", "false");
+    }
+  }
+
   function passesFilters(p) {
     if (paperScope && !paperScope.has(p.n)) { return false; }
     if (filters.cat.size && !filters.cat.has(p.cat)) { return false; }
@@ -160,6 +168,7 @@
       cb.addEventListener("change", function () {
         paperScope = null;
         scopeLabel = "";
+        clearRecommendationActive();
         if (cb.checked) { filters[filterKey].add(opt.value); }
         else { filters[filterKey].delete(opt.value); }
         var n = filters[filterKey].size;
@@ -232,6 +241,7 @@
     pinnedKey = null;
     paperScope = null;
     scopeLabel = "";
+    clearRecommendationActive();
     query = "";
     searchInput.value = "";
     allDropdowns.forEach(function (d) {
@@ -249,6 +259,7 @@
   function setCatFilter(cat) {
     paperScope = null;
     scopeLabel = "";
+    clearRecommendationActive();
     filters.cat.clear();
     filters.cat.add(cat);
     allDropdowns.forEach(function (d) {
@@ -268,6 +279,7 @@
   // Used by framework submodules: keep the parent category selected and
   // narrow the explorer to the references that support the chosen submodule.
   function setSubthemeFilter(cat, label, refs) {
+    clearRecommendationActive();
     filters.cat.clear();
     filters.cat.add(cat);
     paperScope = new Set(refs);
@@ -283,6 +295,54 @@
       d.badge.textContent = String(n);
       d.badge.hidden = (n === 0);
     });
+    render();
+  }
+
+  function setRecommendationFilter(label, refs, activeCard) {
+    filters.cat.clear();
+    filters.year.clear();
+    filters.vtype.clear();
+    filters.link.clear();
+    hiddenCats.clear();
+    hiddenTypes.clear();
+    showEdges = true;
+    pinnedKey = null;
+    query = "";
+    searchInput.value = "";
+    paperScope = new Set(refs);
+    scopeLabel = "Recommendation / " + label;
+    allDropdowns.forEach(function (d) {
+      d.badge.hidden = true;
+      d.badge.textContent = "";
+      var boxes = d.panel.querySelectorAll("input[type=checkbox]");
+      for (var i = 0; i < boxes.length; i++) { boxes[i].checked = false; }
+    });
+    var legendItems = document.querySelectorAll(".legend-item");
+    for (var i = 0; i < legendItems.length; i++) {
+      legendItems[i].setAttribute("aria-pressed", "true");
+    }
+    clearRecommendationActive();
+    activeCard.classList.add("is-active");
+    activeCard.setAttribute("aria-pressed", "true");
+    render();
+  }
+
+  function setEvidenceFilter(label, refs) {
+    filters.cat.clear();
+    filters.year.clear();
+    filters.vtype.clear();
+    filters.link.clear();
+    query = "";
+    searchInput.value = "";
+    paperScope = new Set(refs);
+    scopeLabel = "Evidence Map / " + label;
+    allDropdowns.forEach(function (d) {
+      d.badge.hidden = true;
+      d.badge.textContent = "";
+      var boxes = d.panel.querySelectorAll("input[type=checkbox]");
+      for (var i = 0; i < boxes.length; i++) { boxes[i].checked = false; }
+    });
+    clearRecommendationActive();
     render();
   }
 
@@ -859,6 +919,27 @@
     } else { legacyCopy(); }
   });
 
+  /* ---------- stakeholder recommendations ---------- */
+
+  (function () {
+    var cards = document.querySelectorAll(".recommendation-card");
+    cards.forEach(function (card) {
+      var label = card.getAttribute("data-label");
+      var refs = card.getAttribute("data-refs").split(",").map(function (n) { return Number(n); });
+      function activate() {
+        setRecommendationFilter(label, refs, card);
+        document.getElementById("explorer").scrollIntoView({ behavior: "smooth" });
+      }
+      card.addEventListener("click", activate);
+      card.addEventListener("keydown", function (e) {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          activate();
+        }
+      });
+    });
+  })();
+
   /* ---------- nav scroll spy ---------- */
 
   var sections = Array.prototype.slice.call(document.querySelectorAll("main section[id]"));
@@ -965,36 +1046,167 @@
     var edetail = document.getElementById("emap-detail");
     if (!emap || !edetail) { return; }
     var THEMES = [
-      ["Autonomous Driving", "Single-sensor limits", "r", [1, 18, 20], "Direct rural perception data is scarce — RAV must collect it."],
-      ["Autonomous Driving", "Multi-sensor fusion", "m", [2, 17, 18, 19, 20], "Validated on dense urban networks — re-tune for sparse rural geometry."],
-      ["Autonomous Driving", "Adverse-weather perception", "m", [3, 21, 22], "Onboard-only perception still degrades — lean on cooperative perception."],
-      ["Autonomous Driving", "GNSS/LiDAR failure modes", "m", [1, 2], "No single positioning source is reliable rurally — fuse sources."],
-      ["Autonomous Driving", "HD-map localization", "m", [2, 23, 24, 25], "Rural HD maps largely missing — build and refresh them."],
-      ["Autonomous Driving", "Energy & terrain routing", "m", [1, 4, 26, 27], "Models not calibrated for rural unpaved grades."],
-      ["Autonomous Driving", "On-demand vs fixed route", "m", [5, 16, 30, 31], "Use on-demand planning for healthcare and fixed routes for transit and park service."],
-      ["Autonomous Driving", "Sensor-level fusion", "g", [17, 18, 19], "Reusable directly for the perception pipeline."],
-      ["Autonomous Driving", "Heterogeneous & aggregated data", "r", [2, 19, 25], "Keep onboard reconciliation as the backbone and treat edge/cloud feeds as opportunistic."],
-      ["Fleet Management", "On-demand dispatch & ride-matching", "g", [5, 28, 29, 30, 31], "Reuse RL dispatch, operations-research methods, and rider-app matching."],
-      ["Fleet Management", "Remote monitoring & supervision", "r", [14, 15, 16], "Define supervisor ratios, takeover procedures, and monitoring over weak rural links."],
-      ["Fleet Management", "Fixed-route dispatch & scheduling", "r", [16], "Develop headway and timetable scheduling for thin-demand rural runs."],
-      ["Fleet Management", "Fleet management functions", "r", [14, 15, 16], "Charging, onboard monitoring, and fare collection remain engineering and data-collection items."],
-      ["Infrastructure", "Digital infrastructure", "m", [7, 25, 37, 38], "Adapt HD maps, roadside sensing, and digital twins to sparse, intermittently connected roads."],
-      ["Infrastructure", "Physical road assessment", "m", [39, 46, 47, 48, 49], "Combine UAV, smartphone, mobile-LiDAR, sign, marking, and gravel-road surveys into one upgrade workflow."],
-      ["Communication", "Rural V2X", "r", [9, 50, 51, 52], "Design for weaker coverage, longer disconnections, interference, mobility, and QoS limits."],
-      ["Communication", "Multi-channel links", "m", [8], "Switch among C-V2X, cellular, and LEO satellite links by coverage and latency."],
-      ["Communication", "V2X cybersecurity", "g", [44, 45], "Apply the surveyed countermeasures before field deployment."],
-      ["Cooperative Driving", "Cooperative perception", "m", [10, 35], "Deploy roadside sensing along sparse rural routes."],
-      ["Cooperative Driving", "Edge RSU CDA & handover", "m", [34, 36], "Place edge RSUs where help is most likely needed."],
-      ["Cooperative Driving", "CACC & platooning", "m", [40, 41], "Adapt to low-volume rural arterials with mixed traffic."],
-      ["Cooperative Driving", "Work / school zones", "r", [11], "Passive, unsignalized rural conflict points are largely unsolved."],
-      ["Cooperative Driving", "Rail grade crossings", "m", [42, 43], "Extend V2I warning to passive, uninstrumented rural crossings."],
-      ["Cooperative Driving", "Extreme-weather driving", "r", [12, 13, 21], "Sense, predict, and reroute cooperatively."],
-      ["Pilots", "goMARTI (on-demand)", "g", [14, 15], "Extend toward higher-speed, longer-range, driver-out operation."],
-      ["Pilots", "ADASTEC (fixed route)", "g", [16], "Add headway optimization; reduce operator reliance."]
+      {
+        cat: "Autonomous Driving", title: "Perception - single sensor", status: "r", refs: [1, 18, 20],
+        definition: "One modality, typically a monocular camera, turns raw output into detected lanes, obstacles, pedestrians, animals, and signs.",
+        findings: "A single-sensor stack is inexpensive, computationally light, and simple to calibrate. Its view is narrow and easily degraded by limited range, glare, low light, occlusion, faded markings, and unpaved surfaces.",
+        rav: "Treat single-sensor coverage as a baseline rather than the final solution. Direct rural evidence is scarce, so RAV must collect rural perception data and validate performance on its own roads."
+      },
+      {
+        cat: "Autonomous Driving", title: "Perception - multi-sensor fusion", status: "m", refs: [2, 17, 18, 19, 20],
+        definition: "Camera, radar, LiDAR, and IMU readings are combined into one detection set; some stacks fuse two modalities and others fuse all three plus IMU for ego-motion alignment.",
+        findings: "Fusion adds range, weather robustness, 3-D geometry, and redundancy, and it outperforms any single sensor in complex scenes. The trade-off is higher sensor and compute cost plus calibration and synchronization effort.",
+        rav: "Use camera plus radar as the lower-cost floor and add LiDAR where its 3-D geometry materially improves safety. Re-train and re-validate the models for sparse rural geometry."
+      },
+      {
+        cat: "Autonomous Driving", title: "Perception - adverse weather", status: "m", refs: [3, 21, 22],
+        definition: "Condition-specific methods and datasets keep onboard perception useful under glare, rain, fog, snow, dust, and related visibility loss.",
+        findings: "Adverse-weather training can recover accuracy and dedicated datasets support benchmarking, but performance still degrades when several modalities are affected together.",
+        rav: "Build a local adverse-weather dataset and validate fallback thresholds for the service area. Cooperative information may supplement the vehicle where infrastructure exists, but safe onboard behavior must remain available."
+      },
+      {
+        cat: "Autonomous Driving", title: "Localization - GNSS/LiDAR limits", status: "m", refs: [1, 2],
+        definition: "GNSS/INS provides a global satellite position, while LiDAR localization matches live scans against known road geometry.",
+        findings: "GNSS is affordable and globally referenced; LiDAR can be precise without satellite signals. GNSS drifts under canopy or in valleys, while sparse, repetitive rural geometry makes LiDAR-only matching ambiguous.",
+        rav: "Do not depend on either source alone. RAV needs a fused position estimate that remains stable across canopy, valleys, weak features, and intermittent map matches."
+      },
+      {
+        cat: "Autonomous Driving", title: "Localization - fusion with HD maps", status: "m", refs: [2, 23, 24, 25],
+        definition: "Vision and LiDAR are matched against an HD-map prior and fused with GNSS/INS into one pose estimate.",
+        findings: "The fused stack can sustain lane-level to centimeter positioning in GNSS-challenged settings. Its dominant cost is the HD map that must be surveyed, verified, and continuously refreshed.",
+        rav: "The localization stack transfers directly after RAV maps its own corridors. The project also needs a practical rural HD-map maintenance workflow linked to road and infrastructure updates."
+      },
+      {
+        cat: "Autonomous Driving", title: "Data integration - onboard raw & semantic", status: "g", refs: [17, 18, 19],
+        definition: "Raw camera, radar, and LiDAR streams are fused onboard and converted into semantic output such as detections, pose, trajectory, and control state.",
+        findings: "This preserves the richest detail, low latency, and independence from network coverage. It also carries the highest bandwidth and compute load, and its quality remains bounded by sensor quality.",
+        rav: "Reuse onboard raw-to-semantic fusion as the core perception and localization pipeline. It is the dependable backbone when rural communication is unavailable."
+      },
+      {
+        cat: "Autonomous Driving", title: "Data integration - heterogeneous & aggregated", status: "r", refs: [2, 19, 25],
+        definition: "The system reconciles inputs with different reliability, coordinate frames, and update rates; aggregated feeds add traffic, events, maps, weather, and fleet context.",
+        findings: "Aggregated information adds context no single vehicle can sense, but edge and cloud feeds arrive with latency and depend on coverage that rural roads may not provide.",
+        rav: "Keep onboard reconciliation authoritative and treat roadside, fleet, and cloud feeds as opportunistic additions. Engineer confidence checks and graceful degradation for delayed or missing inputs."
+      },
+      {
+        cat: "Autonomous Driving", title: "Routing - energy & terrain aware", status: "m", refs: [1, 4, 26, 27],
+        definition: "Route cost includes grade, surface, vehicle dynamics, and effective battery range so every plan stays physically feasible.",
+        findings: "Energy-aware routing protects range on hilly and unpaved roads, but it depends on calibrated terrain, surface, and consumption models that are rarely available for rural networks.",
+        rav: "Use energy- and terrain-aware cost underneath every service mode, then calibrate it with grade, surface, weather, load, and energy data from RAV's own corridors."
+      },
+      {
+        cat: "Autonomous Driving", title: "Routing - on-demand vs fixed route", status: "m", refs: [5, 16, 30, 31],
+        definition: "On-demand routing builds and sequences trips from rider requests; fixed-route operation repeats a preset line on a published timetable.",
+        findings: "On-demand service reaches scattered riders but needs live demand and dispatch computing. Fixed routes are predictable and simple, but can waste capacity and miss riders away from the line.",
+        rav: "Use on-demand routing for healthcare service and fixed routes for regular transit and park service, with range and terrain constraints applied to both."
+      },
+      {
+        cat: "Fleet Management", title: "On-demand dispatch & ride-matching", status: "g", refs: [5, 28, 29, 30, 31],
+        definition: "Riders request trips and the fleet assigns, matches, sequences, and rebalances vehicles in real time.",
+        findings: "Reinforcement-learning and operations-research methods reduce waiting and empty travel for low-density demand. They require live requests, a matching engine, and enough vehicles to maintain acceptable waits.",
+        rav: "Reuse proven dispatch and rider-app matching methods for RAV's on-demand service, then tune service zones, wait-time targets, and fleet size using local demand."
+      },
+      {
+        cat: "Fleet Management", title: "Fixed-route dispatch & scheduling", status: "r", refs: [16],
+        definition: "Vehicles repeat a route while headway and timetable planning determine when each run departs and how vehicles are spaced.",
+        findings: "The service is predictable for riders and simple to operate, but thin demand can create long waits and poor vehicle utilization. The review found a pilot, not dedicated rural scheduling studies.",
+        rav: "Develop and test headway, timetable, and fleet-allocation methods specifically for thin-demand rural runs."
+      },
+      {
+        cat: "Fleet Management", title: "Fleet support - charging, monitoring & fares", status: "r", refs: [14, 15, 16],
+        definition: "Fleet support keeps vehicles service-ready through charging and energy management, onboard health monitoring, maintenance coordination, and fare collection.",
+        findings: "The rural pilots handle these functions operationally, but the review found no dedicated rural AV method or comparative evidence for them.",
+        rav: "Treat these as engineering and data-collection functions in early deployment. Use pilot data to formalize charging plans, maintenance triggers, and rider payment policy."
+      },
+      {
+        cat: "Fleet Management", title: "Remote monitoring & supervision", status: "r", refs: [14, 15, 16],
+        definition: "An operations center tracks vehicle location, health, and service state while a human supervisor assists or intervenes when automation requests help.",
+        findings: "One supervisor may support multiple vehicles, enabling scale without a driver in every seat. The model depends on telemetry and video links, and supervisor ratios and takeover procedures remain unsettled.",
+        rav: "Define supervisor-to-vehicle ratios, degraded-link operating rules, intervention authority, and takeover procedures; then test them under weak rural connectivity."
+      },
+      {
+        cat: "Infrastructure", title: "Physical road assessment", status: "m", refs: [39, 46, 47, 48, 49],
+        definition: "UAV, smartphone, imaging, and mobile-LiDAR surveys detect pavement damage, markings, signs, geometry, and gravel-road surface condition.",
+        findings: "The component methods are reusable and lower the cost of network inspection, but existing studies address individual features rather than one integrated rural upgrade workflow.",
+        rav: "Validate the methods under local road, weather, and maintenance conditions, then combine results into segment-level priorities for physical upgrades."
+      },
+      {
+        cat: "Infrastructure", title: "Digital road-information layer", status: "m", refs: [7, 25, 37, 38],
+        definition: "HD maps provide the spatial base, roadside sensing supplies changing observations, and a digital twin integrates both for vehicle and infrastructure decisions.",
+        findings: "Demonstrations exist on highways, selected rural test sections, and controlled campuses, but they are highly instrumented or proof-of-concept.",
+        rav: "Reuse the layered architecture while adapting it to incomplete maps, sparse sensors, intermittent communication, and low-cost rural updates."
+      },
+      {
+        cat: "Communication", title: "Rural V2X", status: "r", refs: [9, 50, 51, 52],
+        definition: "Vehicle-to-vehicle, vehicle-to-infrastructure, and vehicle-to-network links exchange hazard, traffic, road-condition, and coordination information using C-V2X and 5G NR-V2X.",
+        findings: "Rural measurements show weaker coverage and longer disconnections; related studies add interference, resource allocation, mobility, energy, and quality-of-service trade-offs.",
+        rav: "Assume intermittent connectivity from the start. Combine direct and network-based links, monitor link quality, and preserve safe vehicle operation throughout disconnections."
+      },
+      {
+        cat: "Communication", title: "Multi-channel connectivity", status: "m", refs: [8],
+        definition: "C-V2X, public cellular, and LEO satellite interfaces are combined so another path can carry nonlocal information when one network is unavailable.",
+        findings: "Multiple channels improve reach and resilience, but add hardware cost, switching complexity, energy use, and potentially satellite latency.",
+        rav: "Measure coverage and latency along service corridors and switch channels by policy. Keep time-critical control onboard and use wide-area links for supplementary information."
+      },
+      {
+        cat: "Communication", title: "V2X cybersecurity", status: "g", refs: [44, 45],
+        definition: "Authentication, encryption, integrity checks, and message verification protect V2X messages, networks, and devices.",
+        findings: "The surveyed mechanisms address spoofing, manipulation, eavesdropping, and denial of service, although they add communication and computation overhead.",
+        rav: "Apply security across every communication channel before field deployment and include certificate, key, logging, and incident-response operations in the system design."
+      },
+      {
+        cat: "Cooperative Driving", title: "Cooperative perception", status: "m", refs: [10, 35],
+        definition: "Vehicles and roadside infrastructure share sensor data or detected objects to extend field of view and reduce blind spots.",
+        findings: "Cooperation improves awareness under occlusion and adverse weather, but requires reliable links, accurate spatial and temporal alignment, roadside equipment, and protection from delayed or incorrect data.",
+        rav: "Deploy roadside sensing only at conflict points where onboard perception needs help, and preserve a safe onboard fallback when shared data is unavailable."
+      },
+      {
+        cat: "Cooperative Driving", title: "Infrastructure-assisted control & handover", status: "m", refs: [34, 36],
+        definition: "Nearby edge roadside units support cooperative driving services and can assist a vehicle when automation reaches an operational limit.",
+        findings: "Experiments quantify safety and latency benefits, but the approach assumes dense and reliable roadside coverage that rural networks do not have.",
+        rav: "Place edge support at a small number of high-risk locations, define handover authority and timing, and validate operation when the roadside unit or link fails."
+      },
+      {
+        cat: "Cooperative Driving", title: "CACC & platooning", status: "m", refs: [40, 41],
+        definition: "Cooperative adaptive cruise control and platooning coordinate vehicle speed, spacing, and signal interaction using shared motion information.",
+        findings: "Field studies demonstrate efficiency and coordination on urban or suburban arterials with steadier traffic and stronger infrastructure.",
+        rav: "Adapt the methods to low-volume rural arterials with mixed conventional and automated vehicles, variable connectivity, and longer gaps between equipped intersections."
+      },
+      {
+        cat: "Cooperative Driving", title: "Work & school zones", status: "r", refs: [11],
+        definition: "Connected warnings and trajectory coordination help vehicles approach temporary work areas and school-zone conflict points.",
+        findings: "Published methods focus on more structured or connected settings; passive and unsignalized rural interactions remain weakly studied.",
+        rav: "Develop low-infrastructure warnings and operating rules for rural work and school zones, then field-test detection, yielding, and fallback behavior."
+      },
+      {
+        cat: "Cooperative Driving", title: "Rail grade crossings", status: "m", refs: [42, 43],
+        definition: "Vehicle-to-infrastructure warnings communicate train approach, crossing state, and violation risk to road vehicles.",
+        findings: "Federal studies demonstrate warning applications at instrumented crossings, but many rural crossings are passive and lack communications equipment.",
+        rav: "Extend warning logic to passive rural crossings and specify safe onboard behavior when no infrastructure message is available."
+      },
+      {
+        cat: "Cooperative Driving", title: "Extreme-weather cooperation", status: "r", refs: [12, 13, 21],
+        definition: "Road-weather information and cooperative perception support hazard sensing, lane closure, speed adjustment, and rerouting during rain, snow, and fog.",
+        findings: "The methods can supplement degraded onboard sensing, but most demonstrations assume instrumented roads, reliable connectivity, and richer weather data.",
+        rav: "Collect local weather evidence, identify risk thresholds, and test cooperative warning and rerouting while retaining safe onboard operation through infrastructure outages."
+      },
+      {
+        cat: "Pilots", title: "goMARTI - on-demand", status: "g", refs: [14, 15],
+        definition: "A door-to-door rural shuttle serves roughly 97 pick-up and drop-off points, with requests through an app or 211 and a safety operator onboard.",
+        findings: "The pilot demonstrates accessible, low-speed, on-demand service within a geofence and provides real operating evidence for rider requests and fleet supervision.",
+        rav: "Use it as the service-model baseline, then progress through safety gates toward longer range, higher speeds, and reduced onboard operator reliance."
+      },
+      {
+        cat: "Pilots", title: "ADASTEC - fixed route", status: "g", refs: [16],
+        definition: "A scheduled automated bus runs a fixed scenic route for about four round trips per day with advance reservations and a safety operator onboard.",
+        findings: "The pilot demonstrates a predictable fixed-route model, but remains low-speed, geofenced, scheduled, and supervised.",
+        rav: "Reuse the fixed-route operating concept while adding rural headway and timetable optimization and progressively reducing operator dependence."
+      }
     ];
     var STATUS = { g: ["Reusable now", "#4B8B3B"], m: ["Needs rural adaptation", "#D99114"], r: ["Open gap", "#BA0C2F"] };
     var byNum = {};
     PAPERS.forEach(function (p) { byNum[p.n] = p; });
+    var initialTheme = null;
     CATEGORIES.forEach(function (c) {
       var row = el("div", "mrow");
       var lab = el("div", "mlab");
@@ -1004,31 +1216,41 @@
       lab.appendChild(document.createTextNode(c));
       var cells = el("div", "mcells");
       THEMES.forEach(function (t) {
-        if (t[0] !== c) { return; }
-        var pill = el("button", "epill " + t[2], t[1]);
+        if (t.cat !== c) { return; }
+        var pill = el("button", "epill " + t.status, t.title);
         pill.type = "button";
+        pill.setAttribute("aria-pressed", "false");
+        pill.title = "Show definition, findings, rural gap, and RAV action";
         pill.addEventListener("mouseenter", function () { showDetail(t, pill); });
         pill.addEventListener("focus", function () { showDetail(t, pill); });
+        pill.addEventListener("click", function () { showDetail(t, pill); });
         cells.appendChild(pill);
+        if (!initialTheme) { initialTheme = { theme: t, pill: pill }; }
       });
       row.appendChild(lab);
       row.appendChild(cells);
       emap.appendChild(row);
     });
     function showDetail(t, pill) {
-      var st = STATUS[t[2]];
+      var st = STATUS[t.status];
       var pills = emap.querySelectorAll(".epill.on");
-      for (var i = 0; i < pills.length; i++) { pills[i].classList.remove("on"); }
+      for (var i = 0; i < pills.length; i++) {
+        pills[i].classList.remove("on");
+        pills[i].setAttribute("aria-pressed", "false");
+      }
       pill.classList.add("on");
+      pill.setAttribute("aria-pressed", "true");
       while (edetail.firstChild) { edetail.removeChild(edetail.firstChild); }
+      edetail.style.borderLeftColor = st[1];
+      var heading = el("div", "ed-heading");
       var tag = el("span", "ed-tag", st[0]);
       tag.style.background = st[1];
-      edetail.appendChild(tag);
-      var head = el("strong", null, " " + t[1] + " · " + t[0]);
-      edetail.appendChild(head);
+      heading.appendChild(tag);
+      heading.appendChild(el("strong", null, t.title + " | " + t.cat));
+      edetail.appendChild(heading);
       var refsRow = el("div", "ed-row");
       refsRow.appendChild(document.createTextNode("References: "));
-      t[3].forEach(function (n) {
+      t.refs.forEach(function (n) {
         var p = byNum[n];
         var a = el("a", "ed-ref", "[" + n + "]");
         a.href = p ? p._link : "#";
@@ -1039,12 +1261,27 @@
         refsRow.appendChild(document.createTextNode(" "));
       });
       edetail.appendChild(refsRow);
-      var gapRow = el("div", "ed-row");
-      var b = el("strong", null, "RAV priority: ");
-      gapRow.appendChild(b);
-      gapRow.appendChild(document.createTextNode(t[4]));
-      edetail.appendChild(gapRow);
+      var grid = el("div", "ed-grid");
+      [
+        ["Definition", t.definition, "ed-definition"],
+        ["Literature findings and trade-offs", t.findings, "ed-findings"],
+        ["Rural gap and RAV action", t.rav, "ed-rav"]
+      ].forEach(function (section) {
+        var block = el("div", "ed-block " + section[2]);
+        block.appendChild(el("span", "ed-label", section[0]));
+        block.appendChild(el("p", null, section[1]));
+        grid.appendChild(block);
+      });
+      edetail.appendChild(grid);
+      var explore = el("button", "ed-explore", "Explore " + t.refs.length + " supporting reference" + (t.refs.length === 1 ? "" : "s") + " in the literature explorer");
+      explore.type = "button";
+      explore.addEventListener("click", function () {
+        setEvidenceFilter(t.title, t.refs);
+        document.getElementById("explorer").scrollIntoView({ behavior: "smooth" });
+      });
+      edetail.appendChild(explore);
     }
+    if (initialTheme) { showDetail(initialTheme.theme, initialTheme.pill); }
   })();
 
   /* ---------- init ---------- */
