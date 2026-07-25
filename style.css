@@ -156,9 +156,41 @@ h1 { font-size: 42px; line-height: 1.12; margin: 0 0 10px; }
 .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
 .stats-grid h3 { margin: 0 0 14px; font-size: 18px; }
 .stats-grid svg { display: block; width: 100%; height: auto; }
+.stat-help { margin: -6px 0 10px; color: var(--muted); font-size: 13px; }
 .bar-label { font-family: var(--sans); font-size: 12px; fill: #1A1A1A; }
 .bar-value { font-family: var(--sans); font-size: 11.5px; fill: var(--muted); }
 .axis-label { font-family: var(--sans); font-size: 10px; fill: var(--muted); }
+.stat-hit { cursor: pointer; }
+.stat-hit:focus { outline: none; }
+.stat-hitbox { fill: transparent; }
+.stat-hit .stat-bar {
+  transition: opacity .15s ease, filter .15s ease, stroke-width .15s ease;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.stat-hit:hover .stat-bar,
+.stat-hit:focus-visible .stat-bar {
+  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, .24));
+  opacity: .82;
+}
+.stat-hit:focus-visible .bar-label,
+.stat-hit:focus-visible .axis-label,
+.stat-hit:hover .bar-label,
+.stat-hit:hover .axis-label {
+  fill: var(--red);
+  font-weight: 700;
+}
+.stat-hit.is-active .stat-bar {
+  stroke: #111;
+  stroke-width: 2.5;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, .26));
+}
+.stat-hit.is-active .bar-label,
+.stat-hit.is-active .axis-label,
+.stat-hit.is-active .bar-value {
+  fill: #111;
+  font-weight: 700;
+}
 
 /* ---------- explorer toolbar ---------- */
 

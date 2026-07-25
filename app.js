@@ -276,6 +276,35 @@
     render();
   }
 
+  function syncDropdownFilter(filterKey) {
+    allDropdowns.forEach(function (d) {
+      if (d.key !== filterKey) { return; }
+      var boxes = d.panel.querySelectorAll("input[type=checkbox]");
+      var n = 0;
+      for (var i = 0; i < boxes.length; i++) {
+        boxes[i].checked = filters[filterKey].has(boxes[i].value);
+        if (boxes[i].checked) { n++; }
+      }
+      d.badge.textContent = String(n);
+      d.badge.hidden = (n === 0);
+    });
+  }
+
+  // Statistics bars cross-filter the explorer and reference list. Selecting
+  // the active bar again clears that dimension; category and year selections
+  // can be combined.
+  function setStatFilter(filterKey, value) {
+    paperScope = null;
+    scopeLabel = "";
+    clearRecommendationActive();
+    var active = filters[filterKey].size === 1 && filters[filterKey].has(value);
+    filters[filterKey].clear();
+    if (!active) { filters[filterKey].add(value); }
+    syncDropdownFilter(filterKey);
+    render();
+    document.getElementById("explorer").scrollIntoView({ behavior: "smooth" });
+  }
+
   // Used by framework submodules: keep the parent category selected and
   // narrow the explorer to the references that support the chosen submodule.
   function setSubthemeFilter(cat, label, refs) {
@@ -730,17 +759,40 @@
       var yTop = 4 + i * rowH;
       var n = catTotals[c];
       var w = max ? Math.max(2, (n / max) * maxBar) : 2;
+      var group = svgEl("g", {
+        "class": "stat-hit",
+        "data-filter-key": "cat",
+        "data-filter-value": c,
+        role: "button",
+        tabindex: "0",
+        "aria-pressed": "false",
+        "aria-label": "Filter to " + c + ": " + n + " references"
+      });
+      group.appendChild(svgEl("rect", {
+        x: 0, y: yTop, width: W, height: rowH - 2, "class": "stat-hitbox"
+      }));
       var label = svgEl("text", { x: labelX, y: yTop + 18, "text-anchor": "end", "class": "bar-label" });
       label.textContent = c;
-      svg.appendChild(label);
-      var bar = svgEl("rect", { x: barX, y: yTop + 5, width: w, height: 18, rx: 3, fill: CAT_COLORS[c] });
+      group.appendChild(label);
+      var bar = svgEl("rect", {
+        x: barX, y: yTop + 5, width: w, height: 18, rx: 3,
+        fill: CAT_COLORS[c], "class": "stat-bar"
+      });
       var t = svgEl("title");
-      t.textContent = c + ": " + n + " references";
+      t.textContent = c + ": " + n + " references. Select to filter.";
       bar.appendChild(t);
-      svg.appendChild(bar);
+      group.appendChild(bar);
       var val = svgEl("text", { x: barX + w + 7, y: yTop + 18, "class": "bar-value" });
       val.textContent = String(n);
-      svg.appendChild(val);
+      group.appendChild(val);
+      group.addEventListener("click", function () { setStatFilter("cat", c); });
+      group.addEventListener("keydown", function (event) {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          setStatFilter("cat", c);
+        }
+      });
+      svg.appendChild(group);
     });
   }
 
@@ -769,24 +821,61 @@
       var h = max ? (n / max) * plotH : 0;
       if (n > 0 && h < 2) { h = 2; }
       var bx = x0 + i * step;
-      var bar = svgEl("rect", { x: bx, y: baseline - h, width: barW, height: h, fill: "#BA0C2F" });
+      var group = svgEl("g", {
+        "class": "stat-hit",
+        "data-filter-key": "year",
+        "data-filter-value": String(yy),
+        role: "button",
+        tabindex: "0",
+        "aria-pressed": "false",
+        "aria-label": "Filter to publication year " + yy + ": " + n +
+          (n === 1 ? " reference" : " references")
+      });
+      group.appendChild(svgEl("rect", {
+        x: bx - 3, y: 5, width: Math.max(barW + 6, step - 2),
+        height: baseline + 20, "class": "stat-hitbox"
+      }));
+      var bar = svgEl("rect", {
+        x: bx, y: baseline - h, width: barW, height: h,
+        fill: "#BA0C2F", "class": "stat-bar"
+      });
       var t = svgEl("title");
-      t.textContent = yy + ": " + n + (n === 1 ? " reference" : " references");
+      t.textContent = yy + ": " + n + (n === 1 ? " reference" : " references") + ". Select to filter.";
       bar.appendChild(t);
-      svg.appendChild(bar);
+      group.appendChild(bar);
       var lab = svgEl("text", {
         x: bx + barW / 2, y: baseline + 16, "text-anchor": "middle", "class": "axis-label"
       });
       lab.textContent = String(yy);
-      svg.appendChild(lab);
+      group.appendChild(lab);
       if (n > 0) {
         var vv = svgEl("text", {
           x: bx + barW / 2, y: baseline - h - 5, "text-anchor": "middle", "class": "axis-label"
         });
         vv.textContent = String(n);
-        svg.appendChild(vv);
+        group.appendChild(vv);
       }
+      group.addEventListener("click", function () { setStatFilter("year", String(yy)); });
+      group.addEventListener("keydown", function (event) {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          setStatFilter("year", String(yy));
+        }
+      });
+      svg.appendChild(group);
     });
+  }
+
+  function syncStatSelection() {
+    var hits = document.querySelectorAll(".stat-hit");
+    for (var i = 0; i < hits.length; i++) {
+      var hit = hits[i];
+      var key = hit.getAttribute("data-filter-key");
+      var value = hit.getAttribute("data-filter-value");
+      var active = filters[key] && filters[key].has(value);
+      hit.classList.toggle("is-active", Boolean(active));
+      hit.setAttribute("aria-pressed", active ? "true" : "false");
+    }
   }
 
   /* ---------- paper list ---------- */
@@ -887,6 +976,7 @@
     currentFiltered = PAPERS.filter(passesFilters);
     renderScatter(currentFiltered);
     renderTables(currentFiltered);
+    syncStatSelection();
     updateCountLine();
   }
 
@@ -988,7 +1078,7 @@
       "Cooperative Driving": ["Tier 2 · Advanced", "Shared perception and coordinated control extend rural AVs to arterials, work and school zones, rail crossings, and extreme weather, with safety-critical computing retained onboard."],
       "Pilots": ["Field validation", "goMARTI (on-demand, ~97 stops, app or 211) and ADASTEC (fixed scenic route, ~4 round trips/day) validate the service models with safety operators on board. Click to see their references."]
     };
-    var DEFAULT = ["Two tiers, one system", "Existing technology carries the service today; advanced, infrastructure-integrated technology extends it; two field pilots ground it in practice. Hover a module."];
+    var DEFAULT = ["Two tiers, one system", "Existing technology carries the service today; advanced, infrastructure-integrated technology extends it; two focal field pilots ground it in practice. Hover a module."];
     var tagEl = detail.querySelector(".td-tag");
     var txtEl = detail.querySelector(".td-text");
     function show(stage, substage) {
@@ -1047,133 +1137,133 @@
     if (!emap || !edetail) { return; }
     var THEMES = [
       {
-        cat: "Autonomous Driving", title: "Perception - single sensor", status: "r", refs: [1, 18, 20],
+        cat: "Autonomous Driving", title: "Perception - single sensor", status: "r", refs: [1,18,20,64],
         definition: "One modality, typically a monocular camera, turns raw output into detected lanes, obstacles, pedestrians, animals, and signs.",
         findings: "A single-sensor stack is inexpensive, computationally light, and simple to calibrate. Its view is narrow and easily degraded by limited range, glare, low light, occlusion, faded markings, and unpaved surfaces.",
         rav: "Treat single-sensor coverage as a baseline rather than the final solution. Direct rural evidence is scarce, so RAV must collect rural perception data and validate performance on its own roads."
       },
       {
-        cat: "Autonomous Driving", title: "Perception - multi-sensor fusion", status: "m", refs: [2, 17, 18, 19, 20],
+        cat: "Autonomous Driving", title: "Perception - multi-sensor fusion", status: "m", refs: [2,17,18,19,20,56,57,58,59,63,64],
         definition: "Camera, radar, LiDAR, and IMU readings are combined into one detection set; some stacks fuse two modalities and others fuse all three plus IMU for ego-motion alignment.",
         findings: "Fusion adds range, weather robustness, 3-D geometry, and redundancy, and it outperforms any single sensor in complex scenes. The trade-off is higher sensor and compute cost plus calibration and synchronization effort.",
         rav: "Use camera plus radar as the lower-cost floor and add LiDAR where its 3-D geometry materially improves safety. Re-train and re-validate the models for sparse rural geometry."
       },
       {
-        cat: "Autonomous Driving", title: "Perception - adverse weather", status: "m", refs: [3, 21, 22],
+        cat: "Autonomous Driving", title: "Perception - adverse weather", status: "m", refs: [3,21,22,58,61],
         definition: "Condition-specific methods and datasets keep onboard perception useful under glare, rain, fog, snow, dust, and related visibility loss.",
         findings: "Adverse-weather training can recover accuracy and dedicated datasets support benchmarking, but performance still degrades when several modalities are affected together.",
         rav: "Build a local adverse-weather dataset and validate fallback thresholds for the service area. Cooperative information may supplement the vehicle where infrastructure exists, but safe onboard behavior must remain available."
       },
       {
-        cat: "Autonomous Driving", title: "Localization - GNSS/LiDAR limits", status: "m", refs: [1, 2],
+        cat: "Autonomous Driving", title: "Localization - GNSS/LiDAR limits", status: "m", refs: [1,2,61,62],
         definition: "GNSS/INS provides a global satellite position, while LiDAR localization matches live scans against known road geometry.",
         findings: "GNSS is affordable and globally referenced; LiDAR can be precise without satellite signals. GNSS drifts under canopy or in valleys, while sparse, repetitive rural geometry makes LiDAR-only matching ambiguous.",
         rav: "Do not depend on either source alone. RAV needs a fused position estimate that remains stable across canopy, valleys, weak features, and intermittent map matches."
       },
       {
-        cat: "Autonomous Driving", title: "Localization - fusion with HD maps", status: "m", refs: [2, 23, 24, 25],
+        cat: "Autonomous Driving", title: "Localization - fusion with HD maps", status: "m", refs: [2,23,24,25,60],
         definition: "Vision and LiDAR are matched against an HD-map prior and fused with GNSS/INS into one pose estimate.",
         findings: "The fused stack can sustain lane-level to centimeter positioning in GNSS-challenged settings. Its dominant cost is the HD map that must be surveyed, verified, and continuously refreshed.",
         rav: "The localization stack transfers directly after RAV maps its own corridors. The project also needs a practical rural HD-map maintenance workflow linked to road and infrastructure updates."
       },
       {
-        cat: "Autonomous Driving", title: "Data integration - onboard raw & semantic", status: "g", refs: [17, 18, 19],
+        cat: "Autonomous Driving", title: "Data integration - onboard raw & semantic", status: "g", refs: [17,18,19,57,63],
         definition: "Raw camera, radar, and LiDAR streams are fused onboard and converted into semantic output such as detections, pose, trajectory, and control state.",
         findings: "This preserves the richest detail, low latency, and independence from network coverage. It also carries the highest bandwidth and compute load, and its quality remains bounded by sensor quality.",
         rav: "Reuse onboard raw-to-semantic fusion as the core perception and localization pipeline. It is the dependable backbone when rural communication is unavailable."
       },
       {
-        cat: "Autonomous Driving", title: "Data integration - heterogeneous & aggregated", status: "r", refs: [2, 19, 25],
+        cat: "Autonomous Driving", title: "Data integration - heterogeneous & aggregated", status: "r", refs: [2,19,25,56,59],
         definition: "The system reconciles inputs with different reliability, coordinate frames, and update rates; aggregated feeds add traffic, events, maps, weather, and fleet context.",
         findings: "Aggregated information adds context no single vehicle can sense, but edge and cloud feeds arrive with latency and depend on coverage that rural roads may not provide.",
         rav: "Keep onboard reconciliation authoritative and treat roadside, fleet, and cloud feeds as opportunistic additions. Engineer confidence checks and graceful degradation for delayed or missing inputs."
       },
       {
-        cat: "Autonomous Driving", title: "Routing - energy & terrain aware", status: "m", refs: [1, 4, 26, 27],
+        cat: "Autonomous Driving", title: "Routing - energy & terrain aware", status: "m", refs: [1,4,26,27,65,66,67],
         definition: "Route cost includes grade, surface, vehicle dynamics, and effective battery range so every plan stays physically feasible.",
         findings: "Energy-aware routing protects range on hilly and unpaved roads, but it depends on calibrated terrain, surface, and consumption models that are rarely available for rural networks.",
         rav: "Use energy- and terrain-aware cost underneath every service mode, then calibrate it with grade, surface, weather, load, and energy data from RAV's own corridors."
       },
       {
-        cat: "Autonomous Driving", title: "Routing - on-demand vs fixed route", status: "m", refs: [5, 16, 30, 31],
+        cat: "Autonomous Driving", title: "Routing - on-demand vs fixed route", status: "m", refs: [5,16,30,31,69,78],
         definition: "On-demand routing builds and sequences trips from rider requests; fixed-route operation repeats a preset line on a published timetable.",
         findings: "On-demand service reaches scattered riders but needs live demand and dispatch computing. Fixed routes are predictable and simple, but can waste capacity and miss riders away from the line.",
         rav: "Use on-demand routing for healthcare service and fixed routes for regular transit and park service, with range and terrain constraints applied to both."
       },
       {
-        cat: "Fleet Management", title: "On-demand dispatch & ride-matching", status: "g", refs: [5, 28, 29, 30, 31],
+        cat: "Fleet Management", title: "On-demand dispatch & ride-matching", status: "g", refs: [5,28,29,30,31,68,70,71,73,75],
         definition: "Riders request trips and the fleet assigns, matches, sequences, and rebalances vehicles in real time.",
         findings: "Reinforcement-learning and operations-research methods reduce waiting and empty travel for low-density demand. They require live requests, a matching engine, and enough vehicles to maintain acceptable waits.",
         rav: "Reuse proven dispatch and rider-app matching methods for RAV's on-demand service, then tune service zones, wait-time targets, and fleet size using local demand."
       },
       {
-        cat: "Fleet Management", title: "Fixed-route dispatch & scheduling", status: "r", refs: [16],
+        cat: "Fleet Management", title: "Fixed-route dispatch & scheduling", status: "r", refs: [16,69,77,78],
         definition: "Vehicles repeat a route while headway and timetable planning determine when each run departs and how vehicles are spaced.",
         findings: "The service is predictable for riders and simple to operate, but thin demand can create long waits and poor vehicle utilization. The review found a pilot, not dedicated rural scheduling studies.",
         rav: "Develop and test headway, timetable, and fleet-allocation methods specifically for thin-demand rural runs."
       },
       {
-        cat: "Fleet Management", title: "Fleet support - charging, monitoring & fares", status: "r", refs: [14, 15, 16],
+        cat: "Fleet Management", title: "Fleet support - charging, monitoring & fares", status: "r", refs: [14,15,16,72,74,75,76,77],
         definition: "Fleet support keeps vehicles service-ready through charging and energy management, onboard health monitoring, maintenance coordination, and fare collection.",
         findings: "The rural pilots handle these functions operationally, but the review found no dedicated rural AV method or comparative evidence for them.",
         rav: "Treat these as engineering and data-collection functions in early deployment. Use pilot data to formalize charging plans, maintenance triggers, and rider payment policy."
       },
       {
-        cat: "Fleet Management", title: "Remote monitoring & supervision", status: "r", refs: [14, 15, 16],
+        cat: "Fleet Management", title: "Remote monitoring & supervision", status: "r", refs: [14,15,16,79],
         definition: "An operations center tracks vehicle location, health, and service state while a human supervisor assists or intervenes when automation requests help.",
         findings: "One supervisor may support multiple vehicles, enabling scale without a driver in every seat. The model depends on telemetry and video links, and supervisor ratios and takeover procedures remain unsettled.",
         rav: "Define supervisor-to-vehicle ratios, degraded-link operating rules, intervention authority, and takeover procedures; then test them under weak rural connectivity."
       },
       {
-        cat: "Infrastructure", title: "Physical road assessment", status: "m", refs: [39, 46, 47, 48, 49],
+        cat: "Infrastructure", title: "Physical road assessment", status: "m", refs: [39,46,47,48,49,80,81,82,83,84,85,86,87,88],
         definition: "UAV, smartphone, imaging, and mobile-LiDAR surveys detect pavement damage, markings, signs, geometry, and gravel-road surface condition.",
         findings: "The component methods are reusable and lower the cost of network inspection, but existing studies address individual features rather than one integrated rural upgrade workflow.",
         rav: "Validate the methods under local road, weather, and maintenance conditions, then combine results into segment-level priorities for physical upgrades."
       },
       {
-        cat: "Infrastructure", title: "Digital road-information layer", status: "m", refs: [7, 25, 37, 38],
+        cat: "Infrastructure", title: "Digital road-information layer", status: "m", refs: [7,25,37,38,80,87,89,90,91],
         definition: "HD maps provide the spatial base, roadside sensing supplies changing observations, and a digital twin integrates both for vehicle and infrastructure decisions.",
         findings: "Demonstrations exist on highways, selected rural test sections, and controlled campuses, but they are highly instrumented or proof-of-concept.",
         rav: "Reuse the layered architecture while adapting it to incomplete maps, sparse sensors, intermittent communication, and low-cost rural updates."
       },
       {
-        cat: "Communication", title: "Rural V2X", status: "r", refs: [9, 50, 51, 52],
+        cat: "Communication", title: "Rural V2X", status: "r", refs: [9,50,51,52,92,93,95,96,97,98,103],
         definition: "Vehicle-to-vehicle, vehicle-to-infrastructure, and vehicle-to-network links exchange hazard, traffic, road-condition, and coordination information using C-V2X and 5G NR-V2X.",
         findings: "Rural measurements show weaker coverage and longer disconnections; related studies add interference, resource allocation, mobility, energy, and quality-of-service trade-offs.",
         rav: "Assume intermittent connectivity from the start. Combine direct and network-based links, monitor link quality, and preserve safe vehicle operation throughout disconnections."
       },
       {
-        cat: "Communication", title: "Multi-channel connectivity", status: "m", refs: [8],
+        cat: "Communication", title: "Multi-channel connectivity", status: "m", refs: [8,92,93,94,103],
         definition: "C-V2X, public cellular, and LEO satellite interfaces are combined so another path can carry nonlocal information when one network is unavailable.",
         findings: "Multiple channels improve reach and resilience, but add hardware cost, switching complexity, energy use, and potentially satellite latency.",
         rav: "Measure coverage and latency along service corridors and switch channels by policy. Keep time-critical control onboard and use wide-area links for supplementary information."
       },
       {
-        cat: "Communication", title: "V2X cybersecurity", status: "g", refs: [44, 45],
+        cat: "Communication", title: "V2X cybersecurity", status: "g", refs: [44,45,99,100,101,102],
         definition: "Authentication, encryption, integrity checks, and message verification protect V2X messages, networks, and devices.",
         findings: "The surveyed mechanisms address spoofing, manipulation, eavesdropping, and denial of service, although they add communication and computation overhead.",
         rav: "Apply security across every communication channel before field deployment and include certificate, key, logging, and incident-response operations in the system design."
       },
       {
-        cat: "Cooperative Driving", title: "Cooperative perception", status: "m", refs: [10, 35],
+        cat: "Cooperative Driving", title: "Cooperative perception", status: "m", refs: [10,35,104,105,106,108,109],
         definition: "Vehicles and roadside infrastructure share sensor data or detected objects to extend field of view and reduce blind spots.",
         findings: "Cooperation improves awareness under occlusion and adverse weather, but requires reliable links, accurate spatial and temporal alignment, roadside equipment, and protection from delayed or incorrect data.",
         rav: "Deploy roadside sensing only at conflict points where onboard perception needs help, and preserve a safe onboard fallback when shared data is unavailable."
       },
       {
-        cat: "Cooperative Driving", title: "Infrastructure-assisted control & handover", status: "m", refs: [34, 36],
+        cat: "Cooperative Driving", title: "Infrastructure-assisted control & handover", status: "m", refs: [34,36,107,108,114,115],
         definition: "Nearby edge roadside units support cooperative driving services and can assist a vehicle when automation reaches an operational limit.",
         findings: "Experiments quantify safety and latency benefits, but the approach assumes dense and reliable roadside coverage that rural networks do not have.",
         rav: "Place edge support at a small number of high-risk locations, define handover authority and timing, and validate operation when the roadside unit or link fails."
       },
       {
-        cat: "Cooperative Driving", title: "CACC & platooning", status: "m", refs: [40, 41],
+        cat: "Cooperative Driving", title: "CACC & platooning", status: "m", refs: [40,41,110,111,112],
         definition: "Cooperative adaptive cruise control and platooning coordinate vehicle speed, spacing, and signal interaction using shared motion information.",
         findings: "Field studies demonstrate efficiency and coordination on urban or suburban arterials with steadier traffic and stronger infrastructure.",
         rav: "Adapt the methods to low-volume rural arterials with mixed conventional and automated vehicles, variable connectivity, and longer gaps between equipped intersections."
       },
       {
-        cat: "Cooperative Driving", title: "Work & school zones", status: "r", refs: [11],
+        cat: "Cooperative Driving", title: "Work & school zones", status: "r", refs: [11,113,115],
         definition: "Connected warnings and trajectory coordination help vehicles approach temporary work areas and school-zone conflict points.",
         findings: "Published methods focus on more structured or connected settings; passive and unsignalized rural interactions remain weakly studied.",
         rav: "Develop low-infrastructure warnings and operating rules for rural work and school zones, then field-test detection, yielding, and fallback behavior."
@@ -1197,10 +1287,10 @@
         rav: "Use it as the service-model baseline, then progress through safety gates toward longer range, higher speeds, and reduced onboard operator reliance."
       },
       {
-        cat: "Pilots", title: "ADASTEC - fixed route", status: "g", refs: [16],
+        cat: "Pilots", title: "ADASTEC and public-lands shuttles - fixed route", status: "g", refs: [16,116,117],
         definition: "A scheduled automated bus runs a fixed scenic route for about four round trips per day with advance reservations and a safety operator onboard.",
-        findings: "The pilot demonstrates a predictable fixed-route model, but remains low-speed, geofenced, scheduled, and supervised.",
-        rav: "Reuse the fixed-route operating concept while adding rural headway and timetable optimization and progressively reducing operator dependence."
+        findings: "ADASTEC, TEDDY, and CASSI demonstrate predictable fixed-route service in remote parks and public sites. Across deployments, low speed, geofencing, weather or battery interruptions, and onboard supervision remain recurring constraints.",
+        rav: "Reuse the fixed-route operating concept while adding rural headway, timetable, energy, and interruption planning, and progressively reduce operator dependence through explicit safety gates."
       }
     ];
     var STATUS = { g: ["Reusable now", "#4B8B3B"], m: ["Needs rural adaptation", "#D99114"], r: ["Open gap", "#BA0C2F"] };

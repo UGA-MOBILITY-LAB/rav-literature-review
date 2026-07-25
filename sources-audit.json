@@ -1,0 +1,1179 @@
+{
+  "auditDate": "2026-07-25",
+  "method": "Crossref DOI metadata, arXiv official record metadata, or authoritative source-page metadata",
+  "paperCount": 117,
+  "verifiedCount": 117,
+  "failedCount": 0,
+  "entries": [
+    {
+      "n": 1,
+      "title": "Review of Autonomous Vehicles in Rural Areas: Challenges, Opportunities, and Solutions",
+      "source": "Crossref",
+      "identifier": "10.3390/app15084195",
+      "resolved": "https://doi.org/10.3390/app15084195",
+      "metadataTitle": "Autonomous Vehicles in Rural Areas: A Review of Challenges, Opportunities, and Solutions",
+      "titleSimilarity": 0.869,
+      "verified": true
+    },
+    {
+      "n": 2,
+      "title": "Building the Future of Transportation: A Comprehensive Survey on AV Perception, Localization, and Mapping",
+      "source": "Crossref",
+      "identifier": "10.3390/s25072004",
+      "resolved": "https://doi.org/10.3390/s25072004",
+      "metadataTitle": "Building the Future of Transportation: A Comprehensive Survey on AV Perception, Localization, and Mapping",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 3,
+      "title": "Perception and Sensing for Autonomous Vehicles under Adverse Weather Conditions: A Survey",
+      "source": "Crossref",
+      "identifier": "10.1016/j.isprsjprs.2022.12.021",
+      "resolved": "https://doi.org/10.1016/j.isprsjprs.2022.12.021",
+      "metadataTitle": "Perception and sensing for autonomous vehicles under adverse weather conditions: A survey",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 4,
+      "title": "Efficient Energy-Optimal Path Planning for Electric Vehicles Considering Vehicle Dynamics",
+      "source": "arXiv",
+      "identifier": "2411.12964",
+      "resolved": "https://arxiv.org/abs/2411.12964",
+      "metadataTitle": "Efficient Energy-Optimal Path Planning for Electric Vehicles Considering Vehicle Dynamics",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 5,
+      "title": "Optimization of On-Demand Shared Autonomous Vehicle Deployments Utilizing Reinforcement Learning",
+      "source": "Crossref",
+      "identifier": "10.3390/s22218317",
+      "resolved": "https://doi.org/10.3390/s22218317",
+      "metadataTitle": "Optimization of On-Demand Shared Autonomous Vehicle Deployments Utilizing Reinforcement Learning",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 6,
+      "title": "Automated Vehicles and People Living with a Disability: Opportunities, Challenges, and Future Directions for Sustainable Mobility",
+      "source": "Crossref",
+      "identifier": "10.3390/su17135941",
+      "resolved": "https://doi.org/10.3390/su17135941",
+      "metadataTitle": "Automated Vehicles and People Living with a Disability: Opportunities, Challenges, and Future Directions for Sustainable Mobility",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 7,
+      "title": "Infrastructure-Based Digital Twins for Cooperative, Connected, Automated Driving and Smart Road Services",
+      "source": "Crossref",
+      "identifier": "10.1109/ojits.2023.3266800",
+      "resolved": "https://doi.org/10.1109/ojits.2023.3266800",
+      "metadataTitle": "Infrastructure-Based Digital Twins for Cooperative, Connected, Automated Driving and Smart Road Services",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 8,
+      "title": "How are Satellites Bringing Low-Latency Internet to Autonomous Vehicles?",
+      "source": "Authoritative URL",
+      "identifier": "https://www.zuken.com/us/blog/how-are-satellites-bringing-low-latency-internet-to-autonomous-vehicles/",
+      "resolved": "https://www.zuken.com/us/blog/how-are-satellites-bringing-low-latency-internet-to-autonomous-vehicles/",
+      "metadataTitle": "How are Satellites Bringing Low-Latency Internet to Autonomous Vehicles?",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 9,
+      "title": "Toward Safe and Energy-Efficient 5G NR V2X Communications in Rural Environments",
+      "source": "arXiv",
+      "identifier": "2510.12539",
+      "resolved": "https://arxiv.org/abs/2510.12539",
+      "metadataTitle": "Toward Safe and Energy-Efficient 5G NR V2X Communications in Rural Environments",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 10,
+      "title": "Toward Autonomous Vehicles: A Survey on Cooperative Vehicle-Infrastructure System",
+      "source": "Crossref",
+      "identifier": "10.1016/j.isci.2024.109751",
+      "resolved": "https://doi.org/10.1016/j.isci.2024.109751",
+      "metadataTitle": "Toward autonomous vehicles: A survey on cooperative vehicle-infrastructure system",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 11,
+      "title": "Are Work Zones and Connected Automated Vehicles Ready for a Harmonious Coexistence? A Scoping Review and Research Agenda",
+      "source": "Crossref",
+      "identifier": "10.1016/j.trc.2021.103422",
+      "resolved": "https://doi.org/10.1016/j.trc.2021.103422",
+      "metadataTitle": "Are work zones and connected automated vehicles ready for a harmonious coexistence? A scoping review and research agenda",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 12,
+      "title": "Automated Vehicles and Adverse Weather: Final Report",
+      "source": "Authoritative URL",
+      "identifier": "https://rosap.ntl.bts.gov/view/dot/43772",
+      "resolved": "https://rosap.ntl.bts.gov/view/dot/43772",
+      "metadataTitle": "Automated Vehicles and Adverse Weather: Final Report",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 13,
+      "title": "Cooperative Automation Driving System (C-ADS) with Road Weather Management (RWM) with a Lane Closure",
+      "source": "Authoritative URL",
+      "identifier": "https://highways.dot.gov/media/34431",
+      "resolved": "https://highways.dot.gov/media/34431",
+      "metadataTitle": "Cooperative Automation Driving System (C-ADS) with Road Weather Management (RWM) with a Lane Closure",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 14,
+      "title": "Service Deployment Case Study: goMARTI in Grand Rapids, Minnesota",
+      "source": "Authoritative URL",
+      "identifier": "https://maymobility.com/resources/grand-rapids-mn-case-study/",
+      "resolved": "https://maymobility.com/resources/grand-rapids-mn-case-study/",
+      "metadataTitle": "Service Deployment Case Study: goMARTI in Grand Rapids, Minnesota",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 15,
+      "title": "goMARTI: MnDOT Final Report",
+      "source": "Authoritative URL",
+      "identifier": "https://www.lrl.mn.gov/docs/2025/other/251090.pdf",
+      "resolved": "https://www.lrl.mn.gov/docs/2025/other/251090.pdf",
+      "metadataTitle": "goMARTI: MnDOT Final Report",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 16,
+      "title": "Sleeping Bear Dunes FMVSS-Compliant Automated Bus",
+      "source": "Authoritative URL",
+      "identifier": "https://www.adastec.com/news-coverage/adastec-deploys-first-fmvss-compliant-automated-bus-at-sleeping-bear-dunes",
+      "resolved": "https://www.adastec.com/news-coverage/adastec-deploys-first-fmvss-compliant-automated-bus-at-sleeping-bear-dunes",
+      "metadataTitle": "ADASTEC Deploys First FMVSS-Compliant Automated Bus at Sleeping Bear Dunes",
+      "titleSimilarity": 0.602,
+      "verified": true
+    },
+    {
+      "n": 17,
+      "title": "Radar-Camera Fusion for Object Detection and Semantic Segmentation in Autonomous Driving: A Comprehensive Review",
+      "source": "arXiv",
+      "identifier": "2304.10410",
+      "resolved": "https://arxiv.org/abs/2304.10410",
+      "metadataTitle": "Radar-Camera Fusion for Object Detection and Semantic Segmentation in Autonomous Driving: A Comprehensive Review",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 18,
+      "title": "Deep Multi-Modal Object Detection and Semantic Segmentation for Autonomous Driving: Datasets, Methods, and Challenges",
+      "source": "Crossref",
+      "identifier": "10.1109/tits.2020.2972974",
+      "resolved": "https://doi.org/10.1109/tits.2020.2972974",
+      "metadataTitle": "Deep Multi-Modal Object Detection and Semantic Segmentation for Autonomous Driving: Datasets, Methods, and Challenges",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 19,
+      "title": "A Review of Multi-Sensor Fusion in Autonomous Driving",
+      "source": "Crossref",
+      "identifier": "10.3390/s25196033",
+      "resolved": "https://doi.org/10.3390/s25196033",
+      "metadataTitle": "A Review of Multi-Sensor Fusion in Autonomous Driving",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 20,
+      "title": "Real-Time Object Detection Using LiDAR and Camera Fusion for Autonomous Driving",
+      "source": "Crossref",
+      "identifier": "10.1038/s41598-023-35170-z",
+      "resolved": "https://doi.org/10.1038/s41598-023-35170-z",
+      "metadataTitle": "Real time object detection using LiDAR and camera fusion for autonomous driving",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 21,
+      "title": "Perception Methods for Adverse Weather Based on Vehicle Infrastructure Cooperation System: A Review",
+      "source": "Crossref",
+      "identifier": "10.3390/s24020374",
+      "resolved": "https://doi.org/10.3390/s24020374",
+      "metadataTitle": "Perception Methods for Adverse Weather Based on Vehicle Infrastructure Cooperation System: A Review",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 22,
+      "title": "CoInfra: A Large-Scale Cooperative Infrastructure Perception System and Dataset for Vehicle-Infrastructure Cooperation in Adverse Weather",
+      "source": "arXiv",
+      "identifier": "2507.02245",
+      "resolved": "https://arxiv.org/abs/2507.02245",
+      "metadataTitle": "CoInfra: A Large-Scale Cooperative Infrastructure Perception System and Dataset for Vehicle-Infrastructure Cooperation in Adverse Weather",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 23,
+      "title": "Simultaneous Localization and Mapping (SLAM) for Autonomous Driving: Concept and Analysis",
+      "source": "Crossref",
+      "identifier": "10.3390/rs15041156",
+      "resolved": "https://doi.org/10.3390/rs15041156",
+      "metadataTitle": "Simultaneous Localization and Mapping (SLAM) for Autonomous Driving: Concept and Analysis",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 24,
+      "title": "A Review of Visual-LiDAR Fusion based Simultaneous Localization and Mapping",
+      "source": "Crossref",
+      "identifier": "10.3390/s20072068",
+      "resolved": "https://doi.org/10.3390/s20072068",
+      "metadataTitle": "A Review of Visual-LiDAR Fusion based Simultaneous Localization and Mapping",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 25,
+      "title": "Maps for Autonomous Driving: Full-Process Survey and Frontiers",
+      "source": "arXiv",
+      "identifier": "2509.12632",
+      "resolved": "https://arxiv.org/abs/2509.12632",
+      "metadataTitle": "Maps for Autonomous Driving: Full-process Survey and Frontiers",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 26,
+      "title": "A Review and Outlook of Energy Consumption Estimation Models for Electric Vehicles",
+      "source": "arXiv",
+      "identifier": "2003.12873",
+      "resolved": "https://arxiv.org/abs/2003.12873",
+      "metadataTitle": "A Review and Outlook of Energy Consumption Estimation Models for Electric Vehicles",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 27,
+      "title": "Multi-Objective Eco-Routing Model Development and Evaluation for Battery Electric Vehicles",
+      "source": "arXiv",
+      "identifier": "2104.09336",
+      "resolved": "https://arxiv.org/abs/2104.09336",
+      "metadataTitle": "Multi-objective Eco-Routing Model Development and Evaluation for Battery Electric Vehicles",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 28,
+      "title": "Shared Autonomous Vehicle Services: A Comprehensive Review",
+      "source": "Crossref",
+      "identifier": "10.1016/j.trc.2019.12.008",
+      "resolved": "https://doi.org/10.1016/j.trc.2019.12.008",
+      "metadataTitle": "Shared autonomous vehicle services: A comprehensive review",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 29,
+      "title": "The Integration of Shared Autonomous Vehicles in Public Transportation Services: A Systematic Review",
+      "source": "Crossref",
+      "identifier": "10.3390/su151713023",
+      "resolved": "https://doi.org/10.3390/su151713023",
+      "metadataTitle": "The Integration of Shared Autonomous Vehicles in Public Transportation Services: A Systematic Review",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 30,
+      "title": "Semi-on-Demand Transit Feeders with Shared Autonomous Vehicles and Reinforcement-Learning-Based Zonal Dispatching Control",
+      "source": "arXiv",
+      "identifier": "2509.01883",
+      "resolved": "https://arxiv.org/abs/2509.01883",
+      "metadataTitle": "Semi-on-Demand Transit Feeders with Shared Autonomous Vehicles and Reinforcement-Learning-Based Zonal Dispatching Control",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 31,
+      "title": "On-Demand Microtransit: A Rural Solution to Public Transit?",
+      "source": "Authoritative URL",
+      "identifier": "https://www.planning.org/planning/2022/fall/on-demand-microtransit-a-rural-solution-to-public-transit/",
+      "resolved": "https://www.planning.org/planning/2022/fall/on-demand-microtransit-a-rural-solution-to-public-transit/",
+      "metadataTitle": "On-Demand Microtransit: A Rural Solution to Public Transit?",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 32,
+      "title": "A Survey on Approximate Edge AI for Energy-Efficient Autonomous Driving Services",
+      "source": "arXiv",
+      "identifier": "2304.14271",
+      "resolved": "https://arxiv.org/abs/2304.14271",
+      "metadataTitle": "A Survey on Approximate Edge AI for Energy Efficient Autonomous Driving Services",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 33,
+      "title": "Vehicle-to-Everything Cooperative Perception for Autonomous Driving",
+      "source": "arXiv",
+      "identifier": "2310.03525",
+      "resolved": "https://arxiv.org/abs/2310.03525",
+      "metadataTitle": "Vehicle-to-Everything Cooperative Perception for Autonomous Driving",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 34,
+      "title": "Performance Evaluation of Cooperative Driving Automation Services Enabled by Edge Roadside Units",
+      "source": "Crossref",
+      "identifier": "10.3390/s26020504",
+      "resolved": "https://doi.org/10.3390/s26020504",
+      "metadataTitle": "Performance Evaluation of Cooperative Driving Automation Services Enabled by Edge Roadside Units",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 35,
+      "title": "Review on the Impacts of Cooperative Automated Driving on Transportation and Environment",
+      "source": "Crossref",
+      "identifier": "10.1016/j.trd.2023.103607",
+      "resolved": "https://doi.org/10.1016/j.trd.2023.103607",
+      "metadataTitle": "Review on the impacts of cooperative automated driving on transportation and environment",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 36,
+      "title": "Prototyping and Evaluation of Infrastructure-Assisted Transition of Control for Cooperative Automated Vehicles",
+      "source": "arXiv",
+      "identifier": "2103.13826",
+      "resolved": "https://arxiv.org/abs/2103.13826",
+      "metadataTitle": "Prototyping and Evaluation of Infrastructure-Assisted Transition of Control for Cooperative Automated Vehicles",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 37,
+      "title": "Digital Twins for Autonomous Driving: A Comprehensive Implementation and Demonstration",
+      "source": "arXiv",
+      "identifier": "2401.08653",
+      "resolved": "https://arxiv.org/abs/2401.08653",
+      "metadataTitle": "Digital Twins for Autonomous Driving: A Comprehensive Implementation and Demonstration",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 38,
+      "title": "Intelligent Transportation Systems Using External Infrastructure: A Literature Survey",
+      "source": "arXiv",
+      "identifier": "2112.05615",
+      "resolved": "https://arxiv.org/abs/2112.05615",
+      "metadataTitle": "Intelligent Transportation Systems Using External Infrastructure: A Literature Survey",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 39,
+      "title": "UAV-Based Image and LiDAR Fusion for Pavement Crack Segmentation",
+      "source": "Crossref",
+      "identifier": "10.3390/s23239315",
+      "resolved": "https://doi.org/10.3390/s23239315",
+      "metadataTitle": "UAV-Based Image and LiDAR Fusion for Pavement Crack Segmentation",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 40,
+      "title": "Cooperative Platooning with Mixed Traffic on Urban Arterial Roads",
+      "source": "Crossref",
+      "identifier": "10.1109/iv51971.2022.9827105",
+      "resolved": "https://doi.org/10.1109/iv51971.2022.9827105",
+      "metadataTitle": "Cooperative Platooning with Mixed Traffic on Urban Arterial Roads",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 41,
+      "title": "Cooperative Adaptive Cruise Control and Intelligent Traffic Signal Interaction: A Field Operational Test with Platooning on a Suburban Arterial in Real Traffic",
+      "source": "Crossref",
+      "identifier": "10.1049/iet-its.2019.0742",
+      "resolved": "https://doi.org/10.1049/iet-its.2019.0742",
+      "metadataTitle": "Cooperative adaptive cruise control and intelligent traffic signal interaction: a field operational test with platooning on a suburban arterial in real traffic",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 42,
+      "title": "Automated Vehicles at Highway-Rail Grade Crossings: Final Report",
+      "source": "Authoritative URL",
+      "identifier": "https://railroads.dot.gov/elibrary/automated-vehicles-highway-rail-grade-crossings-final-report",
+      "resolved": "https://railroads.dot.gov/elibrary/automated-vehicles-highway-rail-grade-crossings-final-report",
+      "metadataTitle": "Automated Vehicles at Highway-Rail Grade Crossings: Final Report",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 43,
+      "title": "Rail Crossing Violation Warning Application – Phase II",
+      "source": "Authoritative URL",
+      "identifier": "https://railroads.dot.gov/elibrary/rail-crossing-violation-warning-application-phase-ii",
+      "resolved": "https://railroads.dot.gov/elibrary/rail-crossing-violation-warning-application-phase-ii",
+      "metadataTitle": "Rail Crossing Violation Warning Application – Phase II",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 44,
+      "title": "A Comprehensive Survey of V2X Cybersecurity Mechanisms and Future Research Paths",
+      "source": "Crossref",
+      "identifier": "10.1109/ojcoms.2023.3239115",
+      "resolved": "https://doi.org/10.1109/ojcoms.2023.3239115",
+      "metadataTitle": "A Comprehensive Survey of V2X Cybersecurity Mechanisms and Future Research Paths",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 45,
+      "title": "Cyber Security Challenges and Solutions for V2X Communications: A Survey",
+      "source": "arXiv",
+      "identifier": "1901.01053",
+      "resolved": "https://arxiv.org/abs/1901.01053",
+      "metadataTitle": "Cyber Security Challenges and Solutions for V2X Communications: A Survey",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 46,
+      "title": "Road Damage Detection and Classification Using Deep Neural Networks with Smartphone Images",
+      "source": "Crossref",
+      "identifier": "10.1111/mice.12387",
+      "resolved": "https://doi.org/10.1111/mice.12387",
+      "metadataTitle": "Road Damage Detection and Classification Using Deep Neural Networks with Smartphone Images",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 47,
+      "title": "Using Mobile Laser Scanning Data for Automated Extraction of Road Markings",
+      "source": "Crossref",
+      "identifier": "10.1016/j.isprsjprs.2013.11.005",
+      "resolved": "https://doi.org/10.1016/j.isprsjprs.2013.11.005",
+      "metadataTitle": "Using mobile laser scanning data for automated extraction of road markings",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 48,
+      "title": "Novel Approach to Automatic Traffic Sign Inventory Based on Mobile Mapping System Data and Deep Learning",
+      "source": "Crossref",
+      "identifier": "10.3390/rs12030442",
+      "resolved": "https://doi.org/10.3390/rs12030442",
+      "metadataTitle": "Novel Approach to Automatic Traffic Sign Inventory Based on Mobile Mapping System Data and Deep Learning",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 49,
+      "title": "Next Generation Gravel Road Profiling: The Potential of Advanced UAV Drone in Comparison with Road Surface Tester and Rotary Laser Levels",
+      "source": "Crossref",
+      "identifier": "10.1016/j.treng.2024.100260",
+      "resolved": "https://doi.org/10.1016/j.treng.2024.100260",
+      "metadataTitle": "Next generation gravel road profiling – The potential of advanced UAV drone in comparison with road surface tester and rotary laser levels",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 50,
+      "title": "Vehicular LTE Connectivity Analysis in Urban and Rural Environments Using USRP Measurements",
+      "source": "Crossref",
+      "identifier": "10.1016/j.array.2020.100045",
+      "resolved": "https://doi.org/10.1016/j.array.2020.100045",
+      "metadataTitle": "Vehicular LTE connectivity analysis in urban and rural environments using USRP measurements",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 51,
+      "title": "A Tutorial on 5G NR V2X Communications",
+      "source": "Crossref",
+      "identifier": "10.1109/comst.2021.3057017",
+      "resolved": "https://doi.org/10.1109/comst.2021.3057017",
+      "metadataTitle": "A Tutorial on 5G NR V2X Communications",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 52,
+      "title": "Challenges and Solutions for Cellular Based V2X Communications",
+      "source": "Crossref",
+      "identifier": "10.1109/comst.2020.3029723",
+      "resolved": "https://doi.org/10.1109/comst.2020.3029723",
+      "metadataTitle": "Challenges and Solutions for Cellular Based V2X Communications",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 53,
+      "title": "Vehicle Computing: Vision and Challenges",
+      "source": "Crossref",
+      "identifier": "10.1016/j.jiixd.2022.10.001",
+      "resolved": "https://doi.org/10.1016/j.jiixd.2022.10.001",
+      "metadataTitle": "Vehicle Computing: Vision and challenges",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 54,
+      "title": "Computing Systems for Autonomous Driving: State-of-the-Art and Challenges",
+      "source": "Crossref",
+      "identifier": "10.1109/jiot.2020.3043716",
+      "resolved": "https://doi.org/10.1109/jiot.2020.3043716",
+      "metadataTitle": "Computing Systems for Autonomous Driving: State of the Art and Challenges",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 55,
+      "title": "A Multi-Intersection Vehicular Cooperative Control Based on End-Edge-Cloud Computing",
+      "source": "Crossref",
+      "identifier": "10.1109/tvt.2022.3143828",
+      "resolved": "https://doi.org/10.1109/tvt.2022.3143828",
+      "metadataTitle": "A Multi-Intersection Vehicular Cooperative Control Based on End-Edge-Cloud Computing",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 56,
+      "title": "A survey on occupancy perception for autonomous driving: The information fusion perspective",
+      "source": "Crossref",
+      "identifier": "10.1016/j.inffus.2024.102671",
+      "resolved": "https://doi.org/10.1016/j.inffus.2024.102671",
+      "metadataTitle": "A survey on occupancy perception for autonomous driving: The information fusion perspective",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 57,
+      "title": "Towards Compact Autonomous Driving Perception With Balanced Learning and Multi-Sensor Fusion",
+      "source": "Crossref",
+      "identifier": "10.1109/tits.2022.3149370",
+      "resolved": "https://doi.org/10.1109/tits.2022.3149370",
+      "metadataTitle": "Towards Compact Autonomous Driving Perception With Balanced Learning and Multi-Sensor Fusion",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 58,
+      "title": "A Review of Environmental Perception Technology Based on Multi-Sensor Information Fusion in Autonomous Driving",
+      "source": "Crossref",
+      "identifier": "10.3390/wevj16010020",
+      "resolved": "https://doi.org/10.3390/wevj16010020",
+      "metadataTitle": "A Review of Environmental Perception Technology Based on Multi-Sensor Information Fusion in Autonomous Driving",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 59,
+      "title": "Transformer-Based Sensor Fusion for Autonomous Driving: A Survey",
+      "source": "Crossref",
+      "identifier": "10.1109/iccvw60793.2023.00355",
+      "resolved": "https://doi.org/10.1109/iccvw60793.2023.00355",
+      "metadataTitle": "Transformer-Based Sensor Fusion for Autonomous Driving: A Survey",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 60,
+      "title": "AVP-SLAM: Semantic Visual Mapping and Localization for Autonomous Vehicles in the Parking Lot",
+      "source": "Crossref",
+      "identifier": "10.1109/iros45743.2020.9340939",
+      "resolved": "https://doi.org/10.1109/iros45743.2020.9340939",
+      "metadataTitle": "AVP-SLAM: Semantic Visual Mapping and Localization for Autonomous Vehicles in the Parking Lot",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 61,
+      "title": "Dark-SLAM: A Robust Visual Simultaneous Localization and Mapping Pipeline for an Unmanned Driving Vehicle in a Dark Night Environment",
+      "source": "Crossref",
+      "identifier": "10.3390/drones8080390",
+      "resolved": "https://doi.org/10.3390/drones8080390",
+      "metadataTitle": "Dark-SLAM: A Robust Visual Simultaneous Localization and Mapping Pipeline for an Unmanned Driving Vehicle in a Dark Night Environment",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 62,
+      "title": "Simultaneous Localization and Mapping (SLAM) for Synthetic Aperture Radar (SAR) Processing in the Field of Autonomous Driving",
+      "source": "Crossref",
+      "identifier": "10.1109/trs.2023.3347734",
+      "resolved": "https://doi.org/10.1109/trs.2023.3347734",
+      "metadataTitle": "Simultaneous Localization and Mapping (SLAM) for Synthetic Aperture Radar (SAR) Processing in the Field of Autonomous Driving",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 63,
+      "title": "Accurate Perception for Autonomous Driving: Application of Kalman Filter for Sensor Fusion",
+      "source": "Crossref",
+      "identifier": "10.1109/sas48726.2020.9220083",
+      "resolved": "https://doi.org/10.1109/sas48726.2020.9220083",
+      "metadataTitle": "Accurate Perception for Autonomous Driving: Application of Kalman Filter for Sensor Fusion",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 64,
+      "title": "On Multi-Sensor Radar Configurations for Vehicle Tracking in Autonomous Driving Environments",
+      "source": "Crossref",
+      "identifier": "10.23919/icif.2018.8455643",
+      "resolved": "https://doi.org/10.23919/icif.2018.8455643",
+      "metadataTitle": "On Multi-Sensor Radar Configurations for Vehicle Tracking in Autonomous Driving Environments",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 65,
+      "title": "Energy impact evaluation for eco-routing and charging of autonomous electric vehicle fleet: Ambient temperature consideration",
+      "source": "Crossref",
+      "identifier": "10.1016/j.trc.2018.02.018",
+      "resolved": "https://doi.org/10.1016/j.trc.2018.02.018",
+      "metadataTitle": "Energy impact evaluation for eco-routing and charging of autonomous electric vehicle fleet: Ambient temperature consideration",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 66,
+      "title": "Electric-Vehicle Routing Planning Based on the Law of Electric Energy Consumption",
+      "source": "Crossref",
+      "identifier": "10.3390/math10173099",
+      "resolved": "https://doi.org/10.3390/math10173099",
+      "metadataTitle": "Electric-Vehicle Routing Planning Based on the Law of Electric Energy Consumption",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 67,
+      "title": "Saving energy with eco-friendly routing of an electric vehicle fleet",
+      "source": "Crossref",
+      "identifier": "10.1016/j.tre.2024.103644",
+      "resolved": "https://doi.org/10.1016/j.tre.2024.103644",
+      "metadataTitle": "Saving energy with eco-friendly routing of an electric vehicle fleet",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 68,
+      "title": "Congestion-Aware Rideshare Dispatch for Shared Autonomous Electric Vehicle Fleets",
+      "source": "Crossref",
+      "identifier": "10.3390/electronics11162591",
+      "resolved": "https://doi.org/10.3390/electronics11162591",
+      "metadataTitle": "Congestion-Aware Rideshare Dispatch for Shared Autonomous Electric Vehicle Fleets",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 69,
+      "title": "On demand ride sharing: Scheduling of an autonomous bus fleet for last mile travel",
+      "source": "Crossref",
+      "identifier": "10.1016/j.robot.2023.104559",
+      "resolved": "https://doi.org/10.1016/j.robot.2023.104559",
+      "metadataTitle": "On demand ride sharing: Scheduling of an autonomous bus fleet for last mile travel",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 70,
+      "title": "Impact of ridesharing on operational efficiency of shared autonomous electric vehicle fleet",
+      "source": "Crossref",
+      "identifier": "10.1016/j.trc.2018.04.022",
+      "resolved": "https://doi.org/10.1016/j.trc.2018.04.022",
+      "metadataTitle": "Impact of ridesharing on operational efficiency of shared autonomous electric vehicle fleet",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 71,
+      "title": "A general maximum-stability dispatch policy for shared autonomous vehicle dispatch with an analytical characterization of the maximum throughput",
+      "source": "Crossref",
+      "identifier": "10.1016/j.trb.2022.07.003",
+      "resolved": "https://doi.org/10.1016/j.trb.2022.07.003",
+      "metadataTitle": "A general maximum-stability dispatch policy for shared autonomous vehicle dispatch with an analytical characterization of the maximum throughput",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 72,
+      "title": "Fleet performance and cost evaluation of a shared autonomous electric vehicle (SAEV) fleet: A case study for Austin, Texas",
+      "source": "Crossref",
+      "identifier": "10.1016/j.tra.2019.01.025",
+      "resolved": "https://doi.org/10.1016/j.tra.2019.01.025",
+      "metadataTitle": "Fleet performance and cost evaluation of a shared autonomous electric vehicle (SAEV) fleet: A case study for Austin, Texas",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 73,
+      "title": "Maximum Throughput Dispatch for Shared Autonomous Vehicles Including Vehicle Rebalancing",
+      "source": "Crossref",
+      "identifier": "10.1109/tits.2023.3268158",
+      "resolved": "https://doi.org/10.1109/tits.2023.3268158",
+      "metadataTitle": "Maximum Throughput Dispatch for Shared Autonomous Vehicles Including Vehicle Rebalancing",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 74,
+      "title": "Exploring the Financial Implications of Operating a Shared Autonomous Electric Vehicle Fleet in Zurich",
+      "source": "Crossref",
+      "identifier": "10.1016/j.urbmob.2021.100001",
+      "resolved": "https://doi.org/10.1016/j.urbmob.2021.100001",
+      "metadataTitle": "Exploring the Financial Implications of Operating a Shared Autonomous Electric Vehicle Fleet in Zurich",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 75,
+      "title": "Shared autonomous vehicle fleet performance: Impacts of trip densities and parking limitations",
+      "source": "Crossref",
+      "identifier": "10.1016/j.trd.2020.102577",
+      "resolved": "https://doi.org/10.1016/j.trd.2020.102577",
+      "metadataTitle": "Shared autonomous vehicle fleet performance: Impacts of trip densities and parking limitations",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 76,
+      "title": "Parking Strategies and Outcomes for Shared Autonomous Vehicle Fleet Operations",
+      "source": "Crossref",
+      "identifier": "10.1061/jtepbs.teeng-7955",
+      "resolved": "https://doi.org/10.1061/jtepbs.teeng-7955",
+      "metadataTitle": "Parking Strategies and Outcomes for Shared Autonomous Vehicle Fleet Operations",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 77,
+      "title": "Optimal Vehicle Scheduling and Charging Infrastructure Planning for Autonomous Modular Transit System",
+      "source": "Crossref",
+      "identifier": "10.3390/su16083316",
+      "resolved": "https://doi.org/10.3390/su16083316",
+      "metadataTitle": "Optimal Vehicle Scheduling and Charging Infrastructure Planning for Autonomous Modular Transit System",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 78,
+      "title": "Demand Response Transit Scheduling Research Based on Urban and Rural Transportation Station Optimization",
+      "source": "Crossref",
+      "identifier": "10.3390/su142013328",
+      "resolved": "https://doi.org/10.3390/su142013328",
+      "metadataTitle": "Demand Response Transit Scheduling Research Based on Urban and Rural Transportation Station Optimization",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 79,
+      "title": "Network Latency in Teleoperation of Connected and Autonomous Vehicles: A Review of Trends, Challenges, and Mitigation Strategies",
+      "source": "Crossref",
+      "identifier": "10.3390/s24123957",
+      "resolved": "https://doi.org/10.3390/s24123957",
+      "metadataTitle": "Network Latency in Teleoperation of Connected and Autonomous Vehicles: A Review of Trends, Challenges, and Mitigation Strategies",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 80,
+      "title": "Physical and Digital Infrastructure Readiness Index for Connected and Automated Vehicles",
+      "source": "Crossref",
+      "identifier": "10.3390/s22197315",
+      "resolved": "https://doi.org/10.3390/s22197315",
+      "metadataTitle": "Physical and Digital Infrastructure Readiness Index for Connected and Automated Vehicles",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 81,
+      "title": "Preparing Road Infrastructure to Accommodate Connected and Automated Vehicles: System-Level Perspective",
+      "source": "Crossref",
+      "identifier": "10.1061/(asce)is.1943-555x.0000593",
+      "resolved": "https://doi.org/10.1061/(asce)is.1943-555x.0000593",
+      "metadataTitle": "Preparing Road Infrastructure to Accommodate Connected and Automated Vehicles: System-Level Perspective",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 82,
+      "title": "Assessing the Impact on Road Safety of Automated Vehicles: An Infrastructure Inspection-Based Approach",
+      "source": "Crossref",
+      "identifier": "10.3390/futuretransp2020029",
+      "resolved": "https://doi.org/10.3390/futuretransp2020029",
+      "metadataTitle": "Assessing the Impact on Road Safety of Automated Vehicles: An Infrastructure Inspection-Based Approach",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 83,
+      "title": "Challenges in Low Infrastructure and Off-Road Automated Driving",
+      "source": "Crossref",
+      "identifier": "10.1109/metrocad56305.2022.00008",
+      "resolved": "https://doi.org/10.1109/metrocad56305.2022.00008",
+      "metadataTitle": "Challenges in Low Infrastructure and Off-Road Automated Driving",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 84,
+      "title": "Automated Vehicles and Infrastructure Enablers: Pavement Markings and Signs",
+      "source": "Crossref",
+      "identifier": "10.4271/epr2022011",
+      "resolved": "https://doi.org/10.4271/epr2022011",
+      "metadataTitle": "Automated Vehicles and Infrastructure Enablers: Pavement Markings and\n                    Signs",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 85,
+      "title": "An Automated Pavement Marking Retroreflectivity Condition Assessment Method Using Mobile LiDAR and Video Log Images",
+      "source": "Crossref",
+      "identifier": "10.1061/jitse4.iseng-2390",
+      "resolved": "https://doi.org/10.1061/jitse4.iseng-2390",
+      "metadataTitle": "An Automated Pavement Marking Retroreflectivity Condition Assessment Method Using Mobile LiDAR and Video Log Images",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 86,
+      "title": "Performance of the UAS-LiDAR sensing approach in detecting and measuring pavement frost heaves",
+      "source": "Crossref",
+      "identifier": "10.1080/14680629.2023.2207658",
+      "resolved": "https://doi.org/10.1080/14680629.2023.2207658",
+      "metadataTitle": "Performance of the UAS-LiDAR sensing approach in detecting and measuring pavement frost heaves",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 87,
+      "title": "Potential applications of connected vehicles in pavement condition evaluation: a brief review",
+      "source": "Crossref",
+      "identifier": "10.1080/14680629.2023.2237597",
+      "resolved": "https://doi.org/10.1080/14680629.2023.2237597",
+      "metadataTitle": "Potential applications of connected vehicles in pavement condition evaluation: a brief review",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 88,
+      "title": "Safety Risk Assessment of Low-Volume Road Segments on the Tibetan Plateau Using UAV LiDAR Data",
+      "source": "Crossref",
+      "identifier": "10.3390/su151411443",
+      "resolved": "https://doi.org/10.3390/su151411443",
+      "metadataTitle": "Safety Risk Assessment of Low-Volume Road Segments on the Tibetan Plateau Using UAV LiDAR Data",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 89,
+      "title": "Digital Twin Framework for Road Infrastructure Management",
+      "source": "Crossref",
+      "identifier": "10.3390/app15105765",
+      "resolved": "https://doi.org/10.3390/app15105765",
+      "metadataTitle": "Digital Twin Framework for Road Infrastructure Management",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 90,
+      "title": "Proactive perceptive road: a digital twin-driven intelligent road infrastructure towards proactive road state perception and deduction",
+      "source": "Crossref",
+      "identifier": "10.1088/1361-665x/ada596",
+      "resolved": "https://doi.org/10.1088/1361-665x/ada596",
+      "metadataTitle": "Proactive perceptive road: a digital twin-driven intelligent road infrastructure towards proactive road state perception and deduction",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 91,
+      "title": "Mobile Mapping System for Urban Infrastructure Monitoring: Digital Twin Implementation in Road Asset Management",
+      "source": "Crossref",
+      "identifier": "10.3390/land14030597",
+      "resolved": "https://doi.org/10.3390/land14030597",
+      "metadataTitle": "Mobile Mapping System for Urban Infrastructure Monitoring: Digital Twin Implementation in Road Asset Management",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 92,
+      "title": "A systematic literature review of vehicular connectivity and V2X communications: Technical aspects and new challenges",
+      "source": "Crossref",
+      "identifier": "10.1002/dac.5780",
+      "resolved": "https://doi.org/10.1002/dac.5780",
+      "metadataTitle": "A systematic literature review of vehicular connectivity and V2X communications: Technical aspects and new challenges",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 93,
+      "title": "IEEE 802.11bd & 5G NR V2X: Evolution of Radio Access Technologies for V2X Communications",
+      "source": "Crossref",
+      "identifier": "10.1109/access.2019.2919489",
+      "resolved": "https://doi.org/10.1109/access.2019.2919489",
+      "metadataTitle": "IEEE 802.11bd &amp; 5G NR V2X: Evolution of Radio Access Technologies for V2X Communications",
+      "titleSimilarity": 0.977,
+      "verified": true
+    },
+    {
+      "n": 94,
+      "title": "Context-aware heterogeneous V2X communications for connected vehicles",
+      "source": "Crossref",
+      "identifier": "10.1016/j.comnet.2018.02.024",
+      "resolved": "https://doi.org/10.1016/j.comnet.2018.02.024",
+      "metadataTitle": "Context-aware heterogeneous V2X communications for connected vehicles",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 95,
+      "title": "Physical Layer Evaluation of V2X Communications Technologies: 5G NR-V2X, LTE-V2X, IEEE 802.11bd, and IEEE 802.11p",
+      "source": "Crossref",
+      "identifier": "10.1109/vtcfall.2019.8891313",
+      "resolved": "https://doi.org/10.1109/vtcfall.2019.8891313",
+      "metadataTitle": "Physical Layer Evaluation of V2X Communications Technologies: 5G NR-V2X, LTE-V2X, IEEE 802.11bd, and IEEE 802.11p",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 96,
+      "title": "Adaptive Sidelink Open Loop Power Control Optimization Strategies for Vehicle-to- Vehicle Communications in 5G-NR-V2X",
+      "source": "Crossref",
+      "identifier": "10.1109/access.2024.3365133",
+      "resolved": "https://doi.org/10.1109/access.2024.3365133",
+      "metadataTitle": "Adaptive Sidelink Open Loop Power Control Optimization Strategies for Vehicle-to- Vehicle Communications in 5G-NR-V2X",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 97,
+      "title": "On the Feasibility of URLLC for 5G-NR V2X Sidelink Communication at 5.9 GHz",
+      "source": "Crossref",
+      "identifier": "10.1109/globecom48099.2022.10000606",
+      "resolved": "https://doi.org/10.1109/globecom48099.2022.10000606",
+      "metadataTitle": "On the Feasibility of URLLC for 5G-NR V2X Sidelink Communication at 5.9 GHz",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 98,
+      "title": "A survey on road safety and traffic efficiency vehicular applications based on C-V2X technologies",
+      "source": "Crossref",
+      "identifier": "10.1016/j.vehcom.2021.100428",
+      "resolved": "https://doi.org/10.1016/j.vehcom.2021.100428",
+      "metadataTitle": "A survey on road safety and traffic efficiency vehicular applications based on C-V2X technologies",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 99,
+      "title": "Survey on existing authentication issues for cellular-assisted V2X communication",
+      "source": "Crossref",
+      "identifier": "10.1016/j.vehcom.2018.01.008",
+      "resolved": "https://doi.org/10.1016/j.vehcom.2018.01.008",
+      "metadataTitle": "Survey on existing authentication issues for cellular-assisted V2X communication",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 100,
+      "title": "Cybersecurity on Connected and Automated Transportation Systems: A Survey",
+      "source": "Crossref",
+      "identifier": "10.1109/tiv.2023.3326736",
+      "resolved": "https://doi.org/10.1109/tiv.2023.3326736",
+      "metadataTitle": "Cybersecurity on Connected and Automated Transportation Systems: A Survey",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 101,
+      "title": "A Survey of Cybersecurity Challenges and Mitigation Techniques for Connected and Autonomous Vehicles",
+      "source": "Crossref",
+      "identifier": "10.1109/tiv.2024.3493938",
+      "resolved": "https://doi.org/10.1109/tiv.2024.3493938",
+      "metadataTitle": "A Survey of Cybersecurity Challenges and Mitigation Techniques for Connected and Autonomous Vehicles",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 102,
+      "title": "A Blockchain Approach for Decentralized V2X (D-V2X)",
+      "source": "Crossref",
+      "identifier": "10.1109/tvt.2020.3046640",
+      "resolved": "https://doi.org/10.1109/tvt.2020.3046640",
+      "metadataTitle": "A Blockchain Approach for Decentralized V2X (D-V2X)",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 103,
+      "title": "V2X Communication between Connected and Automated Vehicles (CAVs) and Unmanned Aerial Vehicles (UAVs)",
+      "source": "Crossref",
+      "identifier": "10.3390/s22228941",
+      "resolved": "https://doi.org/10.3390/s22228941",
+      "metadataTitle": "V2X Communication between Connected and Automated Vehicles (CAVs) and Unmanned Aerial Vehicles (UAVs)",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 104,
+      "title": "Cooperative Perception for Connected and Automated Vehicles: Evaluation and Impact of Congestion Control",
+      "source": "Crossref",
+      "identifier": "10.1109/access.2020.3035119",
+      "resolved": "https://doi.org/10.1109/access.2020.3035119",
+      "metadataTitle": "Cooperative Perception for Connected and Automated Vehicles: Evaluation and Impact of Congestion Control",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 105,
+      "title": "Generation of Cooperative Perception Messages for Connected and Automated Vehicles",
+      "source": "Crossref",
+      "identifier": "10.1109/tvt.2020.3036165",
+      "resolved": "https://doi.org/10.1109/tvt.2020.3036165",
+      "metadataTitle": "Generation of Cooperative Perception Messages for Connected and Automated Vehicles",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 106,
+      "title": "Consensus-Based Distributed Cooperative Perception for Connected and Automated Vehicles",
+      "source": "Crossref",
+      "identifier": "10.1109/tits.2023.3264608",
+      "resolved": "https://doi.org/10.1109/tits.2023.3264608",
+      "metadataTitle": "Consensus-Based Distributed Cooperative Perception for Connected and Automated Vehicles",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 107,
+      "title": "A cooperative perception based adaptive signal control under early deployment of connected and automated vehicles",
+      "source": "Crossref",
+      "identifier": "10.1016/j.trc.2024.104860",
+      "resolved": "https://doi.org/10.1016/j.trc.2024.104860",
+      "metadataTitle": "A cooperative perception based adaptive signal control under early deployment of connected and automated vehicles",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 108,
+      "title": "Joint Communication and Sensing Enabled Cooperative Perception Testbed for Connected Automated Vehicles",
+      "source": "Crossref",
+      "identifier": "10.1109/infocomwkshps54753.2022.9798074",
+      "resolved": "https://doi.org/10.1109/infocomwkshps54753.2022.9798074",
+      "metadataTitle": "Joint Communication and Sensing Enabled Cooperative Perception Testbed for Connected Automated Vehicles",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 109,
+      "title": "Towards a Framework to Evaluate Cooperative Perception for Connected Vehicles",
+      "source": "Crossref",
+      "identifier": "10.1109/vnc52810.2021.9644667",
+      "resolved": "https://doi.org/10.1109/vnc52810.2021.9644667",
+      "metadataTitle": "Towards a Framework to Evaluate Cooperative Perception for Connected Vehicles",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 110,
+      "title": "Scalable and Resilient Platooning Control of Cooperative Automated Vehicles",
+      "source": "Crossref",
+      "identifier": "10.1109/tvt.2022.3147371",
+      "resolved": "https://doi.org/10.1109/tvt.2022.3147371",
+      "metadataTitle": "Scalable and Resilient Platooning Control of Cooperative Automated Vehicles",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 111,
+      "title": "Modeling and Optimization of Connected and Automated Vehicle Platooning Cooperative Control with Measurement Errors",
+      "source": "Crossref",
+      "identifier": "10.3390/s23219006",
+      "resolved": "https://doi.org/10.3390/s23219006",
+      "metadataTitle": "Modeling and Optimization of Connected and Automated Vehicle Platooning Cooperative Control with Measurement Errors",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 112,
+      "title": "Cooperative Eco-driving Controller for Battery Electric Vehicle Platooning",
+      "source": "Crossref",
+      "identifier": "10.1016/j.ifacol.2022.11.185",
+      "resolved": "https://doi.org/10.1016/j.ifacol.2022.11.185",
+      "metadataTitle": "Cooperative Eco-driving Controller for Battery Electric Vehicle Platooning",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 113,
+      "title": "On the impact of connected automated vehicles in freeway work zones: a cooperative cellular automata model based approach",
+      "source": "Crossref",
+      "identifier": "10.1108/jicv-11-2017-0001",
+      "resolved": "https://doi.org/10.1108/jicv-11-2017-0001",
+      "metadataTitle": "On the impact of connected automated vehicles in freeway work zones: a cooperative cellular automata model based approach",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 114,
+      "title": "Cooperative Ramp Merging for Mixed Traffic with Connected Automated Vehicles and Human-Operated Vehicles",
+      "source": "Crossref",
+      "identifier": "10.1016/j.ifacol.2019.12.384",
+      "resolved": "https://doi.org/10.1016/j.ifacol.2019.12.384",
+      "metadataTitle": "Cooperative Ramp Merging for Mixed Traffic with Connected Automated Vehicles and Human-Operated Vehicles",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 115,
+      "title": "Hybrid cooperative intersection management for connected automated vehicles and pedestrians",
+      "source": "Crossref",
+      "identifier": "10.26599/jicv.2023.9210008",
+      "resolved": "https://doi.org/10.26599/jicv.2023.9210008",
+      "metadataTitle": "Hybrid cooperative intersection management for connected automated vehicles and pedestrians",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 116,
+      "title": "Automation in Our Parks: Automated Shuttle Pilots at Yellowstone National Park and Wright Brothers National Memorial",
+      "source": "Authoritative URL",
+      "identifier": "https://rosap.ntl.bts.gov/view/dot/76562",
+      "resolved": "https://rosap.ntl.bts.gov/view/dot/76562",
+      "metadataTitle": "Automation in Our Parks: Automated Shuttle Pilots at Yellowstone National Park and Wright Brothers National Memorial",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 117,
+      "title": "Connected Autonomous Shuttle Supporting Innovation (CASSI) Program Development Final Report",
+      "source": "Authoritative URL",
+      "identifier": "https://www.ncdot.gov/divisions/integrated-mobility/innovation/cassi/Documents/cassi-program-development-final-report.pdf",
+      "resolved": "https://www.ncdot.gov/divisions/integrated-mobility/innovation/cassi/Documents/cassi-program-development-final-report.pdf",
+      "metadataTitle": "Connected Autonomous Shuttle Supporting Innovation (CASSI) Program Development Final Report",
+      "titleSimilarity": 1.0,
+      "verified": true
+    }
+  ]
+}
