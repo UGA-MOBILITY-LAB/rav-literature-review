@@ -9,7 +9,7 @@
 
   var CATEGORIES = [
     "Autonomous Driving",
-    "Pick-up & Dispatch",
+    "Fleet Management",
     "Infrastructure",
     "Communication",
     "Cooperative Driving",
@@ -18,7 +18,7 @@
 
   var CAT_COLORS = {
     "Autonomous Driving": "#1F4E94",
-    "Pick-up & Dispatch": "#00A3AD",
+    "Fleet Management": "#00A3AD",
     "Infrastructure": "#BA0C2F",
     "Communication": "#E08A3C",
     "Cooperative Driving": "#7E6BB0",
@@ -100,8 +100,11 @@
   var hiddenCats = new Set();
   var hiddenTypes = new Set();
   var showEdges = true;
+  var paperScope = null;
+  var scopeLabel = "";
 
   function passesFilters(p) {
+    if (paperScope && !paperScope.has(p.n)) { return false; }
     if (filters.cat.size && !filters.cat.has(p.cat)) { return false; }
     if (filters.year.size && !filters.year.has(String(p.year))) { return false; }
     if (filters.vtype.size && !filters.vtype.has(p._vtype)) { return false; }
@@ -113,7 +116,7 @@
   /* ---------- meta fill ---------- */
 
   document.getElementById("stat-count").textContent = String(SURVEY_META.paperCount);
-  document.getElementById("stat-cats").textContent = String(CATEGORIES.length);
+  document.getElementById("stat-cats").textContent = String(CATEGORIES.length - 1);
   document.getElementById("stat-years").textContent = SURVEY_META.yearMin + "–" + SURVEY_META.yearMax;
   var rangeText = SURVEY_META.yearMin + "~" + SURVEY_META.yearMax;
   ["stats-range", "explorer-range", "papers-range"].forEach(function (id) {
@@ -155,6 +158,8 @@
       cb.type = "checkbox";
       cb.value = opt.value;
       cb.addEventListener("change", function () {
+        paperScope = null;
+        scopeLabel = "";
         if (cb.checked) { filters[filterKey].add(opt.value); }
         else { filters[filterKey].delete(opt.value); }
         var n = filters[filterKey].size;
@@ -225,6 +230,8 @@
     hiddenCats.clear(); hiddenTypes.clear();
     showEdges = true;
     pinnedKey = null;
+    paperScope = null;
+    scopeLabel = "";
     query = "";
     searchInput.value = "";
     allDropdowns.forEach(function (d) {
@@ -240,8 +247,31 @@
 
   // Used by the framework diagram: select exactly one module and jump to explorer.
   function setCatFilter(cat) {
+    paperScope = null;
+    scopeLabel = "";
     filters.cat.clear();
     filters.cat.add(cat);
+    allDropdowns.forEach(function (d) {
+      if (d.key !== "cat") { return; }
+      var boxes = d.panel.querySelectorAll("input[type=checkbox]");
+      var n = 0;
+      for (var i = 0; i < boxes.length; i++) {
+        boxes[i].checked = (boxes[i].value === cat);
+        if (boxes[i].checked) { n++; }
+      }
+      d.badge.textContent = String(n);
+      d.badge.hidden = (n === 0);
+    });
+    render();
+  }
+
+  // Used by framework submodules: keep the parent category selected and
+  // narrow the explorer to the references that support the chosen submodule.
+  function setSubthemeFilter(cat, label, refs) {
+    filters.cat.clear();
+    filters.cat.add(cat);
+    paperScope = new Set(refs);
+    scopeLabel = cat + " / " + label;
     allDropdowns.forEach(function (d) {
       if (d.key !== "cat") { return; }
       var boxes = d.panel.querySelectorAll("input[type=checkbox]");
@@ -789,7 +819,7 @@
         " — " + adj.length + " evidence link" + (adj.length === 1 ? "" : "s") + " (Esc to exit)";
     } else {
       countBox.textContent = "Showing " + currentFiltered.length + " of " +
-        SURVEY_META.paperCount + " references";
+        SURVEY_META.paperCount + " references" + (scopeLabel ? " · " + scopeLabel : "");
     }
   }
 
@@ -859,28 +889,40 @@
   (function () {
     var detail = document.getElementById("thesis-detail");
     var pillars = document.querySelectorAll(".fw-pillar");
+    var subpillars = document.querySelectorAll(".fw-subpillar");
     if (!detail || !pillars.length) { return; }
     var INFO = {
-      "Autonomous Driving": ["Tier 1 · Existing", "Multi-sensor fusion, GNSS/INS/LiDAR localization against HD maps, and energy-aware routing carry rural driving. Missing: rural data and rural testing. Click to see its references."],
-      "Pick-up & Dispatch": ["Tier 1 · Existing", "Reinforcement-learning dispatch and rider-app matching are reusable. The unsolved piece: unattended, ADA-compliant door, ramp, and securement. Click to see its references."],
-      "Infrastructure": ["Tier 2 · Advanced", "UAV and vehicle surveys pick which rural roads to physically upgrade; a digital-twin layer represents the roads that cannot be fixed in time. Click to see its references."],
-      "Communication": ["Tier 2 · Advanced", "C-V2X + cellular + LEO satellite links switched by coverage, edge roadside units for latency-critical work, V2X security built in. Click to see its references."],
-      "Cooperative Driving": ["Tier 2 · Advanced", "Shared perception and coordinated maneuvers extend a low-speed rural AV to arterials, work/school zones, grade crossings, and bad weather. Click to see its references."],
+      "Autonomous Driving": ["Tier 1 · Existing", "Four linked submodules carry rural driving: perception, localization, heterogeneous data integration, and route planning. Rural data and field validation remain the shared gap."],
+      "Perception": ["Autonomous Driving submodule", "Camera, radar, LiDAR, and IMU fusion improves coverage and redundancy. RAV must retrain and validate the stack on faded markings, unpaved roads, occlusion, and adverse weather."],
+      "Localization": ["Autonomous Driving submodule", "GNSS/INS, vision, LiDAR, and an HD-map prior sustain lane-level positioning. The dominant rural gap is building and maintaining the HD maps."],
+      "Data Integration": ["Autonomous Driving submodule", "Onboard fusion reconciles raw sensor streams, detections, pose, and map priors into one real-time estimate; edge and cloud feeds remain opportunistic under patchy coverage."],
+      "Route Planning": ["Autonomous Driving submodule", "Energy- and terrain-aware planning supports both on-demand healthcare trips and fixed transit or park routes, but needs locally calibrated grade, surface, range, and demand data."],
+      "Fleet Management": ["Tier 1 · Existing", "On-demand dispatch and ride-matching are reusable. Thin-demand fixed-route scheduling, charging and service monitoring, and remote supervision over weak rural links remain the principal gaps."],
+      "Dispatch & Matching": ["Fleet Management submodule", "Reinforcement-learning dispatch, operations-research methods, and rider-app matching support scattered, thin rural demand."],
+      "Remote Supervision": ["Fleet Management submodule", "RAV must define supervisor-to-vehicle ratios, takeover procedures, and resilient monitoring when telemetry or video links degrade."],
+      "Fixed-Route Scheduling": ["Fleet Management submodule", "Headway and timetable design for thin-demand fixed routes remains a rural research and implementation gap."],
+      "Fleet Support": ["Fleet Management submodule", "Charging, onboard monitoring, and fare collection are currently engineering and data-collection functions supported mainly by pilot experience."],
+      "Infrastructure": ["Tier 2 · Advanced", "UAV, smartphone, mobile-LiDAR, and imaging surveys identify physical upgrades; HD maps, roadside sensing, and digital twins form the shared digital road layer."],
+      "Communication": ["Tier 2 · Advanced", "RAV combines direct and network-based V2X with cellular and LEO satellite links, switches by coverage and latency, and maintains safe onboard operation during disconnections."],
+      "Cooperative Driving": ["Tier 2 · Advanced", "Shared perception and coordinated control extend rural AVs to arterials, work and school zones, rail crossings, and extreme weather, with safety-critical computing retained onboard."],
       "Pilots": ["Field validation", "goMARTI (on-demand, ~97 stops, app or 211) and ADASTEC (fixed scenic route, ~4 round trips/day) validate the service models with safety operators on board. Click to see their references."]
     };
     var DEFAULT = ["Two tiers, one system", "Existing technology carries the service today; advanced, infrastructure-integrated technology extends it; two field pilots ground it in practice. Hover a module."];
     var tagEl = detail.querySelector(".td-tag");
     var txtEl = detail.querySelector(".td-text");
-    function show(stage) {
-      var d = INFO[stage] || DEFAULT;
-      tagEl.textContent = d[0] + " · " + stage;
+    function show(stage, substage) {
+      var key = substage || stage;
+      var d = INFO[key] || DEFAULT;
+      tagEl.textContent = d[0] + " · " + key;
       txtEl.textContent = d[1];
       pillars.forEach(function (p) { p.classList.toggle("active", p.getAttribute("data-cat") === stage); });
+      subpillars.forEach(function (p) { p.classList.toggle("active", p.getAttribute("data-subcat") === substage); });
     }
     function clear() {
       tagEl.textContent = DEFAULT[0];
       txtEl.textContent = DEFAULT[1];
       pillars.forEach(function (p) { p.classList.remove("active"); });
+      subpillars.forEach(function (p) { p.classList.remove("active"); });
     }
     pillars.forEach(function (p) {
       var s = p.getAttribute("data-cat");
@@ -892,6 +934,24 @@
       });
       p.addEventListener("keydown", function (e) {
         if (e.key === "Enter" || e.key === " ") { e.preventDefault(); show(s); }
+      });
+    });
+    subpillars.forEach(function (p) {
+      var cat = p.getAttribute("data-cat");
+      var subcat = p.getAttribute("data-subcat");
+      var refs = p.getAttribute("data-refs").split(",").map(function (n) { return Number(n); });
+      p.addEventListener("mouseenter", function () { show(cat, subcat); });
+      p.addEventListener("focus", function () { show(cat, subcat); });
+      p.addEventListener("click", function () {
+        setSubthemeFilter(cat, subcat, refs);
+        document.getElementById("explorer").scrollIntoView({ behavior: "smooth" });
+      });
+      p.addEventListener("keydown", function (e) {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          setSubthemeFilter(cat, subcat, refs);
+          document.getElementById("explorer").scrollIntoView({ behavior: "smooth" });
+        }
       });
     });
     var card = document.querySelector(".thesis-card");
@@ -911,18 +971,17 @@
       ["Autonomous Driving", "GNSS/LiDAR failure modes", "m", [1, 2], "No single positioning source is reliable rurally — fuse sources."],
       ["Autonomous Driving", "HD-map localization", "m", [2, 23, 24, 25], "Rural HD maps largely missing — build and refresh them."],
       ["Autonomous Driving", "Energy & terrain routing", "m", [1, 4, 26, 27], "Models not calibrated for rural unpaved grades."],
-      ["Autonomous Driving", "On-demand vs fixed routing", "m", [5, 16, 30, 31], "Combine on-demand pickup with fixed thin-demand runs."],
+      ["Autonomous Driving", "On-demand vs fixed route", "m", [5, 16, 30, 31], "Use on-demand planning for healthcare and fixed routes for transit and park service."],
       ["Autonomous Driving", "Sensor-level fusion", "g", [17, 18, 19], "Reusable directly for the perception pipeline."],
-      ["Autonomous Driving", "Heterogeneous data fusion", "r", [2, 19, 25], "Engineer the onboard reconciliation layer for unreliable rural inputs."],
-      ["Pick-up & Dispatch", "On-demand dispatch & matching", "g", [5, 28, 29, 30, 31], "Mature — reuse RL dispatch and rider-app matching."],
-      ["Pick-up & Dispatch", "ADA pick-up (unattended door)", "r", [6, 31], "Unsolved — RAV must engineer and help standardize it."],
-      ["Pick-up & Dispatch", "Fixed-route scheduling", "r", [16], "Headway/timetable optimization for rural fixed routes is a gap."],
-      ["Infrastructure", "Roadside sensing & digital twins", "m", [7, 37, 38], "Build a digital layer for roads that can't be upgraded in time."],
-      ["Infrastructure", "Physical road assessment", "m", [39], "Use UAV/vehicle surveys to pick which roads to upgrade."],
-      ["Infrastructure", "Rural HD maps & road info", "r", [8, 25], "Create rural HD maps and road-condition feeds as shared infrastructure."],
-      ["Communication", "Rural V2X coverage", "r", [9], "Tolerate intermittent links — connectivity gaps are the baseline."],
-      ["Communication", "Edge computing at RSUs", "m", [32, 33], "Keep time-critical work on edge units."],
-      ["Communication", "Multi-channel links (C-V2X+LEO)", "m", [8], "Switch channels by coverage rather than betting on one."],
+      ["Autonomous Driving", "Heterogeneous & aggregated data", "r", [2, 19, 25], "Keep onboard reconciliation as the backbone and treat edge/cloud feeds as opportunistic."],
+      ["Fleet Management", "On-demand dispatch & ride-matching", "g", [5, 28, 29, 30, 31], "Reuse RL dispatch, operations-research methods, and rider-app matching."],
+      ["Fleet Management", "Remote monitoring & supervision", "r", [14, 15, 16], "Define supervisor ratios, takeover procedures, and monitoring over weak rural links."],
+      ["Fleet Management", "Fixed-route dispatch & scheduling", "r", [16], "Develop headway and timetable scheduling for thin-demand rural runs."],
+      ["Fleet Management", "Fleet management functions", "r", [14, 15, 16], "Charging, onboard monitoring, and fare collection remain engineering and data-collection items."],
+      ["Infrastructure", "Digital infrastructure", "m", [7, 25, 37, 38], "Adapt HD maps, roadside sensing, and digital twins to sparse, intermittently connected roads."],
+      ["Infrastructure", "Physical road assessment", "m", [39, 46, 47, 48, 49], "Combine UAV, smartphone, mobile-LiDAR, sign, marking, and gravel-road surveys into one upgrade workflow."],
+      ["Communication", "Rural V2X", "r", [9, 50, 51, 52], "Design for weaker coverage, longer disconnections, interference, mobility, and QoS limits."],
+      ["Communication", "Multi-channel links", "m", [8], "Switch among C-V2X, cellular, and LEO satellite links by coverage and latency."],
       ["Communication", "V2X cybersecurity", "g", [44, 45], "Apply the surveyed countermeasures before field deployment."],
       ["Cooperative Driving", "Cooperative perception", "m", [10, 35], "Deploy roadside sensing along sparse rural routes."],
       ["Cooperative Driving", "Edge RSU CDA & handover", "m", [34, 36], "Place edge RSUs where help is most likely needed."],

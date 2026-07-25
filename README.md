@@ -4,8 +4,10 @@ Companion website for the TRAVELS project literature review, linking each Rural 
 
 **Live site:** https://uga-mobility-lab.github.io/rav-literature-review/
 
-- 45 references, tagged by the RAV module they support
-- Interactive two-tier framework diagram, evidence tables, and filterable bibliography
-- Single-file static site (`index.html`), no build step
+- 55 references, tagged by the RAV module they support
+- Interactive two-tier framework diagram, evidence tables, stakeholder recommendations, and filterable bibliography
+- Four linked Autonomous Driving submodules: perception, localization, heterogeneous data integration, and route planning
+- Fleet Management module covering dispatch, scheduling, remote supervision, and fleet-support functions
+- Plain static site, no build step
 
 TRAVELS Project Team · College of Engineering, University of Georgia · June 2026

@@ -379,6 +379,7 @@ h1 { font-size: 42px; line-height: 1.12; margin: 0 0 10px; }
 .thesis-svg { width: 100%; min-width: 720px; height: auto; display: block; }
 
 .thesis-svg .flow { stroke: #9aa0a6; stroke-width: 2; }
+.thesis-svg .sub-flow { stroke: #6F88AD; stroke-width: 1.4; fill: none; }
 .thesis-svg .loop-seg { fill: none; stroke: #9aa0a6; stroke-width: 1.6; stroke-dasharray: 6 5; }
 
 .pillar { cursor: pointer; }
@@ -427,8 +428,79 @@ h1 { font-size: 42px; line-height: 1.12; margin: 0 0 10px; }
 .fw-pillar .chip-kicker { fill: #fff; font-size: 11px; font-weight: 700; letter-spacing: .12em; text-anchor: middle; opacity: .9; }
 .fw-pillar .chip-main { fill: #fff; font-size: 16px; font-weight: 700; text-anchor: middle; font-family: var(--serif); }
 .fw-pillar .chip-sub { fill: #fff; font-size: 12px; text-anchor: middle; opacity: .88; }
+.fw-subpillar { cursor: pointer; }
+.fw-subpillar rect {
+  fill: #EAF0F9;
+  stroke: #1F4E94;
+  stroke-width: 1.2;
+  transition: transform .15s ease, filter .15s ease, fill .15s ease;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.fw-subpillar text {
+  fill: #173B70;
+  font: 700 10.5px var(--sans);
+  text-anchor: middle;
+  pointer-events: none;
+}
+.fw-subpillar:hover rect,
+.fw-subpillar:focus-visible rect,
+.fw-subpillar.active rect {
+  fill: #D8E5F6;
+  filter: drop-shadow(0 2px 5px rgba(31, 78, 148, 0.24));
+  transform: scale(1.025);
+}
+.fw-subpillar:focus { outline: none; }
+.fleet-subpillar rect { fill: #E3F6F7; stroke: #008C94; }
+.fleet-subpillar text { fill: #006A70; }
+.fleet-subpillar:hover rect,
+.fleet-subpillar:focus-visible rect,
+.fleet-subpillar.active rect { fill: #CDEFF1; }
 .tier-label { font: 700 12px var(--sans); letter-spacing: .14em; }
 .thesis-svg { min-width: 860px; }
+
+/* stakeholder recommendations */
+.recommendation-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+.recommendation-card {
+  position: relative;
+  overflow: hidden;
+  padding: 22px 24px 20px;
+  border-top: 4px solid var(--rec-accent, #1F4E94);
+}
+.recommendation-card h3 { margin: 3px 0 13px; font-size: 20px; }
+.recommendation-card ul { margin: 0; padding-left: 20px; }
+.recommendation-card li { margin: 0 0 9px; line-height: 1.5; }
+.recommendation-card li:last-child { margin-bottom: 0; }
+.rec-kicker {
+  margin: 0;
+  color: var(--rec-accent, #1F4E94);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .11em;
+  text-transform: uppercase;
+}
+.rec-evidence {
+  margin: 15px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 600;
+}
+.rec-vehicle { --rec-accent: #1F4E94; }
+.rec-fleet { --rec-accent: #00A3AD; }
+.rec-road { --rec-accent: #BA0C2F; }
+.rec-connect { --rec-accent: #E08A3C; }
+.rec-pilot { --rec-accent: #4B8B3B; grid-column: 1 / -1; }
+.rec-pilot ul { columns: 3; column-gap: 28px; }
+.rec-pilot li { break-inside: avoid; }
+@media (max-width: 760px) {
+  .recommendation-grid { grid-template-columns: 1fr; }
+  .rec-pilot { grid-column: auto; }
+  .rec-pilot ul { columns: 1; }
+}
 
 /* evidence map */
 .elegend { display: flex; flex-wrap: wrap; gap: 18px; font-size: 13px; color: var(--muted); margin-bottom: 14px; }
