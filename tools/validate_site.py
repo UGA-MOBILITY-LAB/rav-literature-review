@@ -29,6 +29,7 @@ def main() -> None:
     app = (ROOT / "app.js").read_text(encoding="utf-8")
     index = (ROOT / "index.html").read_text(encoding="utf-8")
     audit = json.loads((ROOT / "sources-audit.json").read_text(encoding="utf-8"))
+    oa_audit = json.loads((ROOT / "open-access-audit.json").read_text(encoding="utf-8"))
 
     assert len(papers) == meta["paperCount"] == 117
     assert audit["paperCount"] == audit["verifiedCount"] == 117
@@ -37,6 +38,21 @@ def main() -> None:
     assert len({paper["key"] for paper in papers}) == 117
     assert len({paper["title"].casefold() for paper in papers}) == 117
     assert all(paper.get("doi") or paper.get("arxiv") or paper.get("url") for paper in papers)
+    assert all(paper.get("authors") for paper in papers)
+    required_coding = {"etype", "rural", "strength", "access", "focus", "rav"}
+    assert all(required_coding <= set(paper) for paper in papers)
+    assert {paper["strength"] for paper in papers} <= {"High", "Moderate", "Emerging"}
+    assert {paper["rural"] for paper in papers} <= {
+        "Direct rural evidence",
+        "Transferable to rural",
+        "Context-limited",
+    }
+    assert {paper["access"] for paper in papers} <= {"Open", "Restricted", "Unknown"}
+    assert oa_audit["doiCount"] == sum(bool(paper.get("doi")) for paper in papers)
+    assert oa_audit["verifiedCount"] == oa_audit["doiCount"]
+    assert oa_audit["openCount"] == sum(
+        paper.get("access") == "Open" and bool(paper.get("doi")) for paper in papers
+    )
 
     category_counts = Counter(paper["cat"] for paper in papers)
     expected_categories = {
@@ -61,15 +77,22 @@ def main() -> None:
 
     section_ids = re.findall(r'<section id="([^"]+)"', index)
     assert section_ids[-1] == "cite"
-    assert "Pick-up & Dispatch" not in (app + index + data_raw)
+    assert "methodology" in section_ids
+    retired_label = re.compile(r"\x70ick[\s_-]*u\x70.{0,8}dis\x70atch", re.I)
+    assert not retired_label.search(app + index + data_raw)
     assert "Haohua.Que@uga.edu" in index
     assert "Tianle.Zhu@uga.edu" in index
     assert "Handong.Yao@uga.edu" in index
     assert 'data-filter-key": "cat"' in app
     assert 'data-filter-key": "year"' in app
+    assert 'createDropdown("access"' in app
+    assert 'createDropdown("strength"' in app
+    assert "renderHeatmap();" in app
+    assert "export-bibtex" in index
+    assert "qr-uga-mobility-lab.png" in index
     assert "syncStatSelection();" in app
 
-    print("Validated 117 papers, 6 categories, all cross-references, authors, citation order, and statistics hooks")
+    print("Validated 117 papers, review coding, OA audit, cross-references, authors, section order, and interaction hooks")
     print("Category counts:", dict(category_counts))
     print("Evidence edges:", len(edges))
 

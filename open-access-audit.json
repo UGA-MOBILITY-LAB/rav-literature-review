@@ -1,0 +1,654 @@
+{
+  "auditDate": "2026-07-25",
+  "provider": "Unpaywall API",
+  "contact": "Haohua.Que@uga.edu",
+  "doiCount": 92,
+  "verifiedCount": 92,
+  "openCount": 59,
+  "entries": [
+    {
+      "doi": "10.1002/dac.5780",
+      "verified": true,
+      "isOa": false,
+      "status": "closed",
+      "oaUrl": ""
+    },
+    {
+      "doi": "10.1016/j.array.2020.100045",
+      "verified": true,
+      "isOa": true,
+      "status": "gold",
+      "oaUrl": "https://doi.org/10.1016/j.array.2020.100045"
+    },
+    {
+      "doi": "10.1016/j.comnet.2018.02.024",
+      "verified": true,
+      "isOa": true,
+      "status": "green",
+      "oaUrl": "http://hdl.handle.net/11000/6042"
+    },
+    {
+      "doi": "10.1016/j.ifacol.2019.12.384",
+      "verified": true,
+      "isOa": true,
+      "status": "gold",
+      "oaUrl": "https://doi.org/10.1016/j.ifacol.2019.12.384"
+    },
+    {
+      "doi": "10.1016/j.ifacol.2022.11.185",
+      "verified": true,
+      "isOa": true,
+      "status": "gold",
+      "oaUrl": "https://doi.org/10.1016/j.ifacol.2022.11.185"
+    },
+    {
+      "doi": "10.1016/j.inffus.2024.102671",
+      "verified": true,
+      "isOa": false,
+      "status": "closed",
+      "oaUrl": ""
+    },
+    {
+      "doi": "10.1016/j.isci.2024.109751",
+      "verified": true,
+      "isOa": true,
+      "status": "gold",
+      "oaUrl": "https://doi.org/10.1016/j.isci.2024.109751"
+    },
+    {
+      "doi": "10.1016/j.isprsjprs.2013.11.005",
+      "verified": true,
+      "isOa": false,
+      "status": "closed",
+      "oaUrl": ""
+    },
+    {
+      "doi": "10.1016/j.isprsjprs.2022.12.021",
+      "verified": true,
+      "isOa": true,
+      "status": "hybrid",
+      "oaUrl": "https://doi.org/10.1016/j.isprsjprs.2022.12.021"
+    },
+    {
+      "doi": "10.1016/j.jiixd.2022.10.001",
+      "verified": true,
+      "isOa": true,
+      "status": "hybrid",
+      "oaUrl": "https://doi.org/10.1016/j.jiixd.2022.10.001"
+    },
+    {
+      "doi": "10.1016/j.robot.2023.104559",
+      "verified": true,
+      "isOa": false,
+      "status": "closed",
+      "oaUrl": ""
+    },
+    {
+      "doi": "10.1016/j.tra.2019.01.025",
+      "verified": true,
+      "isOa": false,
+      "status": "closed",
+      "oaUrl": ""
+    },
+    {
+      "doi": "10.1016/j.trb.2022.07.003",
+      "verified": true,
+      "isOa": false,
+      "status": "closed",
+      "oaUrl": ""
+    },
+    {
+      "doi": "10.1016/j.trc.2018.02.018",
+      "verified": true,
+      "isOa": true,
+      "status": "green",
+      "oaUrl": "https://www.osti.gov/biblio/1477237"
+    },
+    {
+      "doi": "10.1016/j.trc.2018.04.022",
+      "verified": true,
+      "isOa": false,
+      "status": "closed",
+      "oaUrl": ""
+    },
+    {
+      "doi": "10.1016/j.trc.2019.12.008",
+      "verified": true,
+      "isOa": true,
+      "status": "green",
+      "oaUrl": "https://discovery.ucl.ac.uk/10089865/1/Santhana_Review.pdf"
+    },
+    {
+      "doi": "10.1016/j.trc.2021.103422",
+      "verified": true,
+      "isOa": true,
+      "status": "green",
+      "oaUrl": "https://arxiv.org/pdf/2102.00087"
+    },
+    {
+      "doi": "10.1016/j.trc.2024.104860",
+      "verified": true,
+      "isOa": false,
+      "status": "closed",
+      "oaUrl": ""
+    },
+    {
+      "doi": "10.1016/j.trd.2020.102577",
+      "verified": true,
+      "isOa": false,
+      "status": "closed",
+      "oaUrl": ""
+    },
+    {
+      "doi": "10.1016/j.trd.2023.103607",
+      "verified": true,
+      "isOa": false,
+      "status": "closed",
+      "oaUrl": ""
+    },
+    {
+      "doi": "10.1016/j.tre.2024.103644",
+      "verified": true,
+      "isOa": false,
+      "status": "closed",
+      "oaUrl": ""
+    },
+    {
+      "doi": "10.1016/j.treng.2024.100260",
+      "verified": true,
+      "isOa": true,
+      "status": "gold",
+      "oaUrl": "https://doi.org/10.1016/j.treng.2024.100260"
+    },
+    {
+      "doi": "10.1016/j.urbmob.2021.100001",
+      "verified": true,
+      "isOa": true,
+      "status": "gold",
+      "oaUrl": "https://doi.org/10.1016/j.urbmob.2021.100001"
+    },
+    {
+      "doi": "10.1016/j.vehcom.2018.01.008",
+      "verified": true,
+      "isOa": false,
+      "status": "closed",
+      "oaUrl": ""
+    },
+    {
+      "doi": "10.1016/j.vehcom.2021.100428",
+      "verified": true,
+      "isOa": true,
+      "status": "hybrid",
+      "oaUrl": "https://doi.org/10.1016/j.vehcom.2021.100428"
+    },
+    {
+      "doi": "10.1038/s41598-023-35170-z",
+      "verified": true,
+      "isOa": true,
+      "status": "gold",
+      "oaUrl": "https://www.nature.com/articles/s41598-023-35170-z.pdf"
+    },
+    {
+      "doi": "10.1049/iet-its.2019.0742",
+      "verified": true,
+      "isOa": true,
+      "status": "hybrid",
+      "oaUrl": "https://ietresearch.onlinelibrary.wiley.com/doi/pdfdirect/10.1049/iet-its.2019.0742"
+    },
+    {
+      "doi": "10.1061/(asce)is.1943-555x.0000593",
+      "verified": true,
+      "isOa": false,
+      "status": "closed",
+      "oaUrl": ""
+    },
+    {
+      "doi": "10.1061/jitse4.iseng-2390",
+      "verified": true,
+      "isOa": false,
+      "status": "closed",
+      "oaUrl": ""
+    },
+    {
+      "doi": "10.1061/jtepbs.teeng-7955",
+      "verified": true,
+      "isOa": true,
+      "status": "green",
+      "oaUrl": "https://www.osti.gov/servlets/purl/2482535"
+    },
+    {
+      "doi": "10.1080/14680629.2023.2207658",
+      "verified": true,
+      "isOa": false,
+      "status": "closed",
+      "oaUrl": ""
+    },
+    {
+      "doi": "10.1080/14680629.2023.2237597",
+      "verified": true,
+      "isOa": false,
+      "status": "closed",
+      "oaUrl": ""
+    },
+    {
+      "doi": "10.1088/1361-665x/ada596",
+      "verified": true,
+      "isOa": false,
+      "status": "closed",
+      "oaUrl": ""
+    },
+    {
+      "doi": "10.1108/jicv-11-2017-0001",
+      "verified": true,
+      "isOa": true,
+      "status": "gold",
+      "oaUrl": "https://www.emerald.com/insight/content/doi/10.1108/JICV-11-2017-0001/full/pdf?title=on-the-impact-of-connected-automated-vehicles-in-freeway-work-zones-a-cooperative-cellular-automata-model-based-approach"
+    },
+    {
+      "doi": "10.1109/COMST.2020.3029723",
+      "verified": true,
+      "isOa": false,
+      "status": "closed",
+      "oaUrl": ""
+    },
+    {
+      "doi": "10.1109/COMST.2021.3057017",
+      "verified": true,
+      "isOa": true,
+      "status": "hybrid",
+      "oaUrl": "https://ieeexplore.ieee.org/ielx7/9739/9520094/09345798.pdf"
+    },
+    {
+      "doi": "10.1109/IV51971.2022.9827105",
+      "verified": true,
+      "isOa": false,
+      "status": "closed",
+      "oaUrl": ""
+    },
+    {
+      "doi": "10.1109/JIOT.2020.3043716",
+      "verified": true,
+      "isOa": false,
+      "status": "closed",
+      "oaUrl": ""
+    },
+    {
+      "doi": "10.1109/OJCOMS.2023.3239115",
+      "verified": true,
+      "isOa": true,
+      "status": "gold",
+      "oaUrl": "https://ieeexplore.ieee.org/ielx7/8782661/10008219/10026338.pdf"
+    },
+    {
+      "doi": "10.1109/OJITS.2023.3266800",
+      "verified": true,
+      "isOa": true,
+      "status": "gold",
+      "oaUrl": "https://ieeexplore.ieee.org/ielx7/8784355/8957420/10102410.pdf"
+    },
+    {
+      "doi": "10.1109/TITS.2020.2972974",
+      "verified": true,
+      "isOa": true,
+      "status": "green",
+      "oaUrl": "https://arxiv.org/pdf/1902.07830"
+    },
+    {
+      "doi": "10.1109/TVT.2022.3143828",
+      "verified": true,
+      "isOa": false,
+      "status": "closed",
+      "oaUrl": ""
+    },
+    {
+      "doi": "10.1109/access.2019.2919489",
+      "verified": true,
+      "isOa": true,
+      "status": "gold",
+      "oaUrl": "https://doi.org/10.1109/access.2019.2919489"
+    },
+    {
+      "doi": "10.1109/access.2020.3035119",
+      "verified": true,
+      "isOa": true,
+      "status": "gold",
+      "oaUrl": "https://ieeexplore.ieee.org/ielx7/6287639/8948470/09245573.pdf"
+    },
+    {
+      "doi": "10.1109/access.2024.3365133",
+      "verified": true,
+      "isOa": true,
+      "status": "gold",
+      "oaUrl": "https://ieeexplore.ieee.org/ielx7/6287639/6514899/10433193.pdf"
+    },
+    {
+      "doi": "10.1109/globecom48099.2022.10000606",
+      "verified": true,
+      "isOa": true,
+      "status": "green",
+      "oaUrl": "https://hal.science/hal-04141953"
+    },
+    {
+      "doi": "10.1109/iccvw60793.2023.00355",
+      "verified": true,
+      "isOa": false,
+      "status": "closed",
+      "oaUrl": ""
+    },
+    {
+      "doi": "10.1109/infocomwkshps54753.2022.9798074",
+      "verified": true,
+      "isOa": false,
+      "status": "closed",
+      "oaUrl": ""
+    },
+    {
+      "doi": "10.1109/iros45743.2020.9340939",
+      "verified": true,
+      "isOa": false,
+      "status": "closed",
+      "oaUrl": ""
+    },
+    {
+      "doi": "10.1109/metrocad56305.2022.00008",
+      "verified": true,
+      "isOa": false,
+      "status": "closed",
+      "oaUrl": ""
+    },
+    {
+      "doi": "10.1109/sas48726.2020.9220083",
+      "verified": true,
+      "isOa": false,
+      "status": "closed",
+      "oaUrl": ""
+    },
+    {
+      "doi": "10.1109/tits.2022.3149370",
+      "verified": true,
+      "isOa": true,
+      "status": "green",
+      "oaUrl": "https://arxiv.org/pdf/2606.02979"
+    },
+    {
+      "doi": "10.1109/tits.2023.3264608",
+      "verified": true,
+      "isOa": false,
+      "status": "closed",
+      "oaUrl": ""
+    },
+    {
+      "doi": "10.1109/tits.2023.3268158",
+      "verified": true,
+      "isOa": false,
+      "status": "closed",
+      "oaUrl": ""
+    },
+    {
+      "doi": "10.1109/tiv.2023.3326736",
+      "verified": true,
+      "isOa": false,
+      "status": "closed",
+      "oaUrl": ""
+    },
+    {
+      "doi": "10.1109/tiv.2024.3493938",
+      "verified": true,
+      "isOa": true,
+      "status": "hybrid",
+      "oaUrl": "https://doi.org/10.1109/tiv.2024.3493938"
+    },
+    {
+      "doi": "10.1109/trs.2023.3347734",
+      "verified": true,
+      "isOa": true,
+      "status": "hybrid",
+      "oaUrl": "https://ieeexplore.ieee.org/ielx7/9931145/10070387/10375529.pdf"
+    },
+    {
+      "doi": "10.1109/tvt.2020.3036165",
+      "verified": true,
+      "isOa": true,
+      "status": "green",
+      "oaUrl": "https://arxiv.org/pdf/1908.11151"
+    },
+    {
+      "doi": "10.1109/tvt.2020.3046640",
+      "verified": true,
+      "isOa": true,
+      "status": "green",
+      "oaUrl": "https://hdl.handle.net/10630/29924"
+    },
+    {
+      "doi": "10.1109/tvt.2022.3147371",
+      "verified": true,
+      "isOa": false,
+      "status": "closed",
+      "oaUrl": ""
+    },
+    {
+      "doi": "10.1109/vnc52810.2021.9644667",
+      "verified": true,
+      "isOa": true,
+      "status": "green",
+      "oaUrl": "http://orbilu.uni.lu/handle/10993/48765"
+    },
+    {
+      "doi": "10.1109/vtcfall.2019.8891313",
+      "verified": true,
+      "isOa": false,
+      "status": "closed",
+      "oaUrl": ""
+    },
+    {
+      "doi": "10.1111/mice.12387",
+      "verified": true,
+      "isOa": true,
+      "status": "green",
+      "oaUrl": "https://arxiv.org/pdf/1801.09454"
+    },
+    {
+      "doi": "10.23919/icif.2018.8455643",
+      "verified": true,
+      "isOa": false,
+      "status": "closed",
+      "oaUrl": ""
+    },
+    {
+      "doi": "10.26599/jicv.2023.9210008",
+      "verified": true,
+      "isOa": true,
+      "status": "gold",
+      "oaUrl": "https://ieeexplore.ieee.org/ielx7/9944931/10123362/10184172.pdf"
+    },
+    {
+      "doi": "10.3390/app15084195",
+      "verified": true,
+      "isOa": true,
+      "status": "gold",
+      "oaUrl": "https://www.mdpi.com/2076-3417/15/8/4195/pdf?version=1744351234"
+    },
+    {
+      "doi": "10.3390/app15105765",
+      "verified": true,
+      "isOa": true,
+      "status": "gold",
+      "oaUrl": "https://www.mdpi.com/2076-3417/15/10/5765/pdf?version=1747825795"
+    },
+    {
+      "doi": "10.3390/drones8080390",
+      "verified": true,
+      "isOa": true,
+      "status": "gold",
+      "oaUrl": "https://doi.org/10.3390/drones8080390"
+    },
+    {
+      "doi": "10.3390/electronics11162591",
+      "verified": true,
+      "isOa": true,
+      "status": "gold",
+      "oaUrl": "https://www.mdpi.com/2079-9292/11/16/2591/pdf?version=1661332270"
+    },
+    {
+      "doi": "10.3390/futuretransp2020029",
+      "verified": true,
+      "isOa": true,
+      "status": "gold",
+      "oaUrl": "https://www.mdpi.com/2673-7590/2/2/29/pdf?version=1654073105"
+    },
+    {
+      "doi": "10.3390/land14030597",
+      "verified": true,
+      "isOa": true,
+      "status": "gold",
+      "oaUrl": "https://www.mdpi.com/2073-445X/14/3/597/pdf?version=1741837177"
+    },
+    {
+      "doi": "10.3390/math10173099",
+      "verified": true,
+      "isOa": true,
+      "status": "gold",
+      "oaUrl": "https://www.mdpi.com/2227-7390/10/17/3099/pdf?version=1661770210"
+    },
+    {
+      "doi": "10.3390/rs12030442",
+      "verified": true,
+      "isOa": true,
+      "status": "gold",
+      "oaUrl": "https://www.mdpi.com/2072-4292/12/3/442/pdf?version=1580531136"
+    },
+    {
+      "doi": "10.3390/rs15041156",
+      "verified": true,
+      "isOa": true,
+      "status": "gold",
+      "oaUrl": "https://www.mdpi.com/2072-4292/15/4/1156/pdf?version=1676942717"
+    },
+    {
+      "doi": "10.3390/s20072068",
+      "verified": true,
+      "isOa": true,
+      "status": "gold",
+      "oaUrl": "https://www.mdpi.com/1424-8220/20/7/2068/pdf?version=1586254962"
+    },
+    {
+      "doi": "10.3390/s22197315",
+      "verified": true,
+      "isOa": true,
+      "status": "gold",
+      "oaUrl": "https://www.mdpi.com/1424-8220/22/19/7315/pdf?version=1664355254"
+    },
+    {
+      "doi": "10.3390/s22218317",
+      "verified": true,
+      "isOa": true,
+      "status": "gold",
+      "oaUrl": "https://www.mdpi.com/1424-8220/22/21/8317/pdf?version=1667889120"
+    },
+    {
+      "doi": "10.3390/s22228941",
+      "verified": true,
+      "isOa": true,
+      "status": "gold",
+      "oaUrl": "https://www.mdpi.com/1424-8220/22/22/8941/pdf?version=1668766640"
+    },
+    {
+      "doi": "10.3390/s23219006",
+      "verified": true,
+      "isOa": true,
+      "status": "gold",
+      "oaUrl": "https://www.mdpi.com/1424-8220/23/21/9006/pdf?version=1699289799"
+    },
+    {
+      "doi": "10.3390/s23239315",
+      "verified": true,
+      "isOa": true,
+      "status": "gold",
+      "oaUrl": "https://www.mdpi.com/1424-8220/23/23/9315/pdf?version=1700581976"
+    },
+    {
+      "doi": "10.3390/s24020374",
+      "verified": true,
+      "isOa": true,
+      "status": "gold",
+      "oaUrl": "https://www.mdpi.com/1424-8220/24/2/374/pdf?version=1704706526"
+    },
+    {
+      "doi": "10.3390/s24123957",
+      "verified": true,
+      "isOa": true,
+      "status": "gold",
+      "oaUrl": "https://www.mdpi.com/1424-8220/24/12/3957/pdf?version=1718721675"
+    },
+    {
+      "doi": "10.3390/s25072004",
+      "verified": true,
+      "isOa": true,
+      "status": "gold",
+      "oaUrl": "https://www.mdpi.com/1424-8220/25/7/2004/pdf?version=1742697215"
+    },
+    {
+      "doi": "10.3390/s25196033",
+      "verified": true,
+      "isOa": true,
+      "status": "gold",
+      "oaUrl": "https://www.mdpi.com/1424-8220/25/19/6033/pdf?version=1759305405"
+    },
+    {
+      "doi": "10.3390/s26020504",
+      "verified": true,
+      "isOa": true,
+      "status": "gold",
+      "oaUrl": "https://www.mdpi.com/1424-8220/26/2/504/pdf?version=1768224981"
+    },
+    {
+      "doi": "10.3390/su142013328",
+      "verified": true,
+      "isOa": true,
+      "status": "gold",
+      "oaUrl": "https://www.mdpi.com/2071-1050/14/20/13328/pdf?version=1666615179"
+    },
+    {
+      "doi": "10.3390/su151411443",
+      "verified": true,
+      "isOa": true,
+      "status": "gold",
+      "oaUrl": "https://www.mdpi.com/2071-1050/15/14/11443/pdf?version=1690188521"
+    },
+    {
+      "doi": "10.3390/su151713023",
+      "verified": true,
+      "isOa": true,
+      "status": "gold",
+      "oaUrl": "https://www.mdpi.com/2071-1050/15/17/13023/pdf?version=1693312645"
+    },
+    {
+      "doi": "10.3390/su16083316",
+      "verified": true,
+      "isOa": true,
+      "status": "gold",
+      "oaUrl": "https://www.mdpi.com/2071-1050/16/8/3316/pdf?version=1713250160"
+    },
+    {
+      "doi": "10.3390/su17135941",
+      "verified": true,
+      "isOa": true,
+      "status": "gold",
+      "oaUrl": "https://www.mdpi.com/2071-1050/17/13/5941/pdf?version=1751283758"
+    },
+    {
+      "doi": "10.3390/wevj16010020",
+      "verified": true,
+      "isOa": true,
+      "status": "gold",
+      "oaUrl": "https://www.mdpi.com/2032-6653/16/1/20/pdf?version=1735789236"
+    },
+    {
+      "doi": "10.4271/epr2022011",
+      "verified": true,
+      "isOa": false,
+      "status": "closed",
+      "oaUrl": ""
+    }
+  ]
+}

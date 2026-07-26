@@ -1,15 +1,37 @@
 # Rural Autonomous Vehicles — TRAVELS Literature Review
 
-Companion website for the TRAVELS project literature review, linking each Rural Autonomous Vehicle (RAV) challenge — for both existing and advanced AV technology — to relevant research and AV pilots.
+Interactive companion website for the TRAVELS Rural Autonomous Vehicle (RAV) literature review.
 
 **Live site:** https://uga-mobility-lab.github.io/rav-literature-review/
 
-- 117 references, tagged by the RAV module and Evidence Map sub-theme they support
-- All 117 source records checked against Crossref DOI metadata, arXiv records, or authoritative source pages (see `sources-audit.json`)
-- Interactive two-tier framework diagram, evidence tables, stakeholder recommendations, and filterable bibliography
-- Four linked Autonomous Driving submodules: perception, localization, heterogeneous data integration, and route planning
-- Fleet Management module covering dispatch, scheduling, remote supervision, and fleet-support functions
-- Plain static site, no build step
+## Evidence base
+
+- 117 real, verified references mapped to six RAV categories and 26 evidence sub-themes
+- Every record resolves through Crossref DOI metadata, an arXiv record, or an authoritative source page
+- Paper-level review coding for study type, rural relevance, evidence strength, and open-access status
+- Separate source and Unpaywall audit files for traceability
+- Five interactive stakeholder recommendations linked to their supporting evidence
+
+## Interface
+
+- Interactive two-tier framework and mobile Evidence Map accordion
+- Linked module, year, source, evidence, rural-relevance, strength, access, and text filters
+- Interactive category/year charts, evidence profiles, and module-by-year heatmap
+- Expandable paper summaries with RAV relevance, DOI copying, open-version links, CSV export, and BibTeX export
+- Keyboard-accessible evidence scatter plot
+- Citation remains the final main-page section
+
+## Validation and updates
+
+The site is plain HTML, CSS, and JavaScript; there is no build step.
+
+```powershell
+python tools/validate_site.py
+python tools/check_links.py
+python tools/enrich_reference_metadata.py --apply --fetch-oa
+```
+
+The GitHub Actions workflow validates every push and runs a scheduled source-link audit each Monday. See `CHANGELOG.md` for release history.
 
 Haohua Que (Haohua.Que@uga.edu) · Tianle Zhu (Tianle.Zhu@uga.edu) · Handong Yao (Handong.Yao@uga.edu)
 

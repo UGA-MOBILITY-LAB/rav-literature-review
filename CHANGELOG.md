@@ -1,0 +1,16 @@
+# Changelog
+
+## 2.0 — 2026-07-25
+
+- Expanded the evidence base to 117 verified references across six categories.
+- Added a transparent methodology section and machine-readable verification audits.
+- Added paper-level study type, rural relevance, evidence strength, and open-access coding.
+- Added interactive statistics, combined filters, a module-by-year heatmap, and active-filter summaries.
+- Added expandable Reference Explorer details, CSV and BibTeX exports, DOI copying, and open-access filtering.
+- Improved the Evidence Map with reference counts, evidence profiles, and a mobile accordion.
+- Added keyboard access to scatter-plot markers and improved screen-reader status messages.
+- Added automated data validation, scheduled source-link checks, metadata for search/social sharing, and a UGA Mobility Lab follow link.
+
+## 1.0 — 2026-06
+
+- Initial interactive companion site for the RAV literature review.
