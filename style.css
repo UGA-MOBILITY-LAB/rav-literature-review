@@ -75,12 +75,16 @@ a:hover { color: #8E0A24; }
 .hero-section {
   position: relative;
   display: flex;
-  min-height: 610px;
+  min-height: 660px;
   align-items: center;
   overflow: hidden;
-  background:
-    linear-gradient(90deg, rgba(255,255,255,.99) 0%, rgba(255,255,255,.96) 34%, rgba(255,255,255,.68) 51%, rgba(255,255,255,.06) 73%),
-    url("social-preview.png") center center / cover no-repeat;
+  background-color: #fff;
+  background-image:
+    linear-gradient(90deg, rgba(255,255,255,.99) 0%, rgba(255,255,255,.95) 27%, rgba(255,255,255,.62) 44%, rgba(255,255,255,.10) 62%),
+    url("social-preview.png");
+  background-position: center, right center;
+  background-size: 100% 100%, auto 100%;
+  background-repeat: no-repeat;
   border-bottom: 1px solid rgba(186, 12, 47, .08);
 }
 .hero-section::after {
@@ -88,7 +92,7 @@ a:hover { color: #8E0A24; }
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background: linear-gradient(180deg, rgba(255,255,255,.02) 58%, rgba(255,255,255,.82) 100%);
+  background: linear-gradient(180deg, transparent 78%, rgba(255,255,255,.16) 100%);
 }
 .hero-content {
   position: relative;
@@ -481,12 +485,12 @@ h1 { font-size: 42px; line-height: 1.12; margin: 0 0 10px; }
   .footer-grid { grid-template-columns: 1fr; }
   .follow-card { align-items: flex-start; }
   .hero-section {
-    min-height: 650px;
+    min-height: 700px;
     align-items: flex-end;
-    padding-top: 240px;
+    padding-top: 275px;
     background:
-      linear-gradient(180deg, rgba(255,255,255,.08) 0%, rgba(255,255,255,.22) 31%, rgba(255,255,255,.96) 54%, #fff 100%),
-      url("social-preview.png") 72% top / auto 350px no-repeat;
+      linear-gradient(180deg, rgba(255,255,255,.04) 0%, rgba(255,255,255,.12) 34%, rgba(255,255,255,.94) 55%, #fff 100%),
+      url("social-preview.png") 70% top / auto 390px no-repeat;
   }
   .hero-section::after { display: none; }
   .hero-content h1 { font-size: 38px; }
