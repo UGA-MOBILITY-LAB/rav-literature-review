@@ -1406,6 +1406,72 @@
     } else { legacyCopy(); }
   });
 
+  /* ---------- interactive review methodology ---------- */
+
+  (function () {
+    var cards = Array.prototype.slice.call(document.querySelectorAll(".method-card[data-method-step]"));
+    var detail = document.getElementById("method-detail");
+    if (!cards.length || !detail) { return; }
+    var METHODS = [
+      {
+        title: "Define scope",
+        summary: "Establish what counts as usable evidence before searching so the review remains focused and reproducible.",
+        rule: "Include road-vehicle research with direct rural relevance or a documented pathway to rural RAV service.",
+        evidence: "2014–2026 research across five technical modules plus operational field-pilot validation.",
+        output: "A review framework linking technology, fleet operations, infrastructure, connectivity, cooperation, and pilots."
+      },
+      {
+        title: "Search and identify",
+        summary: "Use complementary discovery channels so engineering research and operational deployments are both represented.",
+        rule: "Combine topic and module keywords, then use backward and forward citation chaining to fill sub-theme gaps.",
+        evidence: "Crossref and arXiv metadata; U.S. DOT, state DOT, university, agency, and official pilot sources.",
+        output: "A candidate source pool spanning peer-reviewed research, preprints, public reports, and deployment pages."
+      },
+      {
+        title: "Screen and deduplicate",
+        summary: "Apply the same relevance test to every candidate and keep one verified record for each distinct work.",
+        rule: "Retain direct rural studies or clearly transferable AV evidence; exclude unrelated modes, corrections, withdrawn items, duplicates, and unverifiable records.",
+        evidence: "Titles, abstracts, study context, source type, deployment setting, and version relationships.",
+        output: "A unique retained set whose rural relevance is explicit rather than inferred from urban evidence."
+      },
+      {
+        title: "Verify and code",
+        summary: "Resolve every retained item to a real source and apply a consistent evidence taxonomy for the interactive review.",
+        rule: "Require a working DOI, arXiv record, or authoritative source page before a record enters the evidence database.",
+        evidence: "92 DOI records, 14 arXiv records, and 11 authoritative pages; 84 records are openly accessible.",
+        output: "117 verified records coded by RAV module, study design, rural relevance, evidence strength, year, and access status."
+      }
+    ];
+    var step = detail.querySelector(".method-detail-step");
+    var title = detail.querySelector("h3");
+    var summary = detail.querySelector(".method-detail-head p");
+    var values = detail.querySelectorAll(".method-detail-grid p");
+    function showMethod(index) {
+      var method = METHODS[index];
+      if (!method) { return; }
+      step.textContent = "Step " + (index + 1) + " of " + METHODS.length;
+      title.textContent = method.title;
+      summary.textContent = method.summary;
+      values[0].textContent = method.rule;
+      values[1].textContent = method.evidence;
+      values[2].textContent = method.output;
+      cards.forEach(function (card, cardIndex) {
+        var active = cardIndex === index;
+        card.classList.toggle("is-active", active);
+        card.setAttribute("aria-pressed", active ? "true" : "false");
+      });
+    }
+    cards.forEach(function (card, index) {
+      card.addEventListener("click", function () { showMethod(index); });
+      card.addEventListener("keydown", function (event) {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          showMethod(index);
+        }
+      });
+    });
+  })();
+
   /* ---------- stakeholder recommendations ---------- */
 
   (function () {
@@ -1476,9 +1542,9 @@
       "Infrastructure": ["Tier 2 · Advanced", "UAV, smartphone, mobile-LiDAR, and imaging surveys identify physical upgrades; HD maps, roadside sensing, and digital twins form the shared digital road layer."],
       "Communication": ["Tier 2 · Advanced", "RAV combines direct and network-based V2X with cellular and LEO satellite links, switches by coverage and latency, and maintains safe onboard operation during disconnections."],
       "Cooperative Driving": ["Tier 2 · Advanced", "Shared perception and coordinated control extend rural AVs to arterials, work and school zones, rail crossings, and extreme weather, with safety-critical computing retained onboard."],
-      "Pilots": ["Field validation", "goMARTI (on-demand, ~97 stops, app or 211) and ADASTEC (fixed scenic route, ~4 round trips/day) validate the service models with safety operators on board. Click to see their references."]
+      "Pilots": ["Field validation", "Five source records cover four named programs: goMARTI in Grand Rapids, ADASTEC at Sleeping Bear Dunes, TEDDY at Yellowstone, and CASSI at Wright Brothers and four other N.C. project sites. Together they provide on-demand and fixed-route operating evidence with safety operators on board. Click to see their references."]
     };
-    var DEFAULT = ["Two tiers, one system", "Existing technology carries the service today; advanced, infrastructure-integrated technology extends it; two focal field pilots ground it in practice. Hover a module."];
+    var DEFAULT = ["Two tiers, one system", "Existing technology carries the service today; advanced, infrastructure-integrated technology extends it; four named field-pilot programs ground it in practice. Hover a module."];
     var tagEl = detail.querySelector(".td-tag");
     var txtEl = detail.querySelector(".td-text");
     function show(stage, substage) {
@@ -1687,8 +1753,8 @@
         rav: "Use it as the service-model baseline, then progress through safety gates toward longer range, higher speeds, and reduced onboard operator reliance."
       },
       {
-        cat: "Pilots", title: "ADASTEC and public-lands shuttles - fixed route", status: "g", refs: [16,116,117],
-        definition: "A scheduled automated bus runs a fixed scenic route for about four round trips per day with advance reservations and a safety operator onboard.",
+        cat: "Pilots", title: "ADASTEC, TEDDY & CASSI - fixed route", status: "g", refs: [16,116,117],
+        definition: "Fixed-route automated shuttles operated at Sleeping Bear Dunes, Yellowstone, Wright Brothers National Memorial, and other North Carolina sites with scheduled service and safety operators onboard.",
         findings: "ADASTEC, TEDDY, and CASSI demonstrate predictable fixed-route service in remote parks and public sites. Across deployments, low speed, geofencing, weather or battery interruptions, and onboard supervision remain recurring constraints.",
         rav: "Reuse the fixed-route operating concept while adding rural headway, timetable, energy, and interruption planning, and progressively reduce operator dependence through explicit safety gates."
       }

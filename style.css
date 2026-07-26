@@ -574,6 +574,15 @@ h1 { font-size: 42px; line-height: 1.12; margin: 0 0 10px; }
 .fw-pillar .chip-kicker { fill: #fff; font-size: 11px; font-weight: 700; letter-spacing: .12em; text-anchor: middle; opacity: .9; }
 .fw-pillar .chip-main { fill: #fff; font-size: 16px; font-weight: 700; text-anchor: middle; font-family: var(--serif); }
 .fw-pillar .chip-sub { fill: #fff; font-size: 12px; text-anchor: middle; opacity: .88; }
+.fw-pillar .pilot-line { font-size: 10.8px; }
+.fw-pillar .pilot-summary {
+  fill: #fff;
+  font: 700 9.5px var(--sans);
+  letter-spacing: .05em;
+  text-anchor: middle;
+  text-transform: uppercase;
+  opacity: .78;
+}
 .fw-subpillar { cursor: pointer; }
 .fw-subpillar rect {
   fill: #EAF0F9;
@@ -720,7 +729,23 @@ h1 { font-size: 42px; line-height: 1.12; margin: 0 0 10px; }
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 14px;
 }
-.method-card { position: relative; padding: 52px 20px 20px; }
+.method-card {
+  position: relative;
+  padding: 52px 20px 20px;
+  cursor: pointer;
+  transition: border-color .18s ease, box-shadow .18s ease, transform .18s ease;
+}
+.method-card:hover,
+.method-card:focus-visible {
+  border-color: rgba(186, 12, 47, .42);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, .08);
+  outline: none;
+  transform: translateY(-2px);
+}
+.method-card.is-active {
+  border-color: var(--red);
+  box-shadow: inset 0 -4px 0 var(--red), 0 8px 22px rgba(0, 0, 0, .08);
+}
 .method-card::after {
   content: "";
   position: absolute;
@@ -746,6 +771,52 @@ h1 { font-size: 42px; line-height: 1.12; margin: 0 0 10px; }
 }
 .method-card h3 { margin: 0 0 8px; font-size: 18px; }
 .method-card p { margin: 0; color: var(--muted); font-size: 13.5px; line-height: 1.55; }
+.method-action {
+  display: block;
+  margin-top: 14px;
+  color: var(--red);
+  font-size: 11.5px;
+  font-weight: 800;
+  letter-spacing: .02em;
+}
+.method-detail {
+  display: grid;
+  grid-template-columns: minmax(220px, .72fr) minmax(0, 1.8fr);
+  gap: 22px;
+  margin-top: 16px;
+  padding: 22px;
+  border-left: 4px solid var(--red);
+}
+.method-detail-head h3 { margin: 7px 0 6px; font-size: 22px; }
+.method-detail-head p { margin: 0; color: var(--muted); font-size: 13.5px; line-height: 1.55; }
+.method-detail-step {
+  color: var(--red);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+.method-detail-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+.method-detail-grid > div {
+  padding: 13px 14px;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  background: var(--bg-alt);
+}
+.method-detail-grid span {
+  display: block;
+  margin-bottom: 6px;
+  color: #5C6570;
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.method-detail-grid p { margin: 0; font-size: 12.5px; line-height: 1.5; }
 .method-summary { margin-top: 16px; padding: 20px 22px; }
 .method-metrics {
   display: grid;
@@ -1014,12 +1085,14 @@ h1 { font-size: 42px; line-height: 1.12; margin: 0 0 10px; }
 @media (max-width: 980px) {
   .method-flow { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .method-card:nth-child(2)::after { display: none; }
+  .method-detail { grid-template-columns: 1fr; }
   .method-metrics { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 
 @media (max-width: 720px) {
   .method-flow,
-  .method-details { grid-template-columns: 1fr; }
+  .method-details,
+  .method-detail-grid { grid-template-columns: 1fr; }
   .method-card::after { display: none; }
   .method-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .stats-filter-strip { align-items: flex-start; flex-direction: column; }
