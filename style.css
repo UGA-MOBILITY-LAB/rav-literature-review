@@ -714,6 +714,16 @@ h1 { font-size: 42px; line-height: 1.12; margin: 0 0 10px; }
 .emap-detail .ed-rav { grid-column: 1 / -1; border-color: rgba(186,12,47,.22); }
 .emap-detail .ed-label { display: block; margin-bottom: 5px; color: #5C6570; font-size: 10.5px; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; }
 .emap-detail .ed-block p { margin: 0; line-height: 1.55; }
+.detail-list {
+  margin: 8px 0 0;
+  padding-left: 19px;
+}
+.detail-list li {
+  margin: 5px 0;
+  line-height: 1.45;
+}
+.definition-list li::marker { color: #65717D; }
+.action-list li::marker { color: #BA0C2F; }
 .tradeoff-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));

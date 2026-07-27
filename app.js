@@ -1604,185 +1604,185 @@
     var THEMES = [
       {
         cat: "Autonomous Driving", title: "Perception - single sensor", status: "r", refs: [1,18,20,64],
-        definition: "One modality, typically a monocular camera, turns raw output into detected lanes, obstacles, pedestrians, animals, and signs.",
+        definition: ["Uses one sensor modality, typically a monocular camera.", "Detects lanes, obstacles, pedestrians, animals, and signs."],
         pros: ["Low sensor and compute cost.", "Simple calibration and lightweight processing."],
         cons: ["Limited range and field of view.", "Sensitive to glare, low light, occlusion, faded markings, and unpaved surfaces."],
-        rav: "Treat single-sensor coverage as a baseline rather than the final solution. Direct rural evidence is scarce, so RAV must collect rural perception data and validate performance on its own roads."
+        rav: ["Use single-sensor coverage only as a baseline.", "Collect rural perception data and validate performance on local roads."]
       },
       {
         cat: "Autonomous Driving", title: "Perception - multi-sensor fusion", status: "m", refs: [2,17,18,19,20,56,57,58,59,63,64],
-        definition: "Camera, radar, LiDAR, and IMU readings are combined into one detection set; some stacks fuse two modalities and others fuse all three plus IMU for ego-motion alignment.",
+        definition: ["Combines camera, radar, LiDAR, and IMU data.", "Produces one aligned detection set for ego motion and scene understanding."],
         pros: ["Improves range, weather robustness, 3-D geometry, and redundancy.", "Outperforms a single sensor in complex scenes."],
         cons: ["Raises sensor and compute cost.", "Requires careful calibration, timing, and synchronization."],
-        rav: "Use camera plus radar as the lower-cost floor and add LiDAR where its 3-D geometry materially improves safety. Re-train and re-validate the models for sparse rural geometry."
+        rav: ["Use camera plus radar as the minimum stack.", "Add LiDAR where 3-D geometry improves safety.", "Retrain and validate models on sparse rural geometry."]
       },
       {
         cat: "Autonomous Driving", title: "Perception - adverse weather", status: "m", refs: [3,21,22,58,61],
-        definition: "Condition-specific methods and datasets keep onboard perception useful under glare, rain, fog, snow, dust, and related visibility loss.",
+        definition: ["Uses condition-specific methods and datasets.", "Targets glare, rain, fog, snow, dust, and other visibility loss."],
         pros: ["Condition-specific training can recover accuracy.", "Dedicated datasets support consistent benchmarking."],
-        cons: ["Performance still degrades when several modalities are affected together.", "Combined rural weather conditions remain underrepresented."],
-        rav: "Build a local adverse-weather dataset and validate fallback thresholds for the service area. Cooperative information may supplement the vehicle where infrastructure exists, but safe onboard behavior must remain available."
+        cons: ["Performance still degrades when several modalities are affected together.", "Training may not generalize to combined rain, fog, snow, or glare."],
+        rav: ["Build a local adverse-weather dataset.", "Set fallback thresholds for the service area.", "Keep safe onboard behavior when cooperative information is unavailable."]
       },
       {
         cat: "Autonomous Driving", title: "Localization - GNSS/LiDAR limits", status: "m", refs: [1,2,61,62],
-        definition: "GNSS/INS provides a global satellite position, while LiDAR localization matches live scans against known road geometry.",
+        definition: ["GNSS/INS provides a global satellite position.", "LiDAR matches live scans against known road geometry."],
         pros: ["GNSS is affordable and globally referenced.", "LiDAR can remain precise without satellite signals."],
         cons: ["GNSS drifts under canopy and in valleys.", "Sparse or repetitive rural geometry makes LiDAR-only matching ambiguous."],
-        rav: "Do not depend on either source alone. RAV needs a fused position estimate that remains stable across canopy, valleys, weak features, and intermittent map matches."
+        rav: ["Fuse GNSS/INS and LiDAR; do not depend on either source alone.", "Test positioning under canopy, in valleys, with weak features, and through map-match interruptions."]
       },
       {
         cat: "Autonomous Driving", title: "Localization - fusion with HD maps", status: "m", refs: [2,23,24,25,60],
-        definition: "Vision and LiDAR are matched against an HD-map prior and fused with GNSS/INS into one pose estimate.",
+        definition: ["Matches vision and LiDAR against an HD-map prior.", "Fuses the result with GNSS/INS into one pose estimate."],
         pros: ["Supports lane-level to centimeter positioning.", "Improves continuity in GNSS-challenged settings."],
         cons: ["Requires an HD map to be surveyed and verified.", "Maps must be continuously refreshed as roads change."],
-        rav: "The localization stack transfers directly after RAV maps its own corridors. The project also needs a practical rural HD-map maintenance workflow linked to road and infrastructure updates."
+        rav: ["Map the RAV service corridors.", "Create a rural HD-map maintenance workflow tied to road and infrastructure updates."]
       },
       {
         cat: "Autonomous Driving", title: "Data integration - onboard raw & semantic", status: "g", refs: [17,18,19,57,63],
-        definition: "Raw camera, radar, and LiDAR streams are fused onboard and converted into semantic output such as detections, pose, trajectory, and control state.",
+        definition: ["Fuses raw camera, radar, and LiDAR streams onboard.", "Produces detections, pose, trajectory, and control state."],
         pros: ["Preserves rich sensor detail with low latency.", "Operates independently of network coverage."],
         cons: ["Carries the highest onboard bandwidth and compute load.", "Output quality remains bounded by sensor quality."],
-        rav: "Reuse onboard raw-to-semantic fusion as the core perception and localization pipeline. It is the dependable backbone when rural communication is unavailable."
+        rav: ["Use onboard raw-to-semantic fusion as the core perception and localization pipeline.", "Keep the pipeline operational when rural connectivity is unavailable."]
       },
       {
         cat: "Autonomous Driving", title: "Data integration - heterogeneous & aggregated", status: "r", refs: [2,19,25,56,59],
-        definition: "The system reconciles inputs with different reliability, coordinate frames, and update rates; aggregated feeds add traffic, events, maps, weather, and fleet context.",
+        definition: ["Reconciles inputs with different reliability, coordinate frames, and update rates.", "Adds traffic, event, map, weather, and fleet feeds."],
         pros: ["Adds traffic, event, map, weather, and fleet context.", "Reveals conditions that one vehicle cannot sense alone."],
         cons: ["Edge and cloud feeds introduce latency.", "Coverage-dependent inputs may be unavailable on rural roads."],
-        rav: "Keep onboard reconciliation authoritative and treat roadside, fleet, and cloud feeds as opportunistic additions. Engineer confidence checks and graceful degradation for delayed or missing inputs."
+        rav: ["Keep onboard reconciliation authoritative.", "Use roadside, fleet, and cloud feeds as optional additions.", "Add confidence checks and graceful degradation for delayed or missing inputs."]
       },
       {
         cat: "Autonomous Driving", title: "Routing - energy & terrain aware", status: "m", refs: [1,4,26,27,65,66,67],
-        definition: "Route cost includes grade, surface, vehicle dynamics, and effective battery range so every plan stays physically feasible.",
+        definition: ["Adds grade, surface, vehicle dynamics, and effective battery range to route cost.", "Rejects routes that are not physically feasible."],
         pros: ["Protects usable range on hilly and unpaved roads.", "Keeps routes feasible under terrain and battery constraints."],
         cons: ["Depends on calibrated terrain, surface, and consumption models.", "Suitable rural-network models and data are rarely available."],
-        rav: "Use energy- and terrain-aware cost underneath every service mode, then calibrate it with grade, surface, weather, load, and energy data from RAV's own corridors."
+        rav: ["Apply energy- and terrain-aware cost to every service mode.", "Calibrate it with local grade, surface, weather, load, and energy data."]
       },
       {
         cat: "Autonomous Driving", title: "Routing - on-demand vs fixed route", status: "m", refs: [5,16,30,31,69,78],
-        definition: "On-demand routing builds and sequences trips from rider requests; fixed-route operation repeats a preset line on a published timetable.",
+        definition: ["On-demand routing sequences live rider requests.", "Fixed-route service repeats a preset line and timetable."],
         pros: ["On-demand service reaches scattered riders.", "Fixed routes are predictable and simple to operate."],
         cons: ["On-demand service needs live requests and dispatch computing.", "Fixed routes can waste capacity and miss off-route riders."],
-        rav: "Use on-demand routing for healthcare service and fixed routes for regular transit and park service, with range and terrain constraints applied to both."
+        rav: ["Use on-demand routing for healthcare service.", "Use fixed routes for regular transit and park service.", "Apply range and terrain constraints to both modes."]
       },
       {
         cat: "Fleet Management", title: "On-demand dispatch & ride-matching", status: "g", refs: [5,28,29,30,31,68,70,71,73,75],
-        definition: "Riders request trips and the fleet assigns, matches, sequences, and rebalances vehicles in real time.",
+        definition: ["Uses incoming rider requests and live fleet status.", "Assigns, matches, sequences, and rebalances vehicles in real time."],
         pros: ["Reduces rider waiting and empty vehicle travel.", "Supports vehicle assignment under low-density demand."],
         cons: ["Requires live requests and a reliable matching engine.", "Needs enough vehicles to maintain acceptable wait times."],
-        rav: "Reuse proven dispatch and rider-app matching methods for RAV's on-demand service, then tune service zones, wait-time targets, and fleet size using local demand."
+        rav: ["Reuse dispatch and rider-app matching methods.", "Tune service zones, wait-time targets, and fleet size using local demand."]
       },
       {
         cat: "Fleet Management", title: "Fixed-route dispatch & scheduling", status: "r", refs: [16,69,77,78],
-        definition: "Vehicles repeat a route while headway and timetable planning determine when each run departs and how vehicles are spaced.",
+        definition: ["Vehicles repeat a preset route.", "Headway and timetable planning set departure times and vehicle spacing."],
         pros: ["Predictable for riders.", "Operationally simple on a repeated route."],
-        cons: ["Thin demand can create long waits and poor utilization.", "Dedicated rural AV scheduling studies are still missing."],
-        rav: "Develop and test headway, timetable, and fleet-allocation methods specifically for thin-demand rural runs."
+        cons: ["Thin demand can create long waits and poor utilization.", "Fixed schedules adapt poorly to day-to-day demand variation."],
+        rav: ["Develop headway, timetable, and fleet-allocation rules for thin-demand routes.", "Test rider wait time and vehicle utilization in rural service."]
       },
       {
         cat: "Fleet Management", title: "Fleet support - charging, monitoring & fares", status: "r", refs: [14,15,16,72,74,75,76,77],
-        definition: "Fleet support keeps vehicles service-ready through charging and energy management, onboard health monitoring, maintenance coordination, and fare collection.",
-        pros: ["Existing rural pilots demonstrate that these support functions can operate in practice.", "Charging, monitoring, maintenance, and fares can share one fleet-support workflow."],
-        cons: ["No dedicated rural AV method was identified.", "Comparative evidence for alternative support strategies is missing."],
-        rav: "Treat these as engineering and data-collection functions in early deployment. Use pilot data to formalize charging plans, maintenance triggers, and rider payment policy."
+        definition: ["Coordinates charging, health monitoring, maintenance, and fare collection.", "Keeps vehicles service-ready."],
+        pros: ["Centralizes vehicle readiness and service continuity.", "Coordinated charging and monitoring can reduce downtime."],
+        cons: ["Charging can remove vehicles from service during peak demand.", "Maintenance and fare systems add cost and staffing needs."],
+        rav: ["Collect charging, maintenance, monitoring, and payment data during early deployment.", "Use the results to define charging plans, maintenance triggers, and rider payment policy."]
       },
       {
         cat: "Fleet Management", title: "Remote monitoring & supervision", status: "r", refs: [14,15,16,79],
-        definition: "An operations center tracks vehicle location, health, and service state while a human supervisor assists or intervenes when automation requests help.",
+        definition: ["An operations center tracks vehicle location, health, and service state.", "A human supervisor assists when automation requests help."],
         pros: ["One supervisor may support multiple vehicles.", "Enables scale without placing a driver in every seat."],
         cons: ["Depends on reliable telemetry and video links.", "Supervisor ratios and takeover procedures remain unsettled."],
-        rav: "Define supervisor-to-vehicle ratios, degraded-link operating rules, intervention authority, and takeover procedures; then test them under weak rural connectivity."
+        rav: ["Define supervisor-to-vehicle ratios and intervention authority.", "Test takeover and degraded-link rules under weak rural connectivity."]
       },
       {
         cat: "Infrastructure", title: "Physical road assessment", status: "m", refs: [39,46,47,48,49,80,81,82,83,84,85,86,87,88],
-        definition: "UAV, smartphone, imaging, and mobile-LiDAR surveys detect pavement damage, markings, signs, geometry, and gravel-road surface condition.",
+        definition: ["Uses UAV, smartphone, imaging, and mobile-LiDAR surveys.", "Detects pavement damage, markings, signs, geometry, and gravel-road condition."],
         pros: ["Reusable survey methods can lower network-inspection cost.", "UAV, smartphone, imaging, and mobile LiDAR cover complementary road features."],
-        cons: ["Most studies address individual features separately.", "An integrated rural upgrade workflow has not been demonstrated."],
-        rav: "Validate the methods under local road, weather, and maintenance conditions, then combine results into segment-level priorities for physical upgrades."
+        cons: ["Separate survey tools can produce fragmented road-condition data.", "Integration and prioritization add workflow and data-management complexity."],
+        rav: ["Validate survey tools under local road, weather, and maintenance conditions.", "Combine results into segment-level physical-upgrade priorities."]
       },
       {
         cat: "Infrastructure", title: "Digital road-information layer", status: "m", refs: [7,25,37,38,80,87,89,90,91],
-        definition: "HD maps provide the spatial base, roadside sensing supplies changing observations, and a digital twin integrates both for vehicle and infrastructure decisions.",
-        pros: ["Demonstrations span highways, selected rural test sections, and campuses.", "The layered map, sensing, and digital-twin architecture is technically feasible."],
-        cons: ["Most sites are highly instrumented.", "Evidence remains dominated by controlled or proof-of-concept deployments."],
-        rav: "Reuse the layered architecture while adapting it to incomplete maps, sparse sensors, intermittent communication, and low-cost rural updates."
+        definition: ["HD maps provide the spatial base.", "Roadside sensing updates conditions, while a digital twin combines the layers."],
+        pros: ["Combines static maps with changing roadside observations.", "Supports shared vehicle and infrastructure decisions."],
+        cons: ["Requires instrumented corridors and ongoing data maintenance.", "Implementation cost rises with sensor density and update frequency."],
+        rav: ["Adapt the layered architecture to incomplete maps, sparse sensors, and intermittent communication.", "Use low-cost methods for rural updates."]
       },
       {
         cat: "Communication", title: "Rural V2X", status: "r", refs: [9,50,51,52,92,93,95,96,97,98,103],
-        definition: "Vehicle-to-vehicle, vehicle-to-infrastructure, and vehicle-to-network links exchange hazard, traffic, road-condition, and coordination information using C-V2X and 5G NR-V2X.",
+        definition: ["V2V, V2I, and V2N links exchange hazard, traffic, road-condition, and coordination data.", "Uses C-V2X and 5G NR-V2X."],
         pros: ["Enables direct and network-based exchange of hazards and road conditions.", "Supports coordination beyond onboard sensing range."],
         cons: ["Rural measurements show weaker coverage and longer disconnections.", "Interference, mobility, energy, and resource allocation affect quality of service."],
-        rav: "Assume intermittent connectivity from the start. Combine direct and network-based links, monitor link quality, and preserve safe vehicle operation throughout disconnections."
+        rav: ["Assume intermittent connectivity from the start.", "Combine direct and network-based links and monitor link quality.", "Preserve safe vehicle operation throughout disconnections."]
       },
       {
         cat: "Communication", title: "Multi-channel connectivity", status: "m", refs: [8,92,93,94,103],
-        definition: "C-V2X, public cellular, and LEO satellite interfaces are combined so another path can carry nonlocal information when one network is unavailable.",
+        definition: ["Combines C-V2X, public cellular, and LEO satellite interfaces.", "Uses an alternate path when one network is unavailable."],
         pros: ["Improves communication reach and resilience.", "Provides an alternate path when one network is unavailable."],
         cons: ["Adds hardware cost, switching complexity, and energy use.", "Satellite links may introduce additional latency."],
-        rav: "Measure coverage and latency along service corridors and switch channels by policy. Keep time-critical control onboard and use wide-area links for supplementary information."
+        rav: ["Measure coverage and latency along service corridors.", "Switch channels by policy.", "Keep time-critical control onboard and use wide-area links for supplementary information."]
       },
       {
         cat: "Communication", title: "V2X cybersecurity", status: "g", refs: [44,45,99,100,101,102],
-        definition: "Authentication, encryption, integrity checks, and message verification protect V2X messages, networks, and devices.",
+        definition: ["Uses authentication, encryption, integrity checks, and message verification.", "Protects V2X messages, networks, and devices."],
         pros: ["Addresses spoofing, message manipulation, eavesdropping, and denial of service.", "Improves trust across connected vehicles and infrastructure."],
         cons: ["Adds communication and computation overhead.", "Requires ongoing certificate, key, logging, and incident-response operations."],
-        rav: "Apply security across every communication channel before field deployment and include certificate, key, logging, and incident-response operations in the system design."
+        rav: ["Apply security across every communication channel before deployment.", "Plan certificate, key, logging, and incident-response operations."]
       },
       {
         cat: "Cooperative Driving", title: "Cooperative perception", status: "m", refs: [10,35,104,105,106,108,109],
-        definition: "Vehicles and roadside infrastructure share sensor data or detected objects to extend field of view and reduce blind spots.",
+        definition: ["Vehicles and roadside infrastructure share sensor data or detected objects.", "Extends field of view and reduces blind spots."],
         pros: ["Extends awareness through occlusion and adverse weather.", "Reduces blind spots by sharing vehicle and roadside observations."],
         cons: ["Requires reliable links and accurate spatial-temporal alignment.", "Roadside equipment and delayed or incorrect data create additional risks."],
-        rav: "Deploy roadside sensing only at conflict points where onboard perception needs help, and preserve a safe onboard fallback when shared data is unavailable."
+        rav: ["Deploy roadside sensing only at high-value conflict points.", "Preserve a safe onboard fallback when shared data is unavailable."]
       },
       {
         cat: "Cooperative Driving", title: "Infrastructure-assisted control & handover", status: "m", refs: [34,36,107,108,114,115],
-        definition: "Nearby edge roadside units support cooperative driving services and can assist a vehicle when automation reaches an operational limit.",
-        pros: ["Experiments report measurable safety and latency benefits.", "Roadside assistance can support vehicles at operational limits."],
+        definition: ["Edge roadside units support cooperative driving services.", "Assists vehicles when automation reaches an operational limit."],
+        pros: ["Can reduce response latency.", "Can assist vehicles at known high-risk locations."],
         cons: ["Assumes dense and reliable roadside coverage.", "Rural networks may not justify or maintain that infrastructure density."],
-        rav: "Place edge support at a small number of high-risk locations, define handover authority and timing, and validate operation when the roadside unit or link fails."
+        rav: ["Place edge support at high-risk locations.", "Define handover authority and timing.", "Test operation when the roadside unit or link fails."]
       },
       {
         cat: "Cooperative Driving", title: "CACC & platooning", status: "m", refs: [40,41,110,111,112],
-        definition: "Cooperative adaptive cruise control and platooning coordinate vehicle speed, spacing, and signal interaction using shared motion information.",
-        pros: ["Field studies demonstrate efficiency and coordinated vehicle motion.", "Platooning can improve spacing control and energy use."],
-        cons: ["Evidence is concentrated on urban or suburban arterials.", "Rural mixed traffic and intermittent connectivity remain weakly validated."],
-        rav: "Adapt the methods to low-volume rural arterials with mixed conventional and automated vehicles, variable connectivity, and longer gaps between equipped intersections."
+        definition: ["Coordinates vehicle speed, spacing, and signal interaction.", "Uses shared motion information for CACC and platooning."],
+        pros: ["Can improve traffic efficiency and coordinated motion.", "Platooning can improve spacing control and energy use."],
+        cons: ["Performance can degrade with mixed traffic and unstable links.", "Requires compatible vehicles and consistent message timing."],
+        rav: ["Adapt CACC and platooning to low-volume rural arterials.", "Test mixed traffic, variable connectivity, and long gaps between equipped intersections."]
       },
       {
         cat: "Cooperative Driving", title: "Work & school zones", status: "r", refs: [11,113,115],
-        definition: "Connected warnings and trajectory coordination help vehicles approach temporary work areas and school-zone conflict points.",
-        pros: ["Connected warnings and trajectory coordination can expose temporary conflicts earlier.", "Structured test settings show that coordinated approaches are feasible."],
-        cons: ["Published methods assume structured or connected settings.", "Passive and unsignalized rural interactions remain weakly studied."],
-        rav: "Develop low-infrastructure warnings and operating rules for rural work and school zones, then field-test detection, yielding, and fallback behavior."
+        definition: ["Connected warnings flag work-zone and school-zone conflicts.", "Trajectory coordination guides vehicle approach."],
+        pros: ["Warns vehicles about temporary conflicts earlier.", "Coordinates approach speed and trajectory."],
+        cons: ["Depends on connected signs, devices, or messages.", "Passive and unsignalized rural zones may remain undetected."],
+        rav: ["Develop low-infrastructure warnings and operating rules.", "Field-test detection, yielding, and fallback behavior."]
       },
       {
         cat: "Cooperative Driving", title: "Rail grade crossings", status: "m", refs: [42, 43],
-        definition: "Vehicle-to-infrastructure warnings communicate train approach, crossing state, and violation risk to road vehicles.",
-        pros: ["Federal studies demonstrate train-approach and violation-warning applications.", "Instrumented crossings can communicate hazard state directly to vehicles."],
+        definition: ["V2I warnings communicate train approach, crossing state, and violation risk.", "Sends the hazard state directly to approaching vehicles."],
+        pros: ["Provides early warning of train approach and crossing violations.", "Instrumented crossings can transmit hazard state directly."],
         cons: ["Many rural crossings are passive.", "Communications equipment is absent at numerous rural sites."],
-        rav: "Extend warning logic to passive rural crossings and specify safe onboard behavior when no infrastructure message is available."
+        rav: ["Extend warning logic to passive rural crossings.", "Specify safe onboard behavior when no infrastructure message is available."]
       },
       {
         cat: "Cooperative Driving", title: "Extreme-weather cooperation", status: "r", refs: [12, 13, 21],
-        definition: "Road-weather information and cooperative perception support hazard sensing, lane closure, speed adjustment, and rerouting during rain, snow, and fog.",
+        definition: ["Combines road-weather data with cooperative perception.", "Supports hazard sensing, lane closure, speed adjustment, and rerouting."],
         pros: ["Supplements degraded onboard sensing.", "Supports hazard warnings, speed adjustment, and rerouting."],
-        cons: ["Most demonstrations assume instrumented roads and reliable connectivity.", "Rural deployments may lack sufficiently rich weather data."],
-        rav: "Collect local weather evidence, identify risk thresholds, and test cooperative warning and rerouting while retaining safe onboard operation through infrastructure outages."
+        cons: ["Depends on roadside sensors and reliable connectivity.", "Sparse rural weather data can delay or weaken warnings."],
+        rav: ["Collect local weather data and define risk thresholds.", "Test cooperative warning and rerouting.", "Maintain safe operation during infrastructure outages."]
       },
       {
         cat: "Pilots", title: "goMARTI - on-demand", status: "g", refs: [14, 15],
-        definition: "A door-to-door rural shuttle serves roughly 97 boarding and drop-off locations, with requests through an app or 211 and a safety operator onboard.",
-        pros: ["Demonstrates accessible on-demand service in a rural community.", "Provides operating evidence for rider requests and fleet supervision."],
+        definition: ["Door-to-door rural shuttle with roughly 97 boarding and drop-off locations.", "Accepts requests through an app or 211; uses a safety operator onboard."],
+        pros: ["Offers accessible on-demand trips across a rural community.", "App and 211 booking support riders with different access needs."],
         cons: ["Operation remains low-speed and geofenced.", "An onboard safety operator is still required."],
-        rav: "Use it as the service-model baseline, then progress through safety gates toward longer range, higher speeds, and reduced onboard operator reliance."
+        rav: ["Use the on-demand model as a service baseline.", "Progress through safety gates toward longer range, higher speeds, and reduced operator reliance."]
       },
       {
         cat: "Pilots", title: "ADASTEC, TEDDY & CASSI - fixed route", status: "g", refs: [16,116,117],
-        definition: "Fixed-route automated shuttles operated at Sleeping Bear Dunes, Yellowstone, Wright Brothers National Memorial, and other North Carolina sites with scheduled service and safety operators onboard.",
-        pros: ["Demonstrates predictable fixed-route service in remote parks and public sites.", "Provides operating evidence across several deployment settings."],
+        definition: ["Scheduled fixed-route shuttles served Sleeping Bear Dunes, Yellowstone, and Wright Brothers.", "Additional deployments operated at other North Carolina sites.", "Uses safety operators onboard."],
+        pros: ["Fixed routes are predictable for riders and operators.", "Geofenced service simplifies route control in remote public sites."],
         cons: ["Low speed, geofencing, and weather or battery interruptions constrain service.", "Onboard supervision remains a recurring requirement."],
-        rav: "Reuse the fixed-route operating concept while adding rural headway, timetable, energy, and interruption planning, and progressively reduce operator dependence through explicit safety gates."
+        rav: ["Reuse the fixed-route operating concept.", "Add rural headway, timetable, energy, and interruption planning.", "Reduce operator dependence through explicit safety gates."]
       }
     ];
     var STATUS = { g: ["Reusable now", "#4B8B3B"], m: ["Needs rural adaptation", "#D99114"], r: ["Open gap", "#BA0C2F"] };
@@ -1882,7 +1882,11 @@
       var grid = el("div", "ed-grid");
       var definitionBlock = el("div", "ed-block ed-definition");
       definitionBlock.appendChild(el("span", "ed-label", "Definition"));
-      definitionBlock.appendChild(el("p", null, t.definition));
+      var definitionList = el("ul", "detail-list definition-list");
+      t.definition.forEach(function (item) {
+        definitionList.appendChild(el("li", null, item));
+      });
+      definitionBlock.appendChild(definitionList);
       grid.appendChild(definitionBlock);
       var tradeoffBlock = el("div", "ed-block ed-findings");
       tradeoffBlock.appendChild(el("span", "ed-label", "Pros and Cons"));
@@ -1904,7 +1908,11 @@
       grid.appendChild(tradeoffBlock);
       var ravBlock = el("div", "ed-block ed-rav");
       ravBlock.appendChild(el("span", "ed-label", "Rural gap and RAV action"));
-      ravBlock.appendChild(el("p", null, t.rav));
+      var ravList = el("ul", "detail-list action-list");
+      t.rav.forEach(function (item) {
+        ravList.appendChild(el("li", null, item));
+      });
+      ravBlock.appendChild(ravList);
       grid.appendChild(ravBlock);
       edetail.appendChild(grid);
       var explore = el("button", "ed-explore", "Explore " + t.refs.length + " supporting reference" + (t.refs.length === 1 ? "" : "s") + " in the literature explorer");
