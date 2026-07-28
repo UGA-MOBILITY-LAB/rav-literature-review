@@ -1734,7 +1734,7 @@
         scoreColor = "#BA0C2F";
       }
 
-      scoreBox.style.setProperty("--score", String(score));
+      scoreBox.style.setProperty("--score-angle", score + "%");
       scoreBox.style.setProperty("--score-color", scoreColor);
       scoreBox.querySelector("strong").textContent = String(score);
       posture.textContent = postureText;

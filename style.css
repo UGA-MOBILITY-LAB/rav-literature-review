@@ -903,7 +903,7 @@ h1 { font-size: 42px; line-height: 1.12; margin: 0 0 10px; }
   height: 106px;
   place-items: center;
   border-radius: 50%;
-  background: conic-gradient(var(--score-color, #D99114) calc(var(--score) * 1%), #E9EBED 0);
+  background: conic-gradient(var(--score-color, #D99114) var(--score-angle, 58%), #E9EBED 0);
 }
 .planner-score::before {
   content: "";
