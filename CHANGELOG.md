@@ -6,7 +6,7 @@
 - Added an interactive four-program field-pilot comparison.
 - Added shareable Reference Explorer filter links and compact mobile statistics.
 - Added text labels for evidence maturity and aligned visible submodule terminology.
-- Added a top-level evidence takeaway summary and synchronized verification dates.
+- Synchronized verification dates across visible and structured metadata.
 
 ## 2.1 — 2026-07-27
 
