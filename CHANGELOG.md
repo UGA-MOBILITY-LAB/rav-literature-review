@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.2 — 2026-07-27
+
+- Added a compact mobile navigation menu and a dedicated vertical mobile Framework.
+- Added an interactive four-program field-pilot comparison.
+- Added shareable Reference Explorer filter links and compact mobile statistics.
+- Added text labels for evidence maturity and aligned visible submodule terminology.
+- Added a top-level evidence takeaway summary and synchronized verification dates.
+
 ## 2.1 — 2026-07-27
 
 - Added the DLR Test Bed Lower Saxony source from the latest Word review as reference 118.

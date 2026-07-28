@@ -79,6 +79,30 @@
     return p.oa_url || p._link;
   }
 
+  /* ---------- compact navigation ---------- */
+
+  var siteHeader = document.querySelector(".site-header");
+  var navToggle = document.querySelector(".nav-toggle");
+  var primaryNav = document.getElementById("primary-nav");
+  function closeMobileNav() {
+    if (!siteHeader || !navToggle) { return; }
+    siteHeader.classList.remove("nav-open");
+    navToggle.setAttribute("aria-expanded", "false");
+  }
+  if (siteHeader && navToggle && primaryNav) {
+    navToggle.addEventListener("click", function () {
+      var opening = !siteHeader.classList.contains("nav-open");
+      siteHeader.classList.toggle("nav-open", opening);
+      navToggle.setAttribute("aria-expanded", opening ? "true" : "false");
+    });
+    primaryNav.addEventListener("click", function (event) {
+      if (event.target.closest("a")) { closeMobileNav(); }
+    });
+    document.addEventListener("keydown", function (event) {
+      if (event.key === "Escape") { closeMobileNav(); }
+    });
+  }
+
   /* ---------- enrich papers ---------- */
 
   PAPERS.forEach(function (p) {
@@ -129,9 +153,65 @@
   var showEdges = true;
   var paperScope = null;
   var scopeLabel = "";
+  var urlStateReady = false;
+  var initialFocusKey = "";
+  var URL_FILTER_KEYS = {
+    cat: "module",
+    year: "year",
+    vtype: "source",
+    etype: "evidence",
+    rural: "rural",
+    strength: "strength",
+    access: "access"
+  };
+
+  function syncUrlState() {
+    if (!urlStateReady || !window.history || !window.URLSearchParams) { return; }
+    var params = new URLSearchParams(window.location.search);
+    Object.keys(URL_FILTER_KEYS).forEach(function (key) {
+      var parameter = URL_FILTER_KEYS[key];
+      params.delete(parameter);
+      filters[key].forEach(function (value) { params.append(parameter, value); });
+    });
+    ["q", "sort", "scope", "scopeLabel", "focus"].forEach(function (key) { params.delete(key); });
+    if (query) { params.set("q", query); }
+    if (sortMode !== "year-desc") { params.set("sort", sortMode); }
+    if (paperScope && paperScope.size) {
+      params.set("scope", Array.from(paperScope).sort(function (a, b) { return a - b; }).join(","));
+      if (scopeLabel) { params.set("scopeLabel", scopeLabel); }
+    }
+    if (pinnedKey) { params.set("focus", pinnedKey); }
+    var next = window.location.pathname + (params.toString() ? "?" + params.toString() : "") + window.location.hash;
+    window.history.replaceState(null, "", next);
+  }
+
+  function hydrateUrlState() {
+    if (!window.URLSearchParams) { return; }
+    var params = new URLSearchParams(window.location.search);
+    Object.keys(URL_FILTER_KEYS).forEach(function (key) {
+      params.getAll(URL_FILTER_KEYS[key]).forEach(function (value) {
+        if (value) { filters[key].add(value); }
+      });
+    });
+    query = (params.get("q") || "").trim().toLowerCase();
+    var requestedSort = params.get("sort");
+    if (["year-desc", "year-asc", "title", "strength", "number"].indexOf(requestedSort) !== -1) {
+      sortMode = requestedSort;
+    }
+    var scope = (params.get("scope") || "").split(",").map(function (value) {
+      return Number(value);
+    }).filter(function (value) {
+      return Number.isFinite(value) && value > 0;
+    });
+    if (scope.length) {
+      paperScope = new Set(scope);
+      scopeLabel = params.get("scopeLabel") || "Shared evidence selection";
+    }
+    initialFocusKey = params.get("focus") || "";
+  }
 
   function clearRecommendationActive() {
-    var cards = document.querySelectorAll(".recommendation-card");
+    var cards = document.querySelectorAll(".recommendation-card, .pilot-card");
     for (var i = 0; i < cards.length; i++) {
       cards[i].classList.remove("is-active");
       cards[i].setAttribute("aria-pressed", "false");
@@ -392,7 +472,7 @@
     render();
   }
 
-  function setRecommendationFilter(label, refs, activeCard) {
+  function setRecommendationFilter(label, refs, activeCard, scopePrefix) {
     Object.keys(filters).forEach(function (key) { filters[key].clear(); });
     hiddenCats.clear();
     hiddenTypes.clear();
@@ -401,7 +481,7 @@
     query = "";
     searchInput.value = "";
     paperScope = new Set(refs);
-    scopeLabel = "Recommendation / " + label;
+    scopeLabel = (scopePrefix || "Recommendation") + " / " + label;
     allDropdowns.forEach(function (d) {
       d.badge.hidden = true;
       d.badge.textContent = "";
@@ -777,6 +857,7 @@
     applyFocus(p);
     describeMarker(p, true);
     updateCountLine();
+    syncUrlState();
   }
 
   function unpinFocus() {
@@ -787,6 +868,7 @@
       scatterSelection.textContent = "Keyboard: Tab to a marker, Enter or Space to pin it, and O to open its source.";
     }
     updateCountLine();
+    syncUrlState();
   }
 
   scatter.addEventListener("mouseover", function (e) {
@@ -1042,6 +1124,37 @@
         box.appendChild(button);
       });
     });
+    var mobile = document.getElementById("mobile-heatmap-list");
+    if (mobile) {
+      while (mobile.firstChild) { mobile.removeChild(mobile.firstChild); }
+      CATEGORIES.forEach(function (cat) {
+        var total = 0;
+        var peakYear = years[0];
+        var peakCount = -1;
+        years.forEach(function (value) {
+          var count = counts[cat + "|" + value] || 0;
+          total += count;
+          if (count > peakCount) {
+            peakCount = count;
+            peakYear = value;
+          }
+        });
+        var row = el("button", "mobile-heatmap-row stat-hit");
+        row.type = "button";
+        row.setAttribute("data-filter-key", "cat");
+        row.setAttribute("data-filter-value", cat);
+        row.setAttribute("aria-pressed", "false");
+        row.setAttribute("aria-label", cat + ": " + total + " references; peak year " + peakYear +
+          " with " + peakCount + ". Select to filter.");
+        row.appendChild(el("strong", null, cat));
+        row.appendChild(el("span", null, "Peak " + peakYear + " · " + peakCount));
+        row.appendChild(el("b", null, String(total)));
+        row.addEventListener("click", function () {
+          setStatFilter("cat", cat);
+        });
+        mobile.appendChild(row);
+      });
+    }
   }
 
   function syncStatSelection() {
@@ -1305,6 +1418,7 @@
     syncStatSelection();
     updateCountLine();
     updateStatsSummary();
+    syncUrlState();
   }
 
   var sortSelect = document.getElementById("sort-select");
@@ -1312,6 +1426,7 @@
     sortSelect.addEventListener("change", function () {
       sortMode = sortSelect.value;
       renderTables(currentFiltered);
+      syncUrlState();
     });
   }
 
@@ -1475,12 +1590,13 @@
   /* ---------- stakeholder recommendations ---------- */
 
   (function () {
-    var cards = document.querySelectorAll(".recommendation-card");
+    var cards = document.querySelectorAll(".recommendation-card, .pilot-card");
     cards.forEach(function (card) {
       var label = card.getAttribute("data-label");
       var refs = card.getAttribute("data-refs").split(",").map(function (n) { return Number(n); });
       function activate() {
-        setRecommendationFilter(label, refs, card);
+        var prefix = card.classList.contains("pilot-card") ? "Pilot program" : "Recommendation";
+        setRecommendationFilter(label, refs, card, prefix);
         document.getElementById("explorer").scrollIntoView({ behavior: "smooth" });
       }
       card.addEventListener("click", activate);
@@ -1580,7 +1696,12 @@
         document.getElementById("explorer").scrollIntoView({ behavior: "smooth" });
       });
       p.addEventListener("keydown", function (e) {
-        if (e.key === "Enter" || e.key === " ") { e.preventDefault(); show(s); }
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          show(s);
+          setCatFilter(s);
+          document.getElementById("explorer").scrollIntoView({ behavior: "smooth" });
+        }
       });
     });
     subpillars.forEach(function (p) {
@@ -1711,21 +1832,21 @@
         rav: ["Validate survey tools under local road, weather, and maintenance conditions.", "Combine results into segment-level physical-upgrade priorities."]
       },
       {
-        cat: "Infrastructure", title: "Digital road-information layer", status: "m", refs: [7,25,37,38,80,87,89,90,91,118],
+        cat: "Infrastructure", title: "Digital Infrastructure", status: "m", refs: [7,25,37,38,80,87,89,90,91,118],
         definition: ["HD maps provide the spatial base.", "Roadside sensing updates conditions, while a digital twin combines the layers."],
         pros: ["Combines static maps with changing roadside observations.", "Supports shared vehicle and infrastructure decisions."],
         cons: ["Requires instrumented corridors and ongoing data maintenance.", "Implementation cost rises with sensor density and update frequency."],
         rav: ["Adapt the layered architecture to incomplete maps, sparse sensors, and intermittent communication.", "Use low-cost methods for rural updates."]
       },
       {
-        cat: "Communication", title: "Rural V2X", status: "r", refs: [9,50,51,52,92,93,95,96,97,98,103],
+        cat: "Communication", title: "Rural V2X Communication", status: "r", refs: [9,50,51,52,92,93,95,96,97,98,103],
         definition: ["V2V, V2I, and V2N links exchange hazard, traffic, road-condition, and coordination data.", "Uses C-V2X and 5G NR-V2X."],
         pros: ["Enables direct and network-based exchange of hazards and road conditions.", "Supports coordination beyond onboard sensing range."],
         cons: ["Rural measurements show weaker coverage and longer disconnections.", "Interference, mobility, energy, and resource allocation affect quality of service."],
         rav: ["Assume intermittent connectivity from the start.", "Combine direct and network-based links and monitor link quality.", "Preserve safe vehicle operation throughout disconnections."]
       },
       {
-        cat: "Communication", title: "Multi-channel connectivity", status: "m", refs: [8,92,93,94,103],
+        cat: "Communication", title: "Multi-Channel Communication", status: "m", refs: [8,92,93,94,103],
         definition: ["Combines C-V2X, public cellular, and LEO satellite interfaces.", "Uses an alternate path when one network is unavailable."],
         pros: ["Improves communication reach and resilience.", "Provides an alternate path when one network is unavailable."],
         cons: ["Adds hardware cost, switching complexity, and energy use.", "Satellite links may introduce additional latency."],
@@ -1774,7 +1895,7 @@
         rav: ["Extend warning logic to passive rural crossings.", "Specify safe onboard behavior when no infrastructure message is available."]
       },
       {
-        cat: "Cooperative Driving", title: "Extreme-weather cooperation", status: "r", refs: [12, 13, 21],
+        cat: "Cooperative Driving", title: "Cooperative Response to Extreme Weather", status: "r", refs: [12, 13, 21],
         definition: ["Combines road-weather data with cooperative perception.", "Supports hazard sensing, lane closure, speed adjustment, and rerouting."],
         pros: ["Supplements degraded onboard sensing.", "Supports hazard warnings, speed adjustment, and rerouting."],
         cons: ["Depends on roadside sensors and reliable connectivity.", "Sparse rural weather data can delay or weaken warnings."],
@@ -1796,6 +1917,7 @@
       }
     ];
     var STATUS = { g: ["Reusable now", "#4B8B3B"], m: ["Needs rural adaptation", "#D99114"], r: ["Open gap", "#BA0C2F"] };
+    var STATUS_SHORT = { g: "Reusable", m: "Adapt", r: "Gap" };
     var byNum = {};
     PAPERS.forEach(function (p) { byNum[p.n] = p; });
     var themeCount = document.getElementById("theme-count");
@@ -1828,8 +1950,11 @@
         var pill = el("button", "epill " + t.status);
         pill.type = "button";
         pill.appendChild(document.createTextNode(t.title));
+        pill.appendChild(el("span", "status-mini", STATUS_SHORT[t.status]));
         pill.appendChild(el("span", "e-count", String(t.refs.length)));
         pill.setAttribute("aria-pressed", "false");
+        pill.setAttribute("aria-label", t.title + ": " + STATUS[t.status][0] + "; " +
+          t.refs.length + " supporting references");
         pill.title = t.refs.length + " supporting references. Show definition, pros, cons, rural gap, and RAV action.";
         pill.addEventListener("mouseenter", function () { showDetail(t, pill); });
         pill.addEventListener("focus", function () { showDetail(t, pill); });
@@ -1938,6 +2063,16 @@
 
   /* ---------- init ---------- */
 
+  hydrateUrlState();
+  if (searchInput) { searchInput.value = query; }
+  Object.keys(filters).forEach(syncDropdownFilter);
+  if (sortSelect) { sortSelect.value = sortMode; }
+  var chartDetails = document.querySelector(".chart-card");
+  if (chartDetails && window.matchMedia("(max-width: 720px)").matches) {
+    chartDetails.removeAttribute("open");
+  }
+  urlStateReady = true;
+
   buildLegend();
   buildGroups();
   renderCatBars();
@@ -1958,8 +2093,33 @@
   render();
   spy();
 
-  var focusParam = /[?&]focus=([A-Za-z0-9_]+)/.exec(window.location.search);
-  if (focusParam && paperByKey[focusParam[1]] && markerPosByKey[focusParam[1]]) {
-    pinFocus(paperByKey[focusParam[1]]);
+  var copyFilterLink = document.getElementById("copy-filter-link");
+  if (copyFilterLink) {
+    copyFilterLink.addEventListener("click", function () {
+      syncUrlState();
+      var text = window.location.href;
+      var done = function () {
+        copyFilterLink.textContent = "Link copied";
+        window.setTimeout(function () { copyFilterLink.textContent = "Copy filter link"; }, 1600);
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(done);
+      } else {
+        var input = el("textarea");
+        input.value = text;
+        input.setAttribute("readonly", "");
+        input.style.position = "fixed";
+        input.style.opacity = "0";
+        document.body.appendChild(input);
+        input.select();
+        document.execCommand("copy");
+        document.body.removeChild(input);
+        done();
+      }
+    });
+  }
+
+  if (initialFocusKey && paperByKey[initialFocusKey] && markerPosByKey[initialFocusKey]) {
+    pinFocus(paperByKey[initialFocusKey]);
   }
 })();

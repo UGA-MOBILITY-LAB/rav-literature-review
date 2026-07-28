@@ -21,7 +21,7 @@
 <meta name="twitter:image" content="https://uga-mobility-lab.github.io/rav-literature-review/social-preview.png">
 <link rel="icon" href="logo.png">
 <link rel="manifest" href="site.webmanifest">
-<link rel="stylesheet" href="style.css?v=20260727c">
+<link rel="stylesheet" href="style.css?v=20260727d">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -35,7 +35,7 @@
   ],
   "publisher": {"@type": "CollegeOrUniversity", "name": "University of Georgia"},
   "datePublished": "2026-06-01",
-  "dateModified": "2026-07-25",
+  "dateModified": "2026-07-27",
   "url": "https://uga-mobility-lab.github.io/rav-literature-review/",
   "inLanguage": "en"
 }
@@ -47,7 +47,11 @@
 <header class="site-header">
   <div class="container nav-row">
     <a class="wordmark" href="#overview"><img class="logo-img" src="logo.png" alt="UGA Mobility Lab"><span class="wordmark-fallback">UGA Mobility Lab</span></a>
-    <nav aria-label="Page sections">
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav">
+      <span class="nav-toggle-label">Menu</span>
+      <span class="nav-toggle-icon" aria-hidden="true"></span>
+    </button>
+    <nav id="primary-nav" class="primary-nav" aria-label="Page sections">
       <ul class="nav-pills">
         <li><a class="pill" href="#overview">Overview</a></li>
         <li><a class="pill" href="#framework">Framework</a></li>
@@ -82,6 +86,31 @@
         <span class="stat-chip"><strong id="stat-cats">5</strong> RAV modules</span>
         <span class="stat-chip"><strong id="stat-years">2014&ndash;2026</strong> coverage</span>
         <span class="stat-chip"><strong>4</strong> named pilot programs</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="section takeaway-section" aria-labelledby="takeaway-heading">
+    <div class="container">
+      <div class="section-head compact-head">
+        <h2 id="takeaway-heading">What the evidence says</h2>
+      </div>
+      <div class="takeaway-grid">
+        <a class="takeaway-card" href="#recommendations">
+          <span class="takeaway-number">01</span>
+          <strong>Keep the safety core onboard</strong>
+          <span>Rural service cannot assume continuous connectivity, pristine markings, or complete roadside sensing.</span>
+        </a>
+        <a class="takeaway-card" href="#framework">
+          <span class="takeaway-number">02</span>
+          <strong>Add infrastructure selectively</strong>
+          <span>Prioritize high-risk segments and conflict points instead of attempting corridor-wide instrumentation.</span>
+        </a>
+        <a class="takeaway-card" href="#pilot-comparison">
+          <span class="takeaway-number">03</span>
+          <strong>Use pilots as evidence generators</strong>
+          <span>Publish comparable safety, accessibility, connectivity, energy, and operator-workload measures.</span>
+        </a>
       </div>
     </div>
   </section>
@@ -230,6 +259,65 @@
             <text x="500" y="405" class="loop-label">existing technology carries the service &middot; advanced technology extends it &middot; pilots validate it</text>
           </svg>
         </div>
+        <div class="framework-mobile" aria-label="Mobile two-tier RAV framework">
+          <section class="mobile-tier">
+            <p class="mobile-tier-label">Tier 1 · Existing RAV Technology</p>
+            <button class="mobile-framework-card fw-pillar drive" type="button" data-cat="Autonomous Driving">
+              <span>Drive</span><strong>Autonomous Driving</strong>
+            </button>
+            <div class="mobile-submodules">
+              <button class="fw-subpillar" type="button" data-cat="Autonomous Driving" data-subcat="Perception" data-refs="1,2,3,17,18,19,20,21,22,56,57,58,59,61,63,64">Perception</button>
+              <button class="fw-subpillar" type="button" data-cat="Autonomous Driving" data-subcat="Localization" data-refs="1,2,23,24,25,60,61,62">Localization</button>
+              <button class="fw-subpillar" type="button" data-cat="Autonomous Driving" data-subcat="Data Integration" data-refs="2,17,18,19,25,56,57,59,63">Data Integration</button>
+              <button class="fw-subpillar" type="button" data-cat="Autonomous Driving" data-subcat="Route Planning" data-refs="1,4,5,16,26,27,30,31,65,66,67,69,78">Route Planning</button>
+            </div>
+            <span class="mobile-flow-arrow" aria-hidden="true">↓</span>
+            <button class="mobile-framework-card fw-pillar operate" type="button" data-cat="Fleet Management">
+              <span>Operate</span><strong>Fleet Management</strong>
+            </button>
+            <div class="mobile-submodules fleet">
+              <button class="fw-subpillar fleet-subpillar" type="button" data-cat="Fleet Management" data-subcat="Dispatch &amp; Matching" data-refs="5,28,29,30,31,68,70,71,73,75">Dispatch &amp; Matching</button>
+              <button class="fw-subpillar fleet-subpillar" type="button" data-cat="Fleet Management" data-subcat="Remote Supervision" data-refs="14,15,16,79">Remote Supervision</button>
+              <button class="fw-subpillar fleet-subpillar" type="button" data-cat="Fleet Management" data-subcat="Fixed-Route Scheduling" data-refs="16,69,77,78">Fixed-Route Scheduling</button>
+              <button class="fw-subpillar fleet-subpillar" type="button" data-cat="Fleet Management" data-subcat="Fleet Support" data-refs="14,15,16,72,74,75,76,77">Fleet Support</button>
+            </div>
+          </section>
+          <section class="mobile-tier">
+            <p class="mobile-tier-label advanced">Tier 2 · Advanced AV Technology</p>
+            <button class="mobile-framework-card fw-pillar road" type="button" data-cat="Infrastructure">
+              <span>Road</span><strong>Infrastructure</strong>
+            </button>
+            <div class="mobile-submodules road">
+              <button class="fw-subpillar infrastructure-subpillar" type="button" data-cat="Infrastructure" data-subcat="Physical Road Assessment" data-refs="39,46,47,48,49,80,81,82,83,84,85,86,87,88">Physical Road Assessment</button>
+              <button class="fw-subpillar infrastructure-subpillar" type="button" data-cat="Infrastructure" data-subcat="Digital Infrastructure" data-refs="7,25,37,38,80,87,89,90,91,118">Digital Infrastructure</button>
+            </div>
+            <span class="mobile-flow-arrow" aria-hidden="true">↓</span>
+            <button class="mobile-framework-card fw-pillar connect" type="button" data-cat="Communication">
+              <span>Connect</span><strong>Communication</strong>
+            </button>
+            <div class="mobile-submodules communication">
+              <button class="fw-subpillar communication-subpillar" type="button" data-cat="Communication" data-subcat="Rural V2X Communication" data-refs="9,50,51,52,92,93,95,96,97,98,103">Rural V2X Communication</button>
+              <button class="fw-subpillar communication-subpillar" type="button" data-cat="Communication" data-subcat="Multi-Channel Communication" data-refs="8,92,93,94,103">Multi-Channel Communication</button>
+              <button class="fw-subpillar communication-subpillar" type="button" data-cat="Communication" data-subcat="V2X Cybersecurity" data-refs="44,45,99,100,101,102">V2X Cybersecurity</button>
+            </div>
+            <span class="mobile-flow-arrow" aria-hidden="true">↓</span>
+            <button class="mobile-framework-card fw-pillar cooperate" type="button" data-cat="Cooperative Driving">
+              <span>Cooperate</span><strong>Cooperative Driving</strong>
+            </button>
+            <div class="mobile-submodules cooperative">
+              <button class="fw-subpillar cooperative-subpillar" type="button" data-cat="Cooperative Driving" data-subcat="Cooperative Perception" data-refs="10,35,104,105,106,108,109">Cooperative Perception</button>
+              <button class="fw-subpillar cooperative-subpillar" type="button" data-cat="Cooperative Driving" data-subcat="Rural-Arterial Control" data-refs="32,34,40,41,53,54,55,107,108,110,111,112,114,115">Rural-Arterial Control</button>
+              <button class="fw-subpillar cooperative-subpillar" type="button" data-cat="Cooperative Driving" data-subcat="Work &amp; School Zones and Handover" data-refs="11,36,113,115">Work &amp; School Zones</button>
+              <button class="fw-subpillar cooperative-subpillar" type="button" data-cat="Cooperative Driving" data-subcat="Rail Grade Crossings" data-refs="42,43">Rail Grade Crossings</button>
+              <button class="fw-subpillar cooperative-subpillar span-two" type="button" data-cat="Cooperative Driving" data-subcat="Cooperative Response to Extreme Weather" data-refs="12,13,21">Cooperative Response to Extreme Weather</button>
+            </div>
+          </section>
+          <span class="mobile-flow-arrow final" aria-hidden="true">↓</span>
+          <button class="mobile-framework-card fw-pillar validate" type="button" data-cat="Pilots">
+            <span>Validate</span><strong>Four Field-Pilot Programs</strong>
+            <small>goMARTI · ADASTEC · TEDDY · CASSI</small>
+          </button>
+        </div>
         <div class="thesis-detail" id="thesis-detail" aria-live="polite">
           <span class="td-tag">Two tiers, one system</span>
           <p class="td-text">Existing technology carries the service today; advanced, infrastructure-integrated technology extends it; four named field-pilot programs ground it in practice. Hover a module.</p>
@@ -316,6 +404,57 @@
           <p class="rec-evidence">Evidence base: 31 references <span class="rec-action">Explore evidence <span aria-hidden="true">&rarr;</span></span></p>
         </article>
       </div>
+      <div id="pilot-comparison" class="pilot-comparison">
+        <div class="pilot-comparison-head">
+          <div>
+            <p class="rec-kicker">Field evidence at a glance</p>
+            <h3>Four rural and remote pilot programs</h3>
+          </div>
+          <p>Select a program to inspect its supporting sources in the Reference Explorer.</p>
+        </div>
+        <div class="pilot-grid">
+          <article class="pilot-card" data-label="goMARTI" data-refs="14,15" tabindex="0" role="button" aria-pressed="false">
+            <div class="pilot-card-head"><strong>goMARTI</strong><span>On-demand</span></div>
+            <p class="pilot-location">Grand Rapids, Minnesota</p>
+            <dl>
+              <div><dt>Service</dt><dd>App or 211 booking; roughly 97 stops</dd></div>
+              <div><dt>Operating frame</dt><dd>Low-speed, geofenced service with an onboard safety operator</dd></div>
+              <div><dt>RAV lesson</dt><dd>Accessible demand-responsive service can reach dispersed rural riders.</dd></div>
+            </dl>
+            <span class="pilot-source">2 source records →</span>
+          </article>
+          <article class="pilot-card" data-label="ADASTEC at Sleeping Bear Dunes" data-refs="16" tabindex="0" role="button" aria-pressed="false">
+            <div class="pilot-card-head"><strong>ADASTEC</strong><span>Fixed route</span></div>
+            <p class="pilot-location">Sleeping Bear Dunes, Michigan</p>
+            <dl>
+              <div><dt>Service</dt><dd>Scheduled automated bus in a remote public-land setting</dd></div>
+              <div><dt>Operating frame</dt><dd>Defined route with supervised operation</dd></div>
+              <div><dt>RAV lesson</dt><dd>Predictable routes simplify deployment but still require interruption planning.</dd></div>
+            </dl>
+            <span class="pilot-source">1 source record →</span>
+          </article>
+          <article class="pilot-card" data-label="TEDDY at Yellowstone" data-refs="116" tabindex="0" role="button" aria-pressed="false">
+            <div class="pilot-card-head"><strong>TEDDY</strong><span>Fixed route</span></div>
+            <p class="pilot-location">Yellowstone National Park</p>
+            <dl>
+              <div><dt>Service</dt><dd>Visitor shuttle tested in a remote national-park environment</dd></div>
+              <div><dt>Operating frame</dt><dd>Low-speed, geofenced operation with onboard supervision</dd></div>
+              <div><dt>RAV lesson</dt><dd>Weather, communications, and energy constraints must be planned together.</dd></div>
+            </dl>
+            <span class="pilot-source">1 shared pilot report →</span>
+          </article>
+          <article class="pilot-card" data-label="CASSI in North Carolina" data-refs="116,117" tabindex="0" role="button" aria-pressed="false">
+            <div class="pilot-card-head"><strong>CASSI</strong><span>Fixed route</span></div>
+            <p class="pilot-location">Wright Brothers Memorial + N.C. sites</p>
+            <dl>
+              <div><dt>Service</dt><dd>Automated shuttle demonstrations across public sites</dd></div>
+              <div><dt>Operating frame</dt><dd>Geofenced routes with onboard safety operators</dd></div>
+              <div><dt>RAV lesson</dt><dd>Comparable reporting across sites exposes repeatable operational barriers.</dd></div>
+            </dl>
+            <span class="pilot-source">2 source records →</span>
+          </article>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -359,6 +498,7 @@
           <div class="heatmap-scroll">
             <div id="module-year-heatmap" class="heatmap" role="grid" aria-label="Reference counts by RAV module and publication year"></div>
           </div>
+          <div id="mobile-heatmap-list" class="mobile-heatmap-list" aria-label="Compact mobile summary of reference counts by module and year"></div>
         </div>
       </div>
     </div>
@@ -387,10 +527,12 @@
           </select>
           <button type="button" id="export-csv" class="utility-btn">Export CSV</button>
           <button type="button" id="export-bibtex" class="utility-btn">Export BibTeX</button>
+          <button type="button" id="copy-filter-link" class="utility-btn">Copy filter link</button>
           <span class="count" id="count" role="status" aria-live="polite">Showing 118 of 118 references</span>
         </div>
       </div>
-      <div class="card chart-card">
+      <details class="card chart-card" open>
+        <summary>Evidence network chart</summary>
         <div class="legend" id="legend"></div>
         <div class="chart-wrap">
           <div class="chart-scroll">
@@ -400,7 +542,7 @@
         </div>
         <div id="scatter-selection" class="scatter-selection" role="status" aria-live="polite">Keyboard: Tab to a marker, Enter or Space to pin it, and O to open its source.</div>
         <p class="chart-note"><em>Hover or focus a point to preview its evidence neighbourhood; click, Enter, or Space to pin it; Esc releases it. Double-click or press O to open the paper. Markers: shape = source type, colour = RAV module.</em></p>
-      </div>
+      </details>
     </div>
   </section>
 
@@ -408,7 +550,7 @@
     <div class="container">
       <div class="section-head">
         <h2>Review Methodology</h2>
-        <span class="date-pill">Last verified July 25, 2026</span>
+        <span class="date-pill">Last verified July 27, 2026</span>
       </div>
       <p class="section-lede">A transparent evidence pipeline keeps the website traceable to real sources while distinguishing direct rural evidence from research that still needs rural validation. <span class="lede-hint">Select a step to inspect its rules, evidence inputs, and output.</span></p>
       <div class="method-flow" aria-label="Interactive literature review workflow">
@@ -523,7 +665,7 @@
         <a href="mailto:Handong.Yao@uga.edu">Handong Yao</a>
       </p>
       <p>College of Engineering, University of Georgia</p>
-      <p class="footer-muted">Version 2.1 &middot; Updated July 27, 2026 &middot; 118 verified references</p>
+      <p class="footer-muted">Version 2.2 &middot; Updated July 27, 2026 &middot; 118 verified references</p>
     </div>
     <aside class="follow-card" aria-label="Follow UGA Mobility Lab">
       <img src="qr-uga-mobility-lab.png" width="112" height="112" alt="QR code linking to the UGA Mobility Lab homepage">
@@ -536,8 +678,8 @@
   </div>
 </footer>
 
-<script src="data.js?v=20260727c"></script>
-<script src="edges.js?v=20260727c"></script>
-<script src="app.js?v=20260727c"></script>
+<script src="data.js?v=20260727d"></script>
+<script src="edges.js?v=20260727d"></script>
+<script src="app.js?v=20260727d"></script>
 </body>
 </html>
