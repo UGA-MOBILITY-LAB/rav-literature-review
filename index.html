@@ -10,7 +10,7 @@
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="UGA Mobility Lab">
 <meta property="og:title" content="Rural Autonomous Vehicles — Literature Review">
-<meta property="og:description" content="Explore 118 verified references, 26 evidence themes, four named field-pilot programs, and actionable recommendations for RAV stakeholders.">
+<meta property="og:description" content="Explore 118 verified references, 25 evidence themes, four named field-pilot programs, and actionable recommendations for RAV stakeholders.">
 <meta property="og:url" content="https://uga-mobility-lab.github.io/rav-literature-review/">
 <meta property="og:image" content="https://uga-mobility-lab.github.io/rav-literature-review/social-preview.png">
 <meta property="og:image:width" content="1200">
@@ -22,7 +22,7 @@
 <link rel="icon" href="logo.png">
 <link rel="manifest" href="site.webmanifest">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
-<link rel="stylesheet" href="style.css?v=20260727k">
+<link rel="stylesheet" href="style.css?v=20260727l">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -103,6 +103,13 @@
       </div>
       <p class="section-lede">Existing technology <em>carries</em> the rural service today; advanced, infrastructure-integrated technology <em>extends</em> it; four named field-pilot programs <em>validate</em> it. <span class="lede-hint">Hover or tap a module.</span></p>
       <div class="card thesis-card">
+        <div class="framework-flow-toolbar">
+          <div>
+            <strong>Framework Flow Mode</strong>
+            <span>Trace how a selected submodule connects to downstream RAV capabilities.</span>
+          </div>
+          <button type="button" id="framework-flow-toggle" aria-pressed="true">Flow mode on</button>
+        </div>
         <div class="thesis-scroll">
           <svg class="thesis-svg" viewBox="0 0 1000 418" role="img" aria-label="Interactive two-tier RAV framework with submodules for autonomous driving, fleet management, infrastructure, communication, and cooperative driving, validated by field pilots.">
             <defs>
@@ -197,10 +204,6 @@
               <rect x="344" y="272" width="98" height="31" rx="7"></rect>
               <text x="393" y="285"><tspan x="393">Multi-Channel</tspan><tspan x="393" dy="10">Communication</tspan></text>
             </g>
-            <g class="fw-subpillar advanced-subpillar communication-subpillar" data-cat="Communication" data-subcat="V2X Cybersecurity" data-refs="44,45,99,100,101,102" tabindex="0" role="button" aria-label="Communication submodule: V2X Cybersecurity">
-              <rect x="238" y="309" width="204" height="31" rx="7"></rect>
-              <text x="340" y="328">V2X Cybersecurity</text>
-            </g>
             <g class="fw-pillar" data-cat="Cooperative Driving" tabindex="0" role="button" aria-label="Cooperative Driving Automation module">
               <rect x="472" y="210" width="204" height="52" rx="10" fill="#7E6BB0"></rect>
               <text x="574" y="231" class="chip-kicker">COOPERATE</text>
@@ -279,7 +282,6 @@
             <div class="mobile-submodules communication">
               <button class="fw-subpillar communication-subpillar" type="button" data-cat="Communication" data-subcat="Rural V2X Communication" data-refs="9,50,51,52,92,93,95,96,97,98,103">Rural V2X Communication</button>
               <button class="fw-subpillar communication-subpillar" type="button" data-cat="Communication" data-subcat="Multi-Channel Communication" data-refs="8,92,93,94,103">Multi-Channel Communication</button>
-              <button class="fw-subpillar communication-subpillar" type="button" data-cat="Communication" data-subcat="V2X Cybersecurity" data-refs="44,45,99,100,101,102">V2X Cybersecurity</button>
             </div>
             <span class="mobile-flow-arrow" aria-hidden="true">↓</span>
             <button class="mobile-framework-card fw-pillar cooperate" type="button" data-cat="Cooperative Driving">
@@ -302,6 +304,11 @@
         <div class="thesis-detail" id="thesis-detail" aria-live="polite">
           <span class="td-tag">Two tiers, one system</span>
           <p class="td-text">Existing technology carries the service today; advanced, infrastructure-integrated technology extends it; four named field-pilot programs ground it in practice. Hover a module.</p>
+          <div id="framework-flow-path" class="framework-flow-path">Select a submodule to reveal its cross-tier path.</div>
+          <div class="framework-detail-actions">
+            <button type="button" class="utility-btn" id="framework-open-evidence">Open related Evidence Map</button>
+            <button type="button" class="btn-primary" id="framework-open-references">Explore references</button>
+          </div>
         </div>
       </div>
     </div>
@@ -311,7 +318,7 @@
     <div class="container">
       <div class="section-head">
         <h2>Evidence Map</h2>
-        <span class="date-pill" id="theme-count">26 sub-themes</span>
+        <span class="date-pill" id="theme-count">25 sub-themes</span>
       </div>
       <p class="section-lede">Research sub-themes aligned with the latest Word review and coloured by their role in the RAV evidence chain. <span class="lede-hint">Limitations motivate recommended directions; reusable baselines show what can transfer now. Select a theme, then follow its clickable progression links.</span></p>
       <div class="card">
@@ -319,6 +326,12 @@
           <span><i style="background:#4B8B3B"></i>Reusable baseline</span>
           <span><i style="background:#D99114"></i>Recommended direction &mdash; rural validation needed</span>
           <span><i style="background:#BA0C2F"></i>Limitation / unresolved RAV problem</span>
+        </div>
+        <div class="evidence-multiselect" id="evidence-multiselect">
+          <span><strong id="evidence-selected-count">0</strong> pinned themes</span>
+          <p id="evidence-overlap-summary">Shift-click themes to compare their supporting evidence.</p>
+          <button type="button" class="utility-btn" id="evidence-compare-selected" disabled>Compare pinned</button>
+          <button type="button" class="utility-btn" id="evidence-clear-selected" disabled>Clear</button>
         </div>
         <div class="emap" id="emap"></div>
         <div class="emap-detail" id="emap-detail" aria-live="polite">Select a sub-theme to open its detailed evidence summary.</div>
@@ -463,15 +476,15 @@
           </ul>
           <p class="rec-evidence">Evidence base: 22 references <span class="rec-action">Explore evidence <span aria-hidden="true">&rarr;</span></span></p>
         </article>
-        <article class="card recommendation-card rec-connect" data-stakeholder-card="connect" data-label="Connectivity and cybersecurity partners" data-refs="8,9,32,33,44,45,50,51,52,53,54,55,92,93,94,95,96,97,98,99,100,101,102,103" tabindex="0" role="button" aria-pressed="false" aria-label="View supporting references for the connectivity and cybersecurity partners recommendation">
-          <p class="rec-kicker">Connectivity and cybersecurity partners</p>
+        <article class="card recommendation-card rec-connect" data-stakeholder-card="connect" data-label="Connectivity partners" data-refs="8,9,32,33,50,51,52,53,54,55,92,93,94,95,96,97,98,103" tabindex="0" role="button" aria-pressed="false" aria-label="View supporting references for the connectivity partners recommendation">
+          <p class="rec-kicker">Connectivity partners</p>
           <h3>Design for disconnection</h3>
           <ul>
             <li>Combine direct and network-based V2X, cellular, and LEO satellite links; switch by measured coverage and latency.</li>
             <li>Keep safety-critical functions onboard and use roadside edge computing as supplementary support.</li>
-            <li>Apply authentication, encryption, and message verification across every channel before field deployment.</li>
+            <li>Measure route-level coverage and define channel-switching and fallback thresholds before field deployment.</li>
           </ul>
-          <p class="rec-evidence">Evidence base: 24 references <span class="rec-action">Explore evidence <span aria-hidden="true">&rarr;</span></span></p>
+          <p class="rec-evidence">Evidence base: 18 references <span class="rec-action">Explore evidence <span aria-hidden="true">&rarr;</span></span></p>
         </article>
         <article class="card recommendation-card rec-pilot" data-stakeholder-card="pilot" data-label="Program, policy, and pilot partners" data-refs="10,11,12,13,14,15,16,34,35,36,37,38,39,40,41,42,43,104,105,106,107,108,109,110,111,112,113,114,115,116,117" tabindex="0" role="button" aria-pressed="false" aria-label="View supporting references for the program, policy, and pilot partners recommendation">
           <p class="rec-kicker">Program, policy, and pilot partners</p>
@@ -549,10 +562,21 @@
             <div class="planner-actions-row">
               <button type="button" id="planner-evidence" class="btn-primary">Explore supporting evidence</button>
               <button type="button" id="planner-share" class="utility-btn">Copy scenario link</button>
+              <button type="button" id="planner-save-a" class="utility-btn">Save as A</button>
+              <button type="button" id="planner-save-b" class="utility-btn">Save as B</button>
             </div>
             <p class="planner-note">Planning aid based on review coding; not a safety certification or route approval.</p>
           </section>
         </div>
+        <section class="scenario-comparison card" id="scenario-comparison" aria-live="polite">
+          <div class="scenario-comparison-head">
+            <div><p class="rec-kicker">A/B scenario comparison</p><h4>Save two planner states to compare</h4></div>
+            <button type="button" class="utility-btn" id="planner-clear-comparison">Clear A/B</button>
+          </div>
+          <div class="scenario-comparison-grid" id="scenario-comparison-grid">
+            <p class="scenario-empty">Use “Save as A” and “Save as B” to compare readiness, technology stacks, actions, and evidence.</p>
+          </div>
+        </section>
       </div>
       <div id="pilot-comparison" class="pilot-comparison">
         <div class="pilot-comparison-head">
@@ -602,6 +626,17 @@
             <span>Map data © OpenStreetMap contributors</span>
           </div>
         </div>
+        <section class="pilot-side-compare card">
+          <div class="pilot-side-controls">
+            <div><p class="rec-kicker">Pilot side-by-side</p><h4>Compare two deployment programs</h4></div>
+            <label for="pilot-compare-a">Pilot A</label>
+            <select id="pilot-compare-a"></select>
+            <label for="pilot-compare-b">Pilot B</label>
+            <select id="pilot-compare-b"></select>
+            <button type="button" class="btn-primary" id="pilot-compare-run">Compare</button>
+          </div>
+          <div class="pilot-side-result" id="pilot-side-result" aria-live="polite"></div>
+        </section>
         <div class="pilot-grid">
           <article class="pilot-card" data-label="goMARTI" data-refs="14,15" tabindex="0" role="button" aria-pressed="false">
             <div class="pilot-card-head"><strong>goMARTI</strong><span>On-demand</span></div>
@@ -658,6 +693,13 @@
         <div>
           <span class="stats-filter-label">Active view</span>
           <p id="stats-filter-summary" role="status" aria-live="polite">All 118 references</p>
+        </div>
+        <div class="year-brush" id="year-brush">
+          <span class="stats-filter-label">Publication-year range</span>
+          <div class="year-brush-inputs">
+            <label>From <strong id="year-brush-min-value">2014</strong><input id="year-brush-min" type="range" min="2014" max="2026" value="2014" step="1"></label>
+            <label>To <strong id="year-brush-max-value">2026</strong><input id="year-brush-max" type="range" min="2014" max="2026" value="2026" step="1"></label>
+          </div>
         </div>
         <button type="button" id="stats-clear" class="reset-btn">Clear all filters</button>
       </div>
@@ -721,6 +763,28 @@
           <span class="count" id="count" role="status" aria-live="polite">Showing 118 of 118 references</span>
         </div>
       </div>
+      <section class="card research-workspace" id="research-workspace">
+        <div class="workspace-head">
+          <div>
+            <p class="rec-kicker">Research workspace</p>
+            <h3>Citation Cart <span id="workspace-count">0</span></h3>
+          </div>
+          <div class="workspace-actions">
+            <button type="button" class="utility-btn" id="workspace-toggle" aria-expanded="false" aria-controls="workspace-panel">Open workspace</button>
+            <button type="button" class="utility-btn" id="workspace-filter">View saved only</button>
+            <button type="button" class="utility-btn" id="workspace-copy">Copy selected citations</button>
+            <button type="button" class="utility-btn" id="workspace-export">Export selected BibTeX</button>
+            <button type="button" class="utility-btn" id="workspace-clear">Clear</button>
+          </div>
+        </div>
+        <div class="workspace-panel" id="workspace-panel" hidden>
+          <div id="workspace-list" class="workspace-list"></div>
+          <div class="workspace-network">
+            <h4>Evidence relationships inside this collection</h4>
+            <div id="workspace-related"></div>
+          </div>
+        </div>
+      </section>
       <details class="card chart-card" open>
         <summary>Evidence network chart</summary>
         <div class="legend" id="legend"></div>
@@ -780,6 +844,24 @@
           <div><span>Evidence handled</span><p>2014&ndash;2026 research across five technical modules plus operational field-pilot validation.</p></div>
           <div><span>Output</span><p>A review framework linking technology, fleet operations, infrastructure, connectivity, cooperation, and pilots.</p></div>
         </div>
+        <div class="method-audit-trail" id="method-audit-trail">
+          <div>
+            <span>Representative query or audit rule</span>
+            <code id="method-audit-query">("autonomous vehicle" OR "automated shuttle") AND (rural OR remote)</code>
+          </div>
+          <div>
+            <span>Verification checklist</span>
+            <ul id="method-audit-checks"></ul>
+          </div>
+          <div>
+            <span>Example decision</span>
+            <p id="method-audit-example"></p>
+          </div>
+          <div>
+            <span>Traceable artifact</span>
+            <p id="method-audit-artifact"></p>
+          </div>
+        </div>
       </div>
       <div class="card method-summary">
         <div class="method-metrics" aria-label="Source verification summary">
@@ -838,6 +920,11 @@
       </div>
       <div class="card cite-card">
         <p>For use in publications and presentations, please cite this review as follows:</p>
+        <div class="citation-style-switcher" role="group" aria-label="Citation style">
+          <button type="button" data-citation-style="apa" aria-pressed="true">APA</button>
+          <button type="button" data-citation-style="ieee" aria-pressed="false">IEEE</button>
+          <button type="button" data-citation-style="chicago" aria-pressed="false">Chicago</button>
+        </div>
         <blockquote id="cite-text">Que, Haohua, Tianle Zhu, and Handong Yao. &ldquo;Rural Autonomous Vehicles: A Literature Review Linking RAV Challenges to Research Evidence and AV Pilots.&rdquo; College of Engineering, University of Georgia, June 2026.</blockquote>
         <button type="button" id="copy-cite" class="btn-primary">Copy citation</button>
       </div>
@@ -866,7 +953,7 @@
         <a href="mailto:Handong.Yao@uga.edu">Handong Yao</a>
       </p>
       <p>College of Engineering, University of Georgia</p>
-      <p class="footer-muted">Version 2.6 &middot; Updated July 27, 2026 &middot; 118 verified references</p>
+      <p class="footer-muted">Version 2.7 &middot; Updated July 27, 2026 &middot; 118 verified references</p>
     </div>
     <aside class="follow-card" aria-label="Follow UGA Mobility Lab">
       <img src="qr-uga-mobility-lab.png" width="112" height="112" alt="QR code linking to the UGA Mobility Lab homepage">
@@ -880,8 +967,8 @@
 </footer>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-<script src="data.js?v=20260727k"></script>
-<script src="edges.js?v=20260727k"></script>
-<script src="app.js?v=20260727k"></script>
+<script src="data.js?v=20260727l"></script>
+<script src="edges.js?v=20260727l"></script>
+<script src="app.js?v=20260727l"></script>
 </body>
 </html>

@@ -89,6 +89,7 @@ def main() -> None:
     assert progression_targets <= theme_titles
     retired_label = re.compile(r"\x70ick[\s_-]*u\x70.{0,8}dis\x70atch", re.I)
     assert not retired_label.search(app + index + data_raw)
+    assert "v2x cybersecurity" not in (app + index).casefold()
     assert "Haohua.Que@uga.edu" in index
     assert "Tianle.Zhu@uga.edu" in index
     assert "Handong.Yao@uga.edu" in index
@@ -110,11 +111,19 @@ def main() -> None:
         "pilot-corridor-toggle",
         "command-palette",
         "reading-progress-bar",
+        "framework-flow-toggle",
+        "evidence-multiselect",
+        "scenario-comparison",
+        "pilot-side-result",
+        "year-brush-min",
+        "research-workspace",
+        "method-audit-trail",
     }
     assert all(f'id="{interaction_id}"' in index for interaction_id in required_interactions)
-    assert "Version 2.6" in index
-    assert "app.js?v=20260727k" in index
-    assert "style.css?v=20260727k" in index
+    assert len(theme_titles) == 25
+    assert "Version 2.7" in index
+    assert "app.js?v=20260727l" in index
+    assert "style.css?v=20260727l" in index
 
     print(
         f"Validated {expected_count} papers, {len(theme_titles)} themes, "

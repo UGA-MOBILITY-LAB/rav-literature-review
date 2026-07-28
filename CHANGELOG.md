@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.7 — 2026-07-27
+
+- Added Framework Flow Mode with evidence and reference handoffs for every displayed submodule.
+- Added multi-select evidence pinning, Scenario A/B comparison, and side-by-side pilot comparison.
+- Added a year-range brush and a persistent Citation Cart with citation copying, filtering, and BibTeX export.
+- Added a methodology audit trail and APA, IEEE, and Chicago citation styles.
+- Simplified the Communication pathway around measured rural coverage and multi-channel resilience.
+
 ## 2.6 — 2026-07-27
 
 - Added a zoomable Evidence Journey with clickable progression nodes and synchronized evidence details.

@@ -1313,6 +1313,17 @@
           copyText(formatReference(p), copyReference, "Copy reference");
         });
         actions.appendChild(copyReference);
+        var saveReference = el(
+          "button",
+          "paper-action workspace-save",
+          window.isPaperSaved && window.isPaperSaved(p.n) ? "Saved to Citation Cart" : "Save to Citation Cart"
+        );
+        saveReference.type = "button";
+        saveReference.classList.toggle("workspace-saved", Boolean(window.isPaperSaved && window.isPaperSaved(p.n)));
+        saveReference.addEventListener("click", function () {
+          if (window.toggleWorkspacePaper) { window.toggleWorkspacePaper(p.n, saveReference); }
+        });
+        actions.appendChild(saveReference);
         detail.appendChild(actions);
         detailCell.appendChild(detail);
         detailRow.appendChild(detailCell);
@@ -1342,12 +1353,20 @@
     });
   }
 
+  var citationStyle = "apa";
   function formatReference(p) {
     var authors = p.authors || "Author information unavailable";
-    var identifier = p.doi ? " https://doi.org/" + p.doi :
-      (p.arxiv ? " https://arxiv.org/abs/" + p.arxiv : " " + p._link);
-    return authors + " (" + p.year + "). " + p.title + ". " + (p.venue || "") + "." + identifier;
+    var identifier = p.doi ? "https://doi.org/" + p.doi :
+      (p.arxiv ? "https://arxiv.org/abs/" + p.arxiv : p._link);
+    if (citationStyle === "ieee") {
+      return authors + ', "' + p.title + '," ' + (p.venue || "") + ", " + p.year + ". " + identifier;
+    }
+    if (citationStyle === "chicago") {
+      return authors + '. "' + p.title + '." ' + (p.venue || "") + " (" + p.year + "). " + identifier;
+    }
+    return authors + " (" + p.year + "). " + p.title + ". " + (p.venue || "") + ". " + identifier;
   }
+  window.formatPaperCitation = formatReference;
 
   function copyText(text, button, originalLabel) {
     function flash(label) {
@@ -1418,6 +1437,7 @@
     renderScatter(currentFiltered);
     renderTables(currentFiltered);
     syncStatSelection();
+    if (window.syncYearBrushFromFilters) { window.syncYearBrushFromFilters(); }
     updateCountLine();
     updateStatsSummary();
     syncUrlState();
@@ -1498,6 +1518,30 @@
 
   var copyBtn = document.getElementById("copy-cite");
   var citeBlock = document.getElementById("cite-text");
+  var siteCitations = {
+    apa: "Que, H., Zhu, T., & Yao, H. (2026). Rural autonomous vehicles: A literature review linking RAV challenges to research evidence and AV pilots. College of Engineering, University of Georgia.",
+    ieee: 'H. Que, T. Zhu, and H. Yao, "Rural Autonomous Vehicles: A Literature Review Linking RAV Challenges to Research Evidence and AV Pilots," College of Engineering, University of Georgia, 2026.',
+    chicago: 'Que, Haohua, Tianle Zhu, and Handong Yao. "Rural Autonomous Vehicles: A Literature Review Linking RAV Challenges to Research Evidence and AV Pilots." College of Engineering, University of Georgia, 2026.'
+  };
+  var citationButtons = document.querySelectorAll("[data-citation-style]");
+  function applyCitationStyle(style) {
+    citationStyle = siteCitations[style] ? style : "apa";
+    citeBlock.textContent = siteCitations[citationStyle];
+    citationButtons.forEach(function (button) {
+      button.setAttribute("aria-pressed", button.getAttribute("data-citation-style") === citationStyle ? "true" : "false");
+    });
+    try { window.localStorage.setItem("rav-citation-style", citationStyle); } catch (err) { /* optional */ }
+    if (Object.keys(groupRefs).length) { renderTables(currentFiltered); }
+  }
+  citationButtons.forEach(function (button) {
+    button.addEventListener("click", function () {
+      applyCitationStyle(button.getAttribute("data-citation-style"));
+    });
+  });
+  try {
+    var storedCitationStyle = window.localStorage.getItem("rav-citation-style");
+    if (siteCitations[storedCitationStyle]) { applyCitationStyle(storedCitationStyle); }
+  } catch (err) { /* storage is optional */ }
   copyBtn.addEventListener("click", function () {
     var text = citeBlock.textContent;
     function flash(msg) {
@@ -1535,34 +1579,54 @@
         summary: "Establish what counts as usable evidence before searching so the review remains focused and reproducible.",
         rule: "Include road-vehicle research with direct rural relevance or a documented pathway to rural RAV service.",
         evidence: "2014–2026 research across five technical modules plus operational field-pilot validation.",
-        output: "A review framework linking technology, fleet operations, infrastructure, connectivity, cooperation, and pilots."
+        output: "A review framework linking technology, fleet operations, infrastructure, connectivity, cooperation, and pilots.",
+        query: "(rural OR low-density OR remote) AND (automated vehicle OR autonomous shuttle) AND road transport",
+        checks: ["Road-vehicle scope is explicit", "Rural relevance is direct or traceable", "Publication window and module are coded"],
+        example: "A primarily urban method is retained only when the review records a defensible transfer pathway to rural operation.",
+        artifact: "Scope statement, five-module framework, and inclusion boundary."
       },
       {
         title: "Search and identify",
         summary: "Use complementary discovery channels so engineering research and operational deployments are both represented.",
         rule: "Combine topic and module keywords, then use backward and forward citation chaining to fill sub-theme gaps.",
         evidence: "Crossref and arXiv metadata; U.S. DOT, state DOT, university, agency, and official pilot sources.",
-        output: "A candidate source pool spanning peer-reviewed research, preprints, public reports, and deployment pages."
+        output: "A candidate source pool spanning peer-reviewed research, preprints, public reports, and deployment pages.",
+        query: '("autonomous driving" OR "automated shuttle") AND (perception OR fleet OR infrastructure OR V2X OR cooperative)',
+        checks: ["Metadata matches the source record", "DOI or arXiv identifier resolves", "Pilot evidence comes from an authoritative owner"],
+        example: "Backward and forward chaining connects a foundational method to newer rural adaptations and deployment evidence.",
+        artifact: "Search-source audit and candidate-source pool."
       },
       {
         title: "Screen and deduplicate",
         summary: "Apply the same relevance test to every candidate and keep one verified record for each distinct work.",
         rule: "Retain direct rural studies or clearly transferable AV evidence; exclude unrelated modes, corrections, withdrawn items, duplicates, and unverifiable records.",
         evidence: "Titles, abstracts, study context, source type, deployment setting, and version relationships.",
-        output: "A unique retained set whose rural relevance is explicit rather than inferred from urban evidence."
+        output: "A unique retained set whose rural relevance is explicit rather than inferred from urban evidence.",
+        query: "retain = road_vehicle AND verified_source AND (direct_rural OR documented_transfer_path)",
+        checks: ["Duplicate title and identifier review", "Transport mode and deployment context check", "Correction, withdrawal, and version check"],
+        example: "A conference paper and its journal extension are linked; only distinct evidence is counted as a separate record.",
+        artifact: "Deduplicated retained set with exclusion reasons."
       },
       {
         title: "Verify and code",
         summary: "Resolve every retained item to a real source and apply a consistent evidence taxonomy for the interactive review.",
         rule: "Require a working DOI, arXiv record, or authoritative source page before a record enters the evidence database.",
         evidence: "92 DOI records, 14 arXiv records, and 12 authoritative pages; 85 records are openly accessible.",
-        output: "118 verified records coded by RAV module, study design, rural relevance, evidence strength, year, and access status."
+        output: "118 verified records coded by RAV module, study design, rural relevance, evidence strength, year, and access status.",
+        query: "DOI resolves OR arXiv resolves OR official program page resolves",
+        checks: ["Identifier and destination agree", "All coding fields are populated", "Open-access status is recorded separately from quality"],
+        example: "Official deployment pages are used for pilot operations when a peer-reviewed evaluation is not available.",
+        artifact: "Verified reference database plus DOI, access, and source audit."
       }
     ];
     var step = detail.querySelector(".method-detail-step");
     var title = detail.querySelector("h3");
     var summary = detail.querySelector(".method-detail-head p");
     var values = detail.querySelectorAll(".method-detail-grid p");
+    var auditQuery = document.getElementById("method-audit-query");
+    var auditChecks = document.getElementById("method-audit-checks");
+    var auditExample = document.getElementById("method-audit-example");
+    var auditArtifact = document.getElementById("method-audit-artifact");
     function showMethod(index) {
       var method = METHODS[index];
       if (!method) { return; }
@@ -1572,6 +1636,13 @@
       values[0].textContent = method.rule;
       values[1].textContent = method.evidence;
       values[2].textContent = method.output;
+      if (auditQuery) { auditQuery.textContent = method.query; }
+      if (auditChecks) {
+        while (auditChecks.firstChild) { auditChecks.removeChild(auditChecks.firstChild); }
+        method.checks.forEach(function (check) { auditChecks.appendChild(el("li", null, check)); });
+      }
+      if (auditExample) { auditExample.textContent = method.example; }
+      if (auditArtifact) { auditArtifact.textContent = method.artifact; }
       cards.forEach(function (card, cardIndex) {
         var active = cardIndex === index;
         card.classList.toggle("is-active", active);
@@ -1587,6 +1658,7 @@
         }
       });
     });
+    showMethod(0);
   })();
 
   /* ---------- scenario planner ---------- */
@@ -1618,8 +1690,15 @@
     var actionBox = document.getElementById("planner-actions");
     var evidenceButton = document.getElementById("planner-evidence");
     var shareButton = document.getElementById("planner-share");
+    var saveAButton = document.getElementById("planner-save-a");
+    var saveBButton = document.getElementById("planner-save-b");
+    var clearComparisonButton = document.getElementById("planner-clear-comparison");
+    var comparisonGrid = document.getElementById("scenario-comparison-grid");
     var currentRefs = [];
     var currentLabel = "";
+    var currentSnapshot = null;
+    var scenarioA = null;
+    var scenarioB = null;
 
     function addUnique(target, values) {
       values.forEach(function (value) {
@@ -1745,12 +1824,78 @@
       actions.slice(0, 5).forEach(function (item) { actionBox.appendChild(el("li", null, item)); });
       currentRefs = refs.sort(function (a, b) { return a - b; });
       currentLabel = state.road + " / " + state.weather + " / " + state.connectivity + " / " + state.demand;
+      currentSnapshot = {
+        state: Object.assign({}, state),
+        label: currentLabel,
+        score: score,
+        posture: postureText,
+        summary: summaryText,
+        stacks: stacks.slice(),
+        actions: actions.slice(0, 5),
+        refs: currentRefs.slice()
+      };
       evidenceButton.textContent = "Explore " + currentRefs.length + " supporting references";
       root.querySelectorAll("[data-planner-key]").forEach(function (button) {
         var active = state[button.getAttribute("data-planner-key")] === button.getAttribute("data-planner-value");
         button.setAttribute("aria-pressed", active ? "true" : "false");
       });
       if (updateUrl) { writeScenarioUrl(); }
+    }
+
+    function persistScenarioComparison() {
+      try {
+        window.localStorage.setItem("rav-scenario-comparison", JSON.stringify({ a: scenarioA, b: scenarioB }));
+      } catch (err) { /* optional */ }
+    }
+
+    function scenarioCard(snapshot, slot) {
+      var card = el("article", "scenario-snapshot");
+      card.style.setProperty("--snapshot-color", snapshot.score >= 72 ? "#4B8B3B" : (snapshot.score >= 48 ? "#D99114" : "#BA0C2F"));
+      card.appendChild(el("span", "scenario-label", "Scenario " + slot));
+      card.appendChild(el("h5", null, snapshot.label.replace(/\//g, " · ")));
+      var score = el("p", "scenario-score-line");
+      score.appendChild(el("strong", null, String(snapshot.score)));
+      score.appendChild(el("span", null, snapshot.posture));
+      card.appendChild(score);
+      var stackList = el("ul");
+      snapshot.stacks.slice(0, 4).forEach(function (item) { stackList.appendChild(el("li", null, item)); });
+      card.appendChild(stackList);
+      var load = el("button", "paper-action", "Load scenario " + slot);
+      load.type = "button";
+      load.addEventListener("click", function () {
+        state = Object.assign({}, snapshot.state);
+        renderPlanner(true);
+      });
+      card.appendChild(load);
+      return card;
+    }
+
+    function renderScenarioComparison() {
+      if (!comparisonGrid) { return; }
+      while (comparisonGrid.firstChild) { comparisonGrid.removeChild(comparisonGrid.firstChild); }
+      if (!scenarioA && !scenarioB) {
+        comparisonGrid.appendChild(el("p", "scenario-empty", "Save the current configuration to A or B to compare readiness, stack requirements, and evidence."));
+        return;
+      }
+      if (scenarioA) { comparisonGrid.appendChild(scenarioCard(scenarioA, "A")); }
+      if (scenarioB) { comparisonGrid.appendChild(scenarioCard(scenarioB, "B")); }
+      if (scenarioA && scenarioB) {
+        var shared = scenarioA.stacks.filter(function (item) { return scenarioB.stacks.indexOf(item) !== -1; });
+        var uniqueA = scenarioA.stacks.filter(function (item) { return scenarioB.stacks.indexOf(item) === -1; });
+        var uniqueB = scenarioB.stacks.filter(function (item) { return scenarioA.stacks.indexOf(item) === -1; });
+        var delta = el("article", "scenario-comparison-delta");
+        delta.appendChild(el("strong", null, Math.abs(scenarioA.score - scenarioB.score) + "-point readiness difference"));
+        delta.appendChild(el("p", null, shared.length + " shared stack elements · " + uniqueA.length + " unique to A · " + uniqueB.length + " unique to B"));
+        var combinedRefs = Array.from(new Set(scenarioA.refs.concat(scenarioB.refs))).sort(function (a, b) { return a - b; });
+        var evidence = el("button", "paper-action", "Explore " + combinedRefs.length + " combined references");
+        evidence.type = "button";
+        evidence.addEventListener("click", function () {
+          setRecommendationFilter("Scenario A/B comparison", combinedRefs, null, "Scenario comparison");
+          document.getElementById("explorer").scrollIntoView({ behavior: "smooth" });
+        });
+        delta.appendChild(evidence);
+        comparisonGrid.appendChild(delta);
+      }
     }
 
     root.querySelectorAll("[data-planner-key]").forEach(function (button) {
@@ -1784,7 +1929,35 @@
         done();
       }
     });
+    if (saveAButton) {
+      saveAButton.addEventListener("click", function () {
+        scenarioA = JSON.parse(JSON.stringify(currentSnapshot));
+        persistScenarioComparison();
+        renderScenarioComparison();
+      });
+    }
+    if (saveBButton) {
+      saveBButton.addEventListener("click", function () {
+        scenarioB = JSON.parse(JSON.stringify(currentSnapshot));
+        persistScenarioComparison();
+        renderScenarioComparison();
+      });
+    }
+    if (clearComparisonButton) {
+      clearComparisonButton.addEventListener("click", function () {
+        scenarioA = null;
+        scenarioB = null;
+        persistScenarioComparison();
+        renderScenarioComparison();
+      });
+    }
+    try {
+      var storedComparison = JSON.parse(window.localStorage.getItem("rav-scenario-comparison") || "{}");
+      scenarioA = storedComparison.a || null;
+      scenarioB = storedComparison.b || null;
+    } catch (err) { scenarioA = null; scenarioB = null; }
     renderPlanner(false);
+    renderScenarioComparison();
   })();
 
   /* ---------- field-pilot map ---------- */
@@ -1867,6 +2040,69 @@
     var corridorNote = document.getElementById("map-corridor-note");
     var corridorLayer = null;
     var corridorVisible = false;
+    var compareA = document.getElementById("pilot-compare-a");
+    var compareB = document.getElementById("pilot-compare-b");
+    var compareRun = document.getElementById("pilot-compare-run");
+    var compareResult = document.getElementById("pilot-side-result");
+
+    function populatePilotCompare() {
+      if (!compareA || !compareB) { return; }
+      programs.forEach(function (program, index) {
+        var optionA = el("option", null, program.name);
+        optionA.value = program.key;
+        compareA.appendChild(optionA);
+        var optionB = el("option", null, program.name);
+        optionB.value = program.key;
+        compareB.appendChild(optionB);
+        if (index === 1) { optionB.selected = true; }
+      });
+    }
+
+    function pilotCompareCard(program) {
+      var card = el("article", "pilot-compare-card");
+      card.appendChild(el("span", "scenario-slot", program.modeLabel));
+      card.appendChild(el("h5", null, program.name));
+      card.appendChild(el("p", "pilot-compare-location", program.location));
+      card.appendChild(el("p", null, program.frame));
+      var lesson = el("p");
+      lesson.appendChild(el("strong", null, "Transfer lesson: "));
+      lesson.appendChild(document.createTextNode(program.lesson));
+      card.appendChild(lesson);
+      var evidence = el("button", "paper-action", "Open " + program.refs.length + " source record" + (program.refs.length === 1 ? "" : "s"));
+      evidence.type = "button";
+      evidence.addEventListener("click", function () {
+        setRecommendationFilter(program.label, program.refs, programCard(program), "Pilot comparison");
+        document.getElementById("explorer").scrollIntoView({ behavior: "smooth" });
+      });
+      card.appendChild(evidence);
+      return card;
+    }
+
+    function renderPilotComparison() {
+      if (!compareA || !compareB || !compareResult) { return; }
+      var first = programs.find(function (program) { return program.key === compareA.value; }) || programs[0];
+      var second = programs.find(function (program) { return program.key === compareB.value; }) || programs[1];
+      while (compareResult.firstChild) { compareResult.removeChild(compareResult.firstChild); }
+      compareResult.appendChild(pilotCompareCard(first));
+      compareResult.appendChild(pilotCompareCard(second));
+      var insight = el("article", "pilot-shared");
+      insight.appendChild(el("span", "scenario-slot", "Shared lesson"));
+      insight.appendChild(el("h5", null, first.mode === second.mode ? "Comparable service models" : "Different service models, shared safety constraints"));
+      insight.appendChild(el("p", null,
+        first.mode === second.mode
+          ? "Compare route context, interruptions, and operator dependence without changing the basic service model."
+          : "Demand-responsive and fixed-route service organize riders differently, but both remain geofenced, supervised, and dependent on explicit fallback procedures."
+      ));
+      compareResult.appendChild(insight);
+      if (map) {
+        map.fitBounds(L.latLngBounds([first.coords, second.coords]).pad(.45), { maxZoom: 6, animate: true });
+      }
+    }
+    populatePilotCompare();
+    if (compareRun) { compareRun.addEventListener("click", renderPilotComparison); }
+    if (compareA) { compareA.addEventListener("change", renderPilotComparison); }
+    if (compareB) { compareB.addEventListener("change", renderPilotComparison); }
+    renderPilotComparison();
 
     function programCard(program) {
       return document.querySelector('.pilot-card[data-label="' + program.label + '"]');
@@ -2080,7 +2316,7 @@
       vehicle: "RAV team: prioritize multi-sensor perception, fused localization, rural training data, and onboard fallback.",
       fleet: "Fleet operator: align dispatch, charging, supervision, and service recovery with thin rural demand.",
       road: "DOT & planners: assess roads first, upgrade selectively, and maintain shared digital road information.",
-      connect: "Connectivity partners: design for dead zones, secure every link, and keep safety-critical control onboard.",
+      connect: "Connectivity partners: design for dead zones, combine resilient channels, and keep safety-critical control onboard.",
       pilot: "Program & community partners: use explicit safety gates, accessible service design, and comparable public reporting."
     };
     var activeStakeholder = "all";
@@ -2177,6 +2413,15 @@
     var pillars = document.querySelectorAll(".fw-pillar");
     var subpillars = document.querySelectorAll(".fw-subpillar");
     if (!detail || !pillars.length) { return; }
+    var card = document.querySelector(".thesis-card");
+    var flowToggle = document.getElementById("framework-flow-toggle");
+    var flowPath = document.getElementById("framework-flow-path");
+    var openEvidence = document.getElementById("framework-open-evidence");
+    var openReferences = document.getElementById("framework-open-references");
+    var flowMode = true;
+    var flowLocked = false;
+    var selectedFlow = { cat: null, subcat: null, refs: [], theme: null };
+    if (card) { card.classList.add("flow-mode"); }
     var INFO = {
       "Autonomous Driving": ["Tier 1 · Existing", "Four linked submodules carry rural driving: perception, localization, heterogeneous data integration, and route planning. Rural data and field validation remain the shared gap."],
       "Perception": ["Autonomous Driving submodule", "Camera, radar, LiDAR, and IMU fusion improves coverage and redundancy. RAV must retrain and validate the stack on faded markings, unpaved roads, occlusion, and adverse weather."],
@@ -2194,7 +2439,6 @@
       "Communication": ["Tier 2 · Advanced", "RAV combines direct and network-based V2X with cellular and LEO satellite links, switches by coverage and latency, and maintains safe onboard operation during disconnections."],
       "Rural V2X Communication": ["Communication submodule", "V2V, V2I, and V2N exchange over C-V2X and 5G NR-V2X extends awareness beyond onboard sensing. Rural deployment must tolerate dead zones, long disconnections, sparse roadside units, and variable quality of service."],
       "Multi-Channel Communication": ["Communication submodule", "C-V2X, public cellular, and LEO satellite links improve reach and resilience when one network fails. RAV must decide when to switch links, what each should carry, and which safety-critical functions must remain onboard."],
-      "V2X Cybersecurity": ["Communication submodule", "Authentication, encryption, integrity checks, and message verification protect vehicles, infrastructure, and shared data. The mechanisms must remain effective under constrained bandwidth and intermittent connectivity."],
       "Cooperative Driving": ["Tier 2 · Advanced", "Shared perception and coordinated control extend rural AVs to arterials, work and school zones, rail crossings, and extreme weather, with safety-critical computing retained onboard."],
       "Cooperative Perception": ["Cooperative Driving submodule", "Vehicles and roadside infrastructure share sensor data, features, or detected objects to extend field of view and reduce blind spots. RAV must tolerate sparse sensors, delayed messages, and incomplete shared information."],
       "Rural-Arterial Control": ["Cooperative Driving submodule", "CACC, platooning, and edge roadside-unit support coordinate speed and traffic interaction on arterials. RAV must adapt these methods to low-volume mixed traffic, intermittent links, selective RSU placement, and onboard safety-critical control."],
@@ -2202,6 +2446,25 @@
       "Rail Grade Crossings": ["Cooperative Driving submodule", "V2I warnings communicate train approach, crossing state, and violation risk. RAV must extend the approach beyond instrumented crossings to passive, unconnected rural sites."],
       "Cooperative Response to Extreme Weather": ["Cooperative Driving submodule", "Road-weather observations and cooperative perception provide earlier hazard warnings and support speed adjustment or rerouting. RAV must work with sparse weather sensors and preserve safe onboard operation when infrastructure information disappears."],
       "Pilots": ["Field validation", "Five source records cover four named programs: goMARTI in Grand Rapids, ADASTEC at Sleeping Bear Dunes, TEDDY at Yellowstone, and CASSI at Wright Brothers and four other N.C. project sites. Together they provide on-demand and fixed-route operating evidence with safety operators on board. Click to see their references."]
+    };
+    var FLOW = {
+      "Perception": { path: "Single-sensor limits → multi-sensor fusion → adverse-weather validation", theme: "Perception - single-sensor limitations", related: ["Perception", "Data Integration"] },
+      "Localization": { path: "GNSS / LiDAR limits → multi-source localization → locally maintained map prior", theme: "Localization - GNSS/LiDAR limits", related: ["Localization", "Digital Infrastructure"] },
+      "Data Integration": { path: "Raw streams → onboard reconciliation → optional fleet and roadside context", theme: "Data integration - onboard raw & semantic", related: ["Data Integration", "Digital Infrastructure"] },
+      "Route Planning": { path: "Terrain and energy constraints → feasible route → calibrated rural service", theme: "Routing - energy & terrain aware", related: ["Route Planning"] },
+      "Dispatch & Matching": { path: "Rider request → vehicle matching → dynamic dispatch → fleet oversight", theme: "On-demand dispatch & ride-matching", related: ["Dispatch & Matching", "Fleet Support", "Remote Supervision"] },
+      "Remote Supervision": { path: "Vehicle alert → remote assessment → bounded intervention → safe fallback", theme: "Remote monitoring & supervision", related: ["Remote Supervision", "Fleet Support"] },
+      "Fixed-Route Scheduling": { path: "Thin demand → headway and energy plan → service recovery", theme: "Fixed-route dispatch & scheduling", related: ["Fixed-Route Scheduling", "Fleet Support"] },
+      "Fleet Support": { path: "Vehicle health → charging and maintenance → service readiness", theme: "Fleet support - charging, monitoring & fares", related: ["Fleet Support"] },
+      "Physical Road Assessment": { path: "Corridor survey → segment condition → targeted physical upgrade", theme: "Physical road assessment", related: ["Physical Road Assessment", "Digital Infrastructure"] },
+      "Digital Infrastructure": { path: "Map and roadside observations → digital road layer → selective vehicle support", theme: "Digital Infrastructure", related: ["Digital Infrastructure"] },
+      "Rural V2X Communication": { path: "Measured corridor coverage → direct / network exchange → onboard fallback", theme: "Rural V2X Communication", related: ["Rural V2X Communication", "Multi-Channel Communication"] },
+      "Multi-Channel Communication": { path: "Link degradation → channel switch → delayed noncritical synchronization", theme: "Multi-Channel Communication", related: ["Multi-Channel Communication"] },
+      "Cooperative Perception": { path: "Onboard blind spot → shared observation → confidence check → safe fallback", theme: "Cooperative perception", related: ["Cooperative Perception", "Rural-Arterial Control"] },
+      "Rural-Arterial Control": { path: "Shared awareness → selective roadside assistance → coordinated motion", theme: "Infrastructure-assisted control & handover", related: ["Rural-Arterial Control"] },
+      "Work & School Zones and Handover": { path: "Temporary conflict → connected warning → low-speed response → fallback", theme: "Work & school zones", related: ["Work & School Zones and Handover"] },
+      "Rail Grade Crossings": { path: "Crossing state → early warning → onboard stop decision", theme: "Rail grade crossings", related: ["Rail Grade Crossings"] },
+      "Cooperative Response to Extreme Weather": { path: "Weather observation → cooperative warning → speed adjustment or rerouting", theme: "Cooperative Response to Extreme Weather", related: ["Cooperative Response to Extreme Weather"] }
     };
     var DEFAULT = ["Two tiers, one system", "Existing technology carries the service today; advanced, infrastructure-integrated technology extends it; four named field-pilot programs ground it in practice. Hover a module."];
     var tagEl = detail.querySelector(".td-tag");
@@ -2211,29 +2474,65 @@
       var d = INFO[key] || DEFAULT;
       tagEl.textContent = d[0] + " · " + key;
       txtEl.textContent = d[1];
+      var flow = FLOW[substage] || null;
+      selectedFlow = { cat: stage, subcat: substage || null, refs: [], theme: flow ? flow.theme : null };
+      if (substage) {
+        subpillars.forEach(function (node) {
+          if (node.getAttribute("data-subcat") === substage) {
+            selectedFlow.refs = node.getAttribute("data-refs").split(",").map(Number);
+          }
+        });
+      }
+      if (flowPath) { flowPath.textContent = flow ? flow.path : stage + " → supporting evidence → rural validation"; }
+      if (openEvidence) { openEvidence.disabled = !selectedFlow.theme; }
       pillars.forEach(function (p) { p.classList.toggle("active", p.getAttribute("data-cat") === stage); });
       subpillars.forEach(function (p) { p.classList.toggle("active", p.getAttribute("data-subcat") === substage); });
+      if (flowMode) {
+        var related = flow ? flow.related : [];
+        pillars.forEach(function (p) {
+          p.classList.toggle("flow-dim", p.getAttribute("data-cat") !== stage);
+          p.classList.toggle("flow-active", p.getAttribute("data-cat") === stage);
+        });
+        subpillars.forEach(function (p) {
+          var active = related.indexOf(p.getAttribute("data-subcat")) !== -1;
+          p.classList.toggle("flow-active", active);
+          p.classList.toggle("flow-dim", related.length > 0 && !active);
+        });
+      }
     }
     function clear() {
       tagEl.textContent = DEFAULT[0];
       txtEl.textContent = DEFAULT[1];
       pillars.forEach(function (p) { p.classList.remove("active"); });
       subpillars.forEach(function (p) { p.classList.remove("active"); });
+      pillars.forEach(function (p) { p.classList.remove("flow-dim", "flow-active"); });
+      subpillars.forEach(function (p) { p.classList.remove("flow-dim", "flow-active"); });
+      if (flowPath) { flowPath.textContent = "Select a submodule to reveal its evidence-to-action path."; }
+      selectedFlow = { cat: null, subcat: null, refs: [], theme: null };
+      flowLocked = false;
+      if (openEvidence) { openEvidence.disabled = true; }
     }
     pillars.forEach(function (p) {
       var s = p.getAttribute("data-cat");
       p.addEventListener("mouseenter", function () { show(s); });
       p.addEventListener("focus", function () { show(s); });
       p.addEventListener("click", function () {
-        setCatFilter(s);
-        document.getElementById("explorer").scrollIntoView({ behavior: "smooth" });
+        show(s);
+        flowLocked = true;
+        if (!flowMode) {
+          setCatFilter(s);
+          document.getElementById("explorer").scrollIntoView({ behavior: "smooth" });
+        }
       });
       p.addEventListener("keydown", function (e) {
         if (e.key === "Enter" || e.key === " ") {
           e.preventDefault();
           show(s);
-          setCatFilter(s);
-          document.getElementById("explorer").scrollIntoView({ behavior: "smooth" });
+          flowLocked = true;
+          if (!flowMode) {
+            setCatFilter(s);
+            document.getElementById("explorer").scrollIntoView({ behavior: "smooth" });
+          }
         }
       });
     });
@@ -2244,19 +2543,58 @@
       p.addEventListener("mouseenter", function () { show(cat, subcat); });
       p.addEventListener("focus", function () { show(cat, subcat); });
       p.addEventListener("click", function () {
-        setSubthemeFilter(cat, subcat, refs);
-        document.getElementById("explorer").scrollIntoView({ behavior: "smooth" });
-      });
-      p.addEventListener("keydown", function (e) {
-        if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault();
+        show(cat, subcat);
+        selectedFlow.refs = refs;
+        flowLocked = true;
+        if (!flowMode) {
           setSubthemeFilter(cat, subcat, refs);
           document.getElementById("explorer").scrollIntoView({ behavior: "smooth" });
         }
       });
+      p.addEventListener("keydown", function (e) {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          show(cat, subcat);
+          selectedFlow.refs = refs;
+          flowLocked = true;
+          if (!flowMode) {
+            setSubthemeFilter(cat, subcat, refs);
+            document.getElementById("explorer").scrollIntoView({ behavior: "smooth" });
+          }
+        }
+      });
     });
-    var card = document.querySelector(".thesis-card");
-    if (card) { card.addEventListener("mouseleave", clear); }
+    if (flowToggle) {
+      flowToggle.addEventListener("click", function () {
+        flowMode = !flowMode;
+        if (card) { card.classList.toggle("flow-mode", flowMode); }
+        flowToggle.setAttribute("aria-pressed", flowMode ? "true" : "false");
+        flowToggle.textContent = flowMode ? "Flow mode on" : "Flow mode off";
+        if (!flowMode) { clear(); }
+      });
+    }
+    if (openEvidence) {
+      openEvidence.disabled = true;
+      openEvidence.addEventListener("click", function () {
+        if (selectedFlow.theme && window.openEvidenceTheme) { window.openEvidenceTheme(selectedFlow.theme, true); }
+      });
+    }
+    if (openReferences) {
+      openReferences.addEventListener("click", function () {
+        if (!selectedFlow.cat) { return; }
+        if (selectedFlow.subcat && selectedFlow.refs.length) {
+          setSubthemeFilter(selectedFlow.cat, selectedFlow.subcat, selectedFlow.refs);
+        } else {
+          setCatFilter(selectedFlow.cat);
+        }
+        document.getElementById("explorer").scrollIntoView({ behavior: "smooth" });
+      });
+    }
+    if (card) {
+      card.addEventListener("mouseleave", function () {
+        if (!flowMode || !flowLocked) { clear(); }
+      });
+    }
   })();
 
   /* ---------- evidence map ---------- */
@@ -2265,6 +2603,11 @@
     var emap = document.getElementById("emap");
     var edetail = document.getElementById("emap-detail");
     if (!emap || !edetail) { return; }
+    var pinnedThemes = [];
+    var selectedCount = document.getElementById("evidence-selected-count");
+    var overlapSummary = document.getElementById("evidence-overlap-summary");
+    var compareSelected = document.getElementById("evidence-compare-selected");
+    var clearSelected = document.getElementById("evidence-clear-selected");
     var THEMES = [
       {
         cat: "Autonomous Driving", title: "Perception - single-sensor limitations", status: "r", refs: [1,18,20,64],
@@ -2406,20 +2749,10 @@
       },
       {
         cat: "Communication", title: "Multi-Channel Communication", status: "m", refs: [8,92,93,94,103],
-        progression: [
-          { label: "Every channel must use", target: "V2X cybersecurity" }
-        ],
         definition: ["Combines C-V2X, public cellular, and LEO satellite interfaces.", "Uses an alternate path when one network is unavailable."],
         pros: ["Improves communication reach and resilience.", "Provides an alternate path when one network is unavailable."],
         cons: ["Adds hardware cost, switching complexity, and energy use.", "Satellite links may introduce additional latency."],
         rav: ["Measure coverage and latency along service corridors.", "Switch channels by policy.", "Keep time-critical control onboard and use wide-area links for supplementary information."]
-      },
-      {
-        cat: "Communication", title: "V2X cybersecurity", status: "g", refs: [44,45,99,100,101,102],
-        definition: ["Uses authentication, encryption, integrity checks, and message verification.", "Protects V2X messages, networks, and devices."],
-        pros: ["Addresses spoofing, message manipulation, eavesdropping, and denial of service.", "Improves trust across connected vehicles and infrastructure."],
-        cons: ["Adds communication and computation overhead.", "Requires ongoing certificate, key, logging, and incident-response operations."],
-        rav: ["Apply security across every communication channel before deployment.", "Plan certificate, key, logging, and incident-response operations."]
       },
       {
         cat: "Cooperative Driving", title: "Cooperative perception", status: "m", refs: [10,35,104,105,106,108,109],
@@ -2535,7 +2868,10 @@
         pill.title = t.refs.length + " supporting references. Show definition, pros, cons, rural gap, and RAV action.";
         pill.addEventListener("mouseenter", function () { showDetail(t, pill); });
         pill.addEventListener("focus", function () { showDetail(t, pill); });
-        pill.addEventListener("click", function () { showDetail(t, pill); });
+        pill.addEventListener("click", function (event) {
+          showDetail(t, pill);
+          if (event.shiftKey || event.ctrlKey || event.metaKey) { togglePinnedTheme(t, pill); }
+        });
         cells.appendChild(pill);
         if (!initialTheme) { initialTheme = { theme: t, pill: pill }; }
       });
@@ -2656,6 +2992,13 @@
         if (window.addThemeToCompare) { window.addThemeToCompare(t.title, true); }
       });
       edetail.appendChild(compareButton);
+      var pinButton = el("button", "ed-compare", pinnedThemes.indexOf(t.title) === -1 ? "Pin for multi-select" : "Unpin theme");
+      pinButton.type = "button";
+      pinButton.addEventListener("click", function () {
+        togglePinnedTheme(t, pill);
+        pinButton.textContent = pinnedThemes.indexOf(t.title) === -1 ? "Pin for multi-select" : "Unpin theme";
+      });
+      edetail.appendChild(pinButton);
       var explore = el("button", "ed-explore", "Explore " + t.refs.length + " supporting reference" + (t.refs.length === 1 ? "" : "s") + " in the literature explorer");
       explore.type = "button";
       explore.addEventListener("click", function () {
@@ -2663,6 +3006,48 @@
         document.getElementById("explorer").scrollIntoView({ behavior: "smooth" });
       });
       edetail.appendChild(explore);
+    }
+    function updatePinnedThemes() {
+      var selected = THEMES.filter(function (theme) { return pinnedThemes.indexOf(theme.title) !== -1; });
+      emap.querySelectorAll(".epill").forEach(function (pill) {
+        pill.classList.toggle("is-pinned", pinnedThemes.indexOf(pill.getAttribute("data-theme-title")) !== -1);
+      });
+      if (selectedCount) { selectedCount.textContent = String(selected.length); }
+      if (compareSelected) { compareSelected.disabled = selected.length < 2; }
+      if (clearSelected) { clearSelected.disabled = selected.length === 0; }
+      if (!overlapSummary) { return; }
+      if (!selected.length) {
+        overlapSummary.textContent = "Shift-click themes, or use Pin in the detail card, to compare evidence overlap.";
+        return;
+      }
+      var union = [];
+      selected.forEach(function (theme) {
+        theme.refs.forEach(function (ref) { if (union.indexOf(ref) === -1) { union.push(ref); } });
+      });
+      var intersection = selected[0].refs.filter(function (ref) {
+        return selected.every(function (theme) { return theme.refs.indexOf(ref) !== -1; });
+      });
+      overlapSummary.textContent = union.length + " unique references · " + intersection.length +
+        " shared across every pinned theme";
+    }
+    function togglePinnedTheme(theme, pill) {
+      var index = pinnedThemes.indexOf(theme.title);
+      if (index === -1) { pinnedThemes.push(theme.title); } else { pinnedThemes.splice(index, 1); }
+      if (pill) { pill.classList.toggle("is-pinned", index === -1); }
+      updatePinnedThemes();
+    }
+    if (compareSelected) {
+      compareSelected.addEventListener("click", function () {
+        pinnedThemes.slice(0, 4).forEach(function (title, index, values) {
+          if (window.addThemeToCompare) { window.addThemeToCompare(title, index === values.length - 1); }
+        });
+      });
+    }
+    if (clearSelected) {
+      clearSelected.addEventListener("click", function () {
+        pinnedThemes = [];
+        updatePinnedThemes();
+      });
     }
     window.openEvidenceTheme = function (title, shouldScroll) {
       var theme = THEMES.find(function (candidate) { return candidate.title === title; });
@@ -2679,6 +3064,7 @@
         document.getElementById("evidence").scrollIntoView({ behavior: "smooth", block: "start" });
       }
     };
+    updatePinnedThemes();
     if (initialTheme) { showDetail(initialTheme.theme, initialTheme.pill); }
   })();
 
@@ -2742,7 +3128,6 @@
       "Digital Infrastructure": [520, 455],
       "Rural V2X Communication": [190, 550],
       "Multi-Channel Communication": [520, 550],
-      "V2X cybersecurity": [850, 550],
       "Cooperative perception": [160, 665],
       "Infrastructure-assisted control & handover": [445, 665],
       "CACC & platooning": [760, 610],
@@ -3469,6 +3854,189 @@
       }
     }, { passive: true });
     updateProgress();
+  })();
+
+  /* ---------- statistics year-range brush ---------- */
+
+  (function () {
+    var minInput = document.getElementById("year-brush-min");
+    var maxInput = document.getElementById("year-brush-max");
+    var minValue = document.getElementById("year-brush-min-value");
+    var maxValue = document.getElementById("year-brush-max-value");
+    if (!minInput || !maxInput) { return; }
+    var earliest = Math.min.apply(null, yearsPresent);
+    var latest = Math.max.apply(null, yearsPresent);
+    [minInput, maxInput].forEach(function (input) {
+      input.min = String(earliest);
+      input.max = String(latest);
+    });
+    minInput.value = String(earliest);
+    maxInput.value = String(latest);
+
+    function updateLabels() {
+      if (minValue) { minValue.textContent = minInput.value; }
+      if (maxValue) { maxValue.textContent = maxInput.value; }
+    }
+    function applyYearBrush(event) {
+      var minimum = Number(minInput.value);
+      var maximum = Number(maxInput.value);
+      if (minimum > maximum) {
+        if (event && event.target === minInput) { maxInput.value = String(minimum); maximum = minimum; }
+        else { minInput.value = String(maximum); minimum = maximum; }
+      }
+      filters.year.clear();
+      if (minimum !== earliest || maximum !== latest) {
+        yearsPresent.forEach(function (year) {
+          if (year >= minimum && year <= maximum) { filters.year.add(String(year)); }
+        });
+      }
+      paperScope = null;
+      scopeLabel = "";
+      clearRecommendationActive();
+      syncDropdownFilter("year");
+      updateLabels();
+      render();
+    }
+    window.syncYearBrushFromFilters = function () {
+      if (!filters.year.size) {
+        minInput.value = String(earliest);
+        maxInput.value = String(latest);
+      } else {
+        var selectedYears = Array.from(filters.year).map(Number);
+        minInput.value = String(Math.min.apply(null, selectedYears));
+        maxInput.value = String(Math.max.apply(null, selectedYears));
+      }
+      updateLabels();
+    };
+    minInput.addEventListener("input", applyYearBrush);
+    maxInput.addEventListener("input", applyYearBrush);
+    updateLabels();
+  })();
+
+  /* ---------- research workspace / citation cart ---------- */
+
+  (function () {
+    var count = document.getElementById("workspace-count");
+    var toggle = document.getElementById("workspace-toggle");
+    var panel = document.getElementById("workspace-panel");
+    var list = document.getElementById("workspace-list");
+    var related = document.getElementById("workspace-related");
+    var filterButton = document.getElementById("workspace-filter");
+    var copyButton = document.getElementById("workspace-copy");
+    var exportButton = document.getElementById("workspace-export");
+    var clearButton = document.getElementById("workspace-clear");
+    if (!count || !toggle || !panel || !list) { return; }
+    var saved = new Set();
+    try {
+      JSON.parse(window.localStorage.getItem("rav-citation-cart") || "[]").forEach(function (number) {
+        if (PAPERS.some(function (paper) { return paper.n === Number(number); })) { saved.add(Number(number)); }
+      });
+    } catch (err) { saved = new Set(); }
+
+    function savedPapers() {
+      return sortPapers(PAPERS.filter(function (paper) { return saved.has(paper.n); }));
+    }
+    function persist() {
+      try { window.localStorage.setItem("rav-citation-cart", JSON.stringify(Array.from(saved))); } catch (err) { /* optional */ }
+    }
+    function updateWorkspaceButtons() {
+      var disabled = saved.size === 0;
+      [filterButton, copyButton, exportButton, clearButton].forEach(function (button) {
+        if (button) { button.disabled = disabled; }
+      });
+    }
+    function renderWorkspace() {
+      var papers = savedPapers();
+      count.textContent = String(papers.length);
+      count.setAttribute("aria-label", papers.length + " saved reference" + (papers.length === 1 ? "" : "s"));
+      while (list.firstChild) { list.removeChild(list.firstChild); }
+      if (!papers.length) {
+        list.appendChild(el("p", "workspace-empty", "Open a reference and choose Save to Citation Cart."));
+      } else {
+        papers.forEach(function (paper) {
+          var item = el("article", "workspace-item");
+          item.appendChild(el("span", "workspace-ref", "[" + paper.n + "]"));
+          var text = el("div");
+          text.appendChild(el("strong", null, paper.title));
+          text.appendChild(el("small", null, paper.cat + " · " + paper.year));
+          item.appendChild(text);
+          var remove = el("button", "paper-action", "×");
+          remove.type = "button";
+          remove.setAttribute("aria-label", "Remove reference " + paper.n + " from Citation Cart");
+          remove.addEventListener("click", function () { window.toggleWorkspacePaper(paper.n); });
+          item.appendChild(remove);
+          list.appendChild(item);
+        });
+      }
+      if (related) {
+        while (related.firstChild) { related.removeChild(related.firstChild); }
+        var links = LINEAGE_EDGES.filter(function (edge) {
+          var from = paperByKey[edge.from];
+          var to = paperByKey[edge.to];
+          return from && to && saved.has(from.n) && saved.has(to.n);
+        });
+        related.appendChild(el("strong", null, links.length ? links.length + " mapped relationship" + (links.length === 1 ? "" : "s") : "No mapped relationships inside this cart yet"));
+        links.slice(0, 8).forEach(function (edge) {
+          related.appendChild(el("p", "workspace-relation", "[" + paperByKey[edge.from].n + "] ↔ [" + paperByKey[edge.to].n + "] · " + edge.rel));
+        });
+      }
+      updateWorkspaceButtons();
+    }
+    window.isPaperSaved = function (number) { return saved.has(Number(number)); };
+    window.toggleWorkspacePaper = function (number, button) {
+      number = Number(number);
+      if (saved.has(number)) { saved.delete(number); } else { saved.add(number); }
+      persist();
+      renderWorkspace();
+      if (button) {
+        button.textContent = saved.has(number) ? "Saved to Citation Cart" : "Save to Citation Cart";
+        button.classList.toggle("workspace-saved", saved.has(number));
+      }
+    };
+    toggle.addEventListener("click", function () {
+      panel.hidden = !panel.hidden;
+      toggle.setAttribute("aria-expanded", panel.hidden ? "false" : "true");
+      toggle.textContent = panel.hidden ? "Open workspace" : "Close workspace";
+    });
+    if (filterButton) {
+      filterButton.addEventListener("click", function () {
+        var numbers = Array.from(saved).sort(function (a, b) { return a - b; });
+        if (!numbers.length) { return; }
+        setRecommendationFilter("Citation Cart", numbers, null, "Research workspace");
+        document.getElementById("explorer").scrollIntoView({ behavior: "smooth" });
+      });
+    }
+    if (copyButton) {
+      copyButton.addEventListener("click", function () {
+        copyText(savedPapers().map(formatReference).join("\n\n"), copyButton, "Copy citations");
+      });
+    }
+    if (exportButton) {
+      exportButton.addEventListener("click", function () {
+        var entries = savedPapers().map(function (paper) {
+          var type = paper.vtype === "Journal" ? "article" : (paper.vtype === "Conference" ? "inproceedings" : "misc");
+          var fields = [
+            "  title = {" + bibValue(paper.title) + "}",
+            "  author = {" + bibValue(paper.authors) + "}",
+            "  year = {" + paper.year + "}",
+            "  note = {" + bibValue(paper.venue) + "}"
+          ];
+          if (paper.doi) { fields.push("  doi = {" + bibValue(paper.doi) + "}"); }
+          else if (paper._link) { fields.push("  url = {" + bibValue(paper._link) + "}"); }
+          return "@" + type + "{rav" + paper.year + "ref" + paper.n + ",\n" + fields.join(",\n") + "\n}";
+        });
+        downloadText("rav-citation-cart.bib", entries.join("\n\n") + "\n", "application/x-bibtex");
+      });
+    }
+    if (clearButton) {
+      clearButton.addEventListener("click", function () {
+        saved.clear();
+        persist();
+        renderWorkspace();
+        renderTables(currentFiltered);
+      });
+    }
+    renderWorkspace();
   })();
 
   /* ---------- init ---------- */
