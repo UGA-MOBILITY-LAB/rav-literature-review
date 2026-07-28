@@ -2112,7 +2112,9 @@
     var THEMES = [
       {
         cat: "Autonomous Driving", title: "Perception - single-sensor limitations", status: "r", refs: [1,18,20,64],
-        leadsTo: "Perception - multi-sensor fusion",
+        progression: [
+          { label: "Limitation motivates", target: "Perception - multi-sensor fusion" }
+        ],
         definition: ["Uses one sensor modality, typically a monocular camera.", "Detects lanes, obstacles, pedestrians, animals, and signs."],
         pros: ["Low sensor and compute cost.", "Simple calibration and lightweight processing."],
         cons: ["Limited range and field of view.", "Sensitive to glare, low light, occlusion, faded markings, and unpaved surfaces."],
@@ -2120,6 +2122,9 @@
       },
       {
         cat: "Autonomous Driving", title: "Perception - multi-sensor fusion", status: "m", refs: [2,17,18,19,20,56,57,58,59,63,64],
+        progression: [
+          { label: "Must be validated under", target: "Perception - adverse weather" }
+        ],
         definition: ["Combines camera, radar, LiDAR, and IMU data.", "Produces one aligned detection set for ego motion and scene understanding."],
         pros: ["Improves range, weather robustness, 3-D geometry, and redundancy.", "Outperforms a single sensor in complex scenes."],
         cons: ["Raises sensor and compute cost.", "Requires careful calibration, timing, and synchronization."],
@@ -2133,7 +2138,10 @@
         rav: ["Build a local adverse-weather dataset.", "Set fallback thresholds for the service area.", "Keep safe onboard behavior when cooperative information is unavailable."]
       },
       {
-        cat: "Autonomous Driving", title: "Localization - GNSS/LiDAR limits", status: "m", refs: [1,2,61,62],
+        cat: "Autonomous Driving", title: "Localization - GNSS/LiDAR limits", status: "r", refs: [1,2,61,62],
+        progression: [
+          { label: "Limitation motivates", target: "Localization - fusion with HD maps" }
+        ],
         definition: ["GNSS/INS provides a global satellite position.", "LiDAR matches live scans against known road geometry."],
         pros: ["GNSS is affordable and globally referenced.", "LiDAR can remain precise without satellite signals."],
         cons: ["GNSS drifts under canopy and in valleys.", "Sparse or repetitive rural geometry makes LiDAR-only matching ambiguous."],
@@ -2148,6 +2156,9 @@
       },
       {
         cat: "Autonomous Driving", title: "Data integration - onboard raw & semantic", status: "g", refs: [17,18,19,57,63],
+        progression: [
+          { label: "Extends toward", target: "Data integration - heterogeneous & aggregated" }
+        ],
         definition: ["Fuses raw camera, radar, and LiDAR streams onboard.", "Produces detections, pose, trajectory, and control state."],
         pros: ["Preserves rich sensor detail with low latency.", "Operates independently of network coverage."],
         cons: ["Carries the highest onboard bandwidth and compute load.", "Output quality remains bounded by sensor quality."],
@@ -2176,6 +2187,10 @@
       },
       {
         cat: "Fleet Management", title: "On-demand dispatch & ride-matching", status: "g", refs: [5,28,29,30,31,68,70,71,73,75],
+        progression: [
+          { label: "Requires an operations layer", target: "Fleet support - charging, monitoring & fares" },
+          { label: "Requires an oversight layer", target: "Remote monitoring & supervision" }
+        ],
         definition: ["Uses incoming rider requests and live fleet status.", "Assigns, matches, sequences, and rebalances vehicles in real time."],
         pros: ["Reduces rider waiting and empty vehicle travel.", "Supports vehicle assignment under low-density demand."],
         cons: ["Requires live requests and a reliable matching engine.", "Needs enough vehicles to maintain acceptable wait times."],
@@ -2183,6 +2198,10 @@
       },
       {
         cat: "Fleet Management", title: "Fixed-route dispatch & scheduling", status: "r", refs: [16,69,77,78],
+        progression: [
+          { label: "Requires an operations layer", target: "Fleet support - charging, monitoring & fares" },
+          { label: "Requires an oversight layer", target: "Remote monitoring & supervision" }
+        ],
         definition: ["Vehicles repeat a preset route.", "Headway and timetable planning set departure times and vehicle spacing."],
         pros: ["Predictable for riders.", "Operationally simple on a repeated route."],
         cons: ["Thin demand can create long waits and poor utilization.", "Fixed schedules adapt poorly to day-to-day demand variation."],
@@ -2204,6 +2223,9 @@
       },
       {
         cat: "Infrastructure", title: "Physical road assessment", status: "m", refs: [39,46,47,48,49,80,81,82,83,84,85,86,87,88],
+        progression: [
+          { label: "Survey data enables", target: "Digital Infrastructure" }
+        ],
         definition: ["Uses UAV, smartphone, imaging, and mobile-LiDAR surveys.", "Detects pavement damage, markings, signs, geometry, and gravel-road condition."],
         pros: ["Reusable survey methods can lower network-inspection cost.", "UAV, smartphone, imaging, and mobile LiDAR cover complementary road features."],
         cons: ["Separate survey tools can produce fragmented road-condition data.", "Integration and prioritization add workflow and data-management complexity."],
@@ -2218,6 +2240,9 @@
       },
       {
         cat: "Communication", title: "Rural V2X Communication", status: "r", refs: [9,50,51,52,92,93,95,96,97,98,103],
+        progression: [
+          { label: "Coverage limits motivate", target: "Multi-Channel Communication" }
+        ],
         definition: ["V2V, V2I, and V2N links exchange hazard, traffic, road-condition, and coordination data.", "Uses C-V2X and 5G NR-V2X."],
         pros: ["Enables direct and network-based exchange of hazards and road conditions.", "Supports coordination beyond onboard sensing range."],
         cons: ["Rural measurements show weaker coverage and longer disconnections.", "Interference, mobility, energy, and resource allocation affect quality of service."],
@@ -2225,6 +2250,9 @@
       },
       {
         cat: "Communication", title: "Multi-Channel Communication", status: "m", refs: [8,92,93,94,103],
+        progression: [
+          { label: "Every channel must use", target: "V2X cybersecurity" }
+        ],
         definition: ["Combines C-V2X, public cellular, and LEO satellite interfaces.", "Uses an alternate path when one network is unavailable."],
         pros: ["Improves communication reach and resilience.", "Provides an alternate path when one network is unavailable."],
         cons: ["Adds hardware cost, switching complexity, and energy use.", "Satellite links may introduce additional latency."],
@@ -2239,6 +2267,9 @@
       },
       {
         cat: "Cooperative Driving", title: "Cooperative perception", status: "m", refs: [10,35,104,105,106,108,109],
+        progression: [
+          { label: "Shared awareness enables", target: "Infrastructure-assisted control & handover" }
+        ],
         definition: ["Vehicles and roadside infrastructure share sensor data or detected objects.", "Extends field of view and reduces blind spots."],
         pros: ["Extends awareness through occlusion and adverse weather.", "Reduces blind spots by sharing vehicle and roadside observations."],
         cons: ["Requires reliable links and accurate spatial-temporal alignment.", "Roadside equipment and delayed or incorrect data create additional risks."],
@@ -2246,6 +2277,12 @@
       },
       {
         cat: "Cooperative Driving", title: "Infrastructure-assisted control & handover", status: "m", refs: [34,36,107,108,114,115],
+        progression: [
+          { label: "Applied to coordinated motion", target: "CACC & platooning" },
+          { label: "Applied at conflict points", target: "Work & school zones" },
+          { label: "Applied at conflict points", target: "Rail grade crossings" },
+          { label: "Applied during disruptions", target: "Cooperative Response to Extreme Weather" }
+        ],
         definition: ["Edge roadside units support cooperative driving services.", "Assists vehicles when automation reaches an operational limit."],
         pros: ["Can reduce response latency.", "Can assist vehicles at known high-risk locations."],
         cons: ["Assumes dense and reliable roadside coverage.", "Rural networks may not justify or maintain that infrastructure density."],
@@ -2433,21 +2470,27 @@
       ravBlock.appendChild(ravList);
       grid.appendChild(ravBlock);
       edetail.appendChild(grid);
-      if (t.leadsTo) {
-        var nextTheme = THEMES.find(function (candidate) { return candidate.title === t.leadsTo; });
-        var nextPill = emap.querySelector('[data-theme-title="' + t.leadsTo + '"]');
-        if (nextTheme && nextPill) {
+      if (t.progression && t.progression.length) {
+        var bridgeGroup = el("div", "evidence-bridges" + (t.progression.length === 1 ? " single" : ""));
+        bridgeGroup.appendChild(el("span", "evidence-bridges-label", "Evidence progression"));
+        t.progression.forEach(function (link) {
+          var nextTheme = THEMES.find(function (candidate) { return candidate.title === link.target; });
+          var nextPill = emap.querySelector('[data-theme-title="' + link.target + '"]');
+          if (!nextTheme || !nextPill) { return; }
           var bridge = el("button", "evidence-bridge");
           bridge.type = "button";
-          bridge.appendChild(el("span", null, "Limitation motivates"));
-          bridge.appendChild(el("strong", null, t.leadsTo));
+          bridge.appendChild(el("span", null, link.label));
+          bridge.appendChild(el("strong", null, link.target));
           bridge.appendChild(el("b", null, "→"));
-          bridge.setAttribute("aria-label", "Open the recommended direction: " + t.leadsTo);
+          bridge.setAttribute("aria-label", link.label + ": open " + link.target);
           bridge.addEventListener("click", function () {
             showDetail(nextTheme, nextPill);
             nextPill.scrollIntoView({ behavior: "smooth", block: "center" });
           });
-          edetail.appendChild(bridge);
+          bridgeGroup.appendChild(bridge);
+        });
+        if (bridgeGroup.children.length > 1) {
+          edetail.appendChild(bridgeGroup);
         }
       }
       var explore = el("button", "ed-explore", "Explore " + t.refs.length + " supporting reference" + (t.refs.length === 1 ? "" : "s") + " in the literature explorer");

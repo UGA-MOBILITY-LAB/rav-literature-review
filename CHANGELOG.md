@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.5 — 2026-07-27
+
+- Added clickable evidence progressions across perception, localization, data integration, fleet operations, infrastructure, communication, and cooperative driving.
+- Preserved service alternatives and pilot programs as parallel evidence where the literature does not establish a causal sequence.
+
 ## 2.4 — 2026-07-27
 
 - Reframed Evidence Map colours as evidence roles rather than a single deployment-maturity scale.
