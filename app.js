@@ -2111,11 +2111,12 @@
     if (!emap || !edetail) { return; }
     var THEMES = [
       {
-        cat: "Autonomous Driving", title: "Perception - single sensor", status: "r", refs: [1,18,20,64],
+        cat: "Autonomous Driving", title: "Perception - single-sensor limitations", status: "r", refs: [1,18,20,64],
+        leadsTo: "Perception - multi-sensor fusion",
         definition: ["Uses one sensor modality, typically a monocular camera.", "Detects lanes, obstacles, pedestrians, animals, and signs."],
         pros: ["Low sensor and compute cost.", "Simple calibration and lightweight processing."],
         cons: ["Limited range and field of view.", "Sensitive to glare, low light, occlusion, faded markings, and unpaved surfaces."],
-        rav: ["Use single-sensor coverage only as a baseline.", "Collect rural perception data and validate performance on local roads."]
+        rav: ["Use single-sensor coverage only as a low-cost baseline.", "Let its failure modes define the multi-sensor fusion and fallback requirements.", "Collect rural perception data and validate the combined stack on local roads."]
       },
       {
         cat: "Autonomous Driving", title: "Perception - multi-sensor fusion", status: "m", refs: [2,17,18,19,20,56,57,58,59,63,64],
@@ -2293,8 +2294,12 @@
         rav: ["Reuse the fixed-route operating concept.", "Add rural headway, timetable, energy, and interruption planning.", "Reduce operator dependence through explicit safety gates."]
       }
     ];
-    var STATUS = { g: ["Reusable now", "#4B8B3B"], m: ["Needs rural adaptation", "#D99114"], r: ["Open gap", "#BA0C2F"] };
-    var STATUS_SHORT = { g: "Reusable", m: "Adapt", r: "Gap" };
+    var STATUS = {
+      g: ["Reusable baseline", "#4B8B3B"],
+      m: ["Recommended direction — rural validation needed", "#D99114"],
+      r: ["Limitation / unresolved RAV problem", "#BA0C2F"]
+    };
+    var STATUS_SHORT = { g: "Baseline", m: "Direction", r: "Limitation" };
     var byNum = {};
     PAPERS.forEach(function (p) { byNum[p.n] = p; });
     var themeCount = document.getElementById("theme-count");
@@ -2330,6 +2335,7 @@
         pill.appendChild(el("span", "status-mini", STATUS_SHORT[t.status]));
         pill.appendChild(el("span", "e-count", String(t.refs.length)));
         pill.setAttribute("aria-pressed", "false");
+        pill.setAttribute("data-theme-title", t.title);
         pill.setAttribute("aria-label", t.title + ": " + STATUS[t.status][0] + "; " +
           t.refs.length + " supporting references");
         pill.title = t.refs.length + " supporting references. Show definition, pros, cons, rural gap, and RAV action.";
@@ -2427,6 +2433,23 @@
       ravBlock.appendChild(ravList);
       grid.appendChild(ravBlock);
       edetail.appendChild(grid);
+      if (t.leadsTo) {
+        var nextTheme = THEMES.find(function (candidate) { return candidate.title === t.leadsTo; });
+        var nextPill = emap.querySelector('[data-theme-title="' + t.leadsTo + '"]');
+        if (nextTheme && nextPill) {
+          var bridge = el("button", "evidence-bridge");
+          bridge.type = "button";
+          bridge.appendChild(el("span", null, "Limitation motivates"));
+          bridge.appendChild(el("strong", null, t.leadsTo));
+          bridge.appendChild(el("b", null, "→"));
+          bridge.setAttribute("aria-label", "Open the recommended direction: " + t.leadsTo);
+          bridge.addEventListener("click", function () {
+            showDetail(nextTheme, nextPill);
+            nextPill.scrollIntoView({ behavior: "smooth", block: "center" });
+          });
+          edetail.appendChild(bridge);
+        }
+      }
       var explore = el("button", "ed-explore", "Explore " + t.refs.length + " supporting reference" + (t.refs.length === 1 ? "" : "s") + " in the literature explorer");
       explore.type = "button";
       explore.addEventListener("click", function () {

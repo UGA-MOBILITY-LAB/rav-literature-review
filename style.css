@@ -1257,6 +1257,34 @@ h1 { font-size: 42px; line-height: 1.12; margin: 0 0 10px; }
 .tradeoff-group.cons li::marker { color: #BA0C2F; }
 .emap-detail .ed-explore { margin-top: 13px; border: 1px solid var(--red); border-radius: 999px; padding: 7px 14px; color: var(--red); background: #fff; font: 700 12px var(--sans); cursor: pointer; }
 .emap-detail .ed-explore:hover, .emap-detail .ed-explore:focus-visible { color: #fff; background: var(--red); }
+.evidence-bridge {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  margin-top: 13px;
+  border: 1px solid rgba(217,145,20,.42);
+  border-radius: 7px;
+  background: linear-gradient(90deg, rgba(186,12,47,.05), rgba(217,145,20,.09));
+  color: #4D5660;
+  padding: 10px 12px;
+  text-align: left;
+  cursor: pointer;
+}
+.evidence-bridge span {
+  color: var(--red);
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+}
+.evidence-bridge strong { color: #9A6508; font-size: 12px; }
+.evidence-bridge b { color: #D99114; font-size: 18px; transition: transform .16s ease; }
+.evidence-bridge:hover,
+.evidence-bridge:focus-visible { border-color: #D99114; outline: none; }
+.evidence-bridge:hover b,
+.evidence-bridge:focus-visible b { transform: translateX(3px); }
 @media (max-width: 720px) {
   .emap .mrow { grid-template-columns: 1fr; }
   .emap .mlab { border-bottom: 1px dashed var(--line); }

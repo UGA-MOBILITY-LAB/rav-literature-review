@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.4 — 2026-07-27
+
+- Reframed Evidence Map colours as evidence roles rather than a single deployment-maturity scale.
+- Clarified single-sensor perception as a limitation that motivates multi-sensor fusion and rural validation.
+
 ## 2.3 — 2026-07-27
 
 - Added an interactive map linking four rural and remote field-pilot programs to their source records.
