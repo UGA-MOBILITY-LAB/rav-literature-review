@@ -611,6 +611,23 @@ h1 { font-size: 42px; line-height: 1.12; margin: 0 0 10px; }
 .fleet-subpillar:hover rect,
 .fleet-subpillar:focus-visible rect,
 .fleet-subpillar.active rect { fill: #CDEFF1; }
+.advanced-flow { stroke: #9AA0A6 !important; }
+.advanced-subpillar text { font-size: 8.4px; }
+.infrastructure-subpillar rect { fill: #FCECEF; stroke: #BA0C2F; }
+.infrastructure-subpillar text { fill: #8F0926; }
+.infrastructure-subpillar:hover rect,
+.infrastructure-subpillar:focus-visible rect,
+.infrastructure-subpillar.active rect { fill: #F7D9E0; }
+.communication-subpillar rect { fill: #FFF1E4; stroke: #CE7125; }
+.communication-subpillar text { fill: #9A4C10; }
+.communication-subpillar:hover rect,
+.communication-subpillar:focus-visible rect,
+.communication-subpillar.active rect { fill: #FBE1C9; }
+.cooperative-subpillar rect { fill: #F0ECFA; stroke: #7E6BB0; }
+.cooperative-subpillar text { fill: #5D4B92; }
+.cooperative-subpillar:hover rect,
+.cooperative-subpillar:focus-visible rect,
+.cooperative-subpillar.active rect { fill: #E1D9F3; }
 .tier-label { font: 700 12px var(--sans); letter-spacing: .14em; }
 .thesis-svg { min-width: 860px; }
 
