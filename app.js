@@ -1856,6 +1856,17 @@
     var selected = programs[0];
     var markers = {};
     var map = null;
+    var storyButton = document.getElementById("pilot-story-toggle");
+    var storyPrevious = document.getElementById("pilot-story-prev");
+    var storyNext = document.getElementById("pilot-story-next");
+    var storyStatus = document.getElementById("pilot-story-status");
+    var storyActive = false;
+    var storyIndex = 0;
+    var storyTimer = null;
+    var corridorButton = document.getElementById("pilot-corridor-toggle");
+    var corridorNote = document.getElementById("map-corridor-note");
+    var corridorLayer = null;
+    var corridorVisible = false;
 
     function programCard(program) {
       return document.querySelector('.pilot-card[data-label="' + program.label + '"]');
@@ -1880,8 +1891,17 @@
         }
       });
       if (map && markers[program.key] && map.hasLayer(markers[program.key]) && shouldFly) {
-        map.flyTo(program.coords, 6, { duration: .65 });
+        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+          map.setView(program.coords, 6, { animate: false });
+        } else {
+          map.flyTo(program.coords, 6, { duration: .65 });
+        }
       }
+      if (storyActive && storyStatus) {
+        storyIndex = programs.indexOf(program);
+        storyStatus.textContent = (storyIndex + 1) + " of " + programs.length + " · " + program.name;
+      }
+      if (corridorVisible) { renderConceptCorridor(false); }
     }
 
     detailEvidence.addEventListener("click", function () {
@@ -1891,6 +1911,8 @@
 
     if (typeof L === "undefined") {
       mapElement.innerHTML = '<p class="pilot-map-loading">The interactive map could not load. The accessible pilot cards below remain available.</p>';
+      if (storyButton) { storyButton.disabled = true; storyButton.textContent = "Story unavailable"; }
+      if (corridorButton) { corridorButton.disabled = true; corridorButton.textContent = "Corridor unavailable"; }
       updateSelection(programs[0], false);
       return;
     }
@@ -1909,6 +1931,40 @@
       maxZoom: 19,
       attribution: "&copy; OpenStreetMap contributors"
     }).addTo(map);
+
+    function conceptCorridor(program) {
+      var latitude = program.coords[0];
+      var longitude = program.coords[1];
+      return [
+        [latitude - .055, longitude - .09],
+        [latitude - .025, longitude - .035],
+        [latitude, longitude],
+        [latitude + .028, longitude + .045],
+        [latitude + .05, longitude + .095]
+      ];
+    }
+    function renderConceptCorridor(shouldFit) {
+      if (corridorLayer) { map.removeLayer(corridorLayer); corridorLayer = null; }
+      if (!corridorVisible) { return; }
+      corridorLayer = L.polyline(conceptCorridor(selected), {
+        color: "#BA0C2F",
+        weight: 5,
+        opacity: .78,
+        dashArray: "10 8",
+        lineCap: "round",
+        interactive: false
+      }).addTo(map);
+      if (shouldFit) {
+        map.fitBounds(corridorLayer.getBounds().pad(.55), { maxZoom: 9, animate: true });
+      }
+    }
+    corridorButton.addEventListener("click", function () {
+      corridorVisible = !corridorVisible;
+      corridorButton.setAttribute("aria-pressed", corridorVisible ? "true" : "false");
+      corridorButton.textContent = corridorVisible ? "Hide concept corridor" : "Show concept corridor";
+      corridorNote.hidden = !corridorVisible;
+      renderConceptCorridor(corridorVisible);
+    });
 
     programs.forEach(function (program, index) {
       var color = program.mode === "on-demand" ? "#00A3AD" : "#4B8B3B";
@@ -1957,11 +2013,111 @@
 
     document.querySelectorAll(".pilot-map-filter").forEach(function (button) {
       button.addEventListener("click", function () {
+        stopStory();
         applyMapFilter(button.getAttribute("data-pilot-filter"));
       });
     });
+
+    function clearStoryTimer() {
+      if (storyTimer) { window.clearInterval(storyTimer); storyTimer = null; }
+    }
+    function showStoryStep(index) {
+      storyIndex = (index + programs.length) % programs.length;
+      updateSelection(programs[storyIndex], true);
+    }
+    function startStory() {
+      storyActive = true;
+      clearStoryTimer();
+      applyMapFilter("all");
+      document.querySelector(".pilot-map-shell").classList.add("is-story-mode");
+      storyButton.setAttribute("aria-pressed", "true");
+      storyButton.textContent = "Stop story";
+      storyPrevious.hidden = false;
+      storyNext.hidden = false;
+      storyStatus.hidden = false;
+      showStoryStep(programs.indexOf(selected) >= 0 ? programs.indexOf(selected) : 0);
+      if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        storyTimer = window.setInterval(function () { showStoryStep(storyIndex + 1); }, 7000);
+      }
+    }
+    function stopStory() {
+      if (!storyActive) { return; }
+      storyActive = false;
+      clearStoryTimer();
+      document.querySelector(".pilot-map-shell").classList.remove("is-story-mode");
+      storyButton.setAttribute("aria-pressed", "false");
+      storyButton.textContent = "Start story";
+      storyPrevious.hidden = true;
+      storyNext.hidden = true;
+      storyStatus.hidden = true;
+    }
+    storyButton.addEventListener("click", function () {
+      if (storyActive) { stopStory(); } else { startStory(); }
+    });
+    storyPrevious.addEventListener("click", function () {
+      clearStoryTimer();
+      showStoryStep(storyIndex - 1);
+    });
+    storyNext.addEventListener("click", function () {
+      clearStoryTimer();
+      showStoryStep(storyIndex + 1);
+    });
     updateSelection(programs[0], false);
     applyMapFilter("all");
+  })();
+
+  /* ---------- stakeholder briefing view ---------- */
+
+  (function () {
+    var root = document.getElementById("stakeholder-view");
+    if (!root) { return; }
+    var cards = Array.prototype.slice.call(document.querySelectorAll(".recommendation-card[data-stakeholder-card]"));
+    var summary = document.getElementById("stakeholder-summary");
+    var referenceLine = document.getElementById("stakeholder-reference-line");
+    var printButton = document.getElementById("stakeholder-print");
+    var stakeholderCopy = {
+      all: "Showing the complete staged deployment strategy across all stakeholder groups.",
+      vehicle: "RAV team: prioritize multi-sensor perception, fused localization, rural training data, and onboard fallback.",
+      fleet: "Fleet operator: align dispatch, charging, supervision, and service recovery with thin rural demand.",
+      road: "DOT & planners: assess roads first, upgrade selectively, and maintain shared digital road information.",
+      connect: "Connectivity partners: design for dead zones, secure every link, and keep safety-critical control onboard.",
+      pilot: "Program & community partners: use explicit safety gates, accessible service design, and comparable public reporting."
+    };
+    var activeStakeholder = "all";
+    function setStakeholder(value) {
+      activeStakeholder = value;
+      root.querySelectorAll("[data-stakeholder]").forEach(function (button) {
+        button.setAttribute("aria-pressed",
+          button.getAttribute("data-stakeholder") === value ? "true" : "false");
+      });
+      cards.forEach(function (card) {
+        var focused = value === "all" || card.getAttribute("data-stakeholder-card") === value;
+        card.classList.toggle("is-deemphasized", !focused);
+        card.classList.toggle("is-stakeholder-focus", value !== "all" && focused);
+      });
+      summary.textContent = stakeholderCopy[value];
+      if (value === "all") {
+        referenceLine.textContent = "Choose one perspective to include its supporting reference numbers in the printable brief.";
+      } else {
+        var focusedCard = cards.find(function (card) {
+          return card.getAttribute("data-stakeholder-card") === value;
+        });
+        var refs = focusedCard ? focusedCard.getAttribute("data-refs").split(",") : [];
+        referenceLine.textContent = "Supporting references: " + refs.map(function (number) {
+          return "[" + number + "]";
+        }).join(" ");
+      }
+    }
+    root.querySelectorAll("[data-stakeholder]").forEach(function (button) {
+      button.addEventListener("click", function () { setStakeholder(button.getAttribute("data-stakeholder")); });
+    });
+    printButton.addEventListener("click", function () {
+      document.body.classList.add("brief-print-mode");
+      window.print();
+      window.setTimeout(function () { document.body.classList.remove("brief-print-mode"); }, 500);
+    });
+    window.addEventListener("afterprint", function () { document.body.classList.remove("brief-print-mode"); });
+    setStakeholder(activeStakeholder);
   })();
 
   /* ---------- stakeholder recommendations ---------- */
@@ -1988,7 +2144,7 @@
 
   /* ---------- nav scroll spy ---------- */
 
-  var sections = Array.prototype.slice.call(document.querySelectorAll("main section[id]"));
+  var sections = Array.prototype.slice.call(document.querySelectorAll("main > section[id]"));
   var navLinks = {};
   Array.prototype.forEach.call(document.querySelectorAll(".nav-pills a"), function (a) {
     navLinks[a.getAttribute("href").slice(1)] = a;
@@ -2331,6 +2487,7 @@
         rav: ["Reuse the fixed-route operating concept.", "Add rural headway, timetable, energy, and interruption planning.", "Reduce operator dependence through explicit safety gates."]
       }
     ];
+    window.RAV_THEMES = THEMES;
     var STATUS = {
       g: ["Reusable baseline", "#4B8B3B"],
       m: ["Recommended direction — rural validation needed", "#D99114"],
@@ -2493,6 +2650,12 @@
           edetail.appendChild(bridgeGroup);
         }
       }
+      var compareButton = el("button", "ed-compare", "Add to Compare Board");
+      compareButton.type = "button";
+      compareButton.addEventListener("click", function () {
+        if (window.addThemeToCompare) { window.addThemeToCompare(t.title, true); }
+      });
+      edetail.appendChild(compareButton);
       var explore = el("button", "ed-explore", "Explore " + t.refs.length + " supporting reference" + (t.refs.length === 1 ? "" : "s") + " in the literature explorer");
       explore.type = "button";
       explore.addEventListener("click", function () {
@@ -2501,7 +2664,811 @@
       });
       edetail.appendChild(explore);
     }
+    window.openEvidenceTheme = function (title, shouldScroll) {
+      var theme = THEMES.find(function (candidate) { return candidate.title === title; });
+      var pill = emap.querySelector('[data-theme-title="' + title + '"]');
+      if (!theme || !pill) { return; }
+      var row = pill.closest(".mrow");
+      if (row && window.matchMedia("(max-width: 720px)").matches) {
+        row.classList.add("is-open");
+        var rowToggle = row.querySelector(".mlab-toggle");
+        if (rowToggle) { rowToggle.setAttribute("aria-expanded", "true"); }
+      }
+      showDetail(theme, pill);
+      if (shouldScroll !== false) {
+        document.getElementById("evidence").scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    };
     if (initialTheme) { showDetail(initialTheme.theme, initialTheme.pill); }
+  })();
+
+  /* ---------- evidence journey and decision lab ---------- */
+
+  (function () {
+    var root = document.getElementById("decision-lab");
+    var graph = document.getElementById("journey-graph");
+    var themes = window.RAV_THEMES || [];
+    if (!root || !graph || !themes.length) { return; }
+
+    var statusMeta = {
+      g: { label: "Reusable baseline", short: "Baseline", color: "#4B8B3B" },
+      m: { label: "Recommended direction", short: "Direction", color: "#D99114" },
+      r: { label: "Limitation / unresolved problem", short: "Limitation", color: "#BA0C2F" }
+    };
+    var paperByNumber = {};
+    PAPERS.forEach(function (paper) { paperByNumber[paper.n] = paper; });
+    var themeByTitle = {};
+    themes.forEach(function (theme) { themeByTitle[theme.title] = theme; });
+
+    function activateLabTab(name, focusTab) {
+      root.querySelectorAll("[data-lab-tab]").forEach(function (button) {
+        var active = button.getAttribute("data-lab-tab") === name;
+        button.setAttribute("aria-selected", active ? "true" : "false");
+        button.tabIndex = active ? 0 : -1;
+        if (active && focusTab) { button.focus(); }
+      });
+      ["journey", "compare", "intelligence"].forEach(function (panelName) {
+        var panel = document.getElementById("lab-" + panelName);
+        if (panel) { panel.hidden = panelName !== name; }
+      });
+    }
+    root.querySelectorAll("[data-lab-tab]").forEach(function (button) {
+      button.addEventListener("click", function () {
+        activateLabTab(button.getAttribute("data-lab-tab"), false);
+      });
+      button.addEventListener("keydown", function (event) {
+        if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") { return; }
+        event.preventDefault();
+        var tabs = Array.prototype.slice.call(root.querySelectorAll("[data-lab-tab]"));
+        var direction = event.key === "ArrowRight" ? 1 : -1;
+        var nextIndex = (tabs.indexOf(button) + direction + tabs.length) % tabs.length;
+        activateLabTab(tabs[nextIndex].getAttribute("data-lab-tab"), true);
+      });
+    });
+
+    var nodePositions = {
+      "Perception - single-sensor limitations": [190, 70],
+      "Perception - multi-sensor fusion": [520, 70],
+      "Perception - adverse weather": [850, 70],
+      "Localization - GNSS/LiDAR limits": [190, 160],
+      "Localization - fusion with HD maps": [520, 160],
+      "Data integration - onboard raw & semantic": [190, 250],
+      "Data integration - heterogeneous & aggregated": [520, 250],
+      "On-demand dispatch & ride-matching": [160, 355],
+      "Fixed-route dispatch & scheduling": [410, 355],
+      "Fleet support - charging, monitoring & fares": [735, 330],
+      "Remote monitoring & supervision": [1010, 380],
+      "Physical road assessment": [190, 455],
+      "Digital Infrastructure": [520, 455],
+      "Rural V2X Communication": [190, 550],
+      "Multi-Channel Communication": [520, 550],
+      "V2X cybersecurity": [850, 550],
+      "Cooperative perception": [160, 665],
+      "Infrastructure-assisted control & handover": [445, 665],
+      "CACC & platooning": [760, 610],
+      "Work & school zones": [1015, 625],
+      "Rail grade crossings": [760, 710],
+      "Cooperative Response to Extreme Weather": [1015, 725]
+    };
+    var laneLabels = [
+      ["PERCEPTION", 70],
+      ["LOCALIZATION", 160],
+      ["DATA", 250],
+      ["FLEET", 355],
+      ["ROAD", 455],
+      ["CONNECT", 550],
+      ["COOPERATE", 665]
+    ];
+    var journeyEdges = [];
+    themes.forEach(function (theme) {
+      (theme.progression || []).forEach(function (link) {
+        if (nodePositions[theme.title] && nodePositions[link.target]) {
+          journeyEdges.push({ from: theme.title, to: link.target, label: link.label });
+        }
+      });
+    });
+
+    var defs = svgEl("defs");
+    var marker = svgEl("marker", {
+      id: "journey-arrow",
+      viewBox: "0 0 10 10",
+      refX: "9",
+      refY: "5",
+      markerWidth: "7",
+      markerHeight: "7",
+      orient: "auto-start-reverse"
+    });
+    marker.appendChild(svgEl("path", { d: "M0 0 L10 5 L0 10 z", fill: "#A4ABB2" }));
+    defs.appendChild(marker);
+    graph.appendChild(defs);
+    var background = svgEl("rect", { x: "0", y: "0", width: "1200", height: "790", fill: "transparent" });
+    graph.appendChild(background);
+    laneLabels.forEach(function (lane) {
+      var line = svgEl("line", {
+        x1: "110", y1: String(lane[1] + 38), x2: "1170", y2: String(lane[1] + 38),
+        stroke: "#E4E7EA", "stroke-width": "1"
+      });
+      graph.appendChild(line);
+      var text = svgEl("text", { x: "18", y: String(lane[1] + 4), "class": "journey-lane" });
+      text.textContent = lane[0];
+      graph.appendChild(text);
+    });
+
+    function edgePath(from, to) {
+      var start = nodePositions[from];
+      var end = nodePositions[to];
+      var startX = start[0] + 108;
+      var endX = end[0] - 108;
+      var middle = startX + (endX - startX) * .5;
+      return "M" + startX + "," + start[1] + " C" + middle + "," + start[1] + " " +
+        middle + "," + end[1] + " " + endX + "," + end[1];
+    }
+    journeyEdges.forEach(function (edge) {
+      var path = svgEl("path", {
+        d: edgePath(edge.from, edge.to),
+        "class": "journey-edge",
+        "data-from": edge.from,
+        "data-to": edge.to,
+        "marker-end": "url(#journey-arrow)"
+      });
+      path.appendChild(svgEl("title"));
+      path.firstChild.textContent = edge.label;
+      graph.appendChild(path);
+    });
+
+    function labelLines(title) {
+      var normalized = title.replace(" - ", ": ");
+      if (normalized.length <= 27) { return [normalized]; }
+      var words = normalized.split(" ");
+      var lines = [""];
+      words.forEach(function (word) {
+        var current = lines[lines.length - 1];
+        if ((current + " " + word).trim().length > 26 && lines.length < 2) {
+          lines.push(word);
+        } else {
+          lines[lines.length - 1] = (current + " " + word).trim();
+        }
+      });
+      if (lines[1] && lines[1].length > 29) { lines[1] = lines[1].slice(0, 27) + "…"; }
+      return lines;
+    }
+
+    function themeProfile(theme) {
+      var papers = theme.refs.map(function (number) { return paperByNumber[number]; }).filter(Boolean);
+      return {
+        papers: papers,
+        direct: papers.filter(function (paper) { return paper.rural === "Direct rural evidence"; }).length,
+        high: papers.filter(function (paper) { return paper.strength === "High"; }).length,
+        field: papers.filter(function (paper) {
+          return paper.etype === "Field pilot / case" || paper.etype === "Empirical / testbed";
+        }).length,
+        earliest: Math.min.apply(null, papers.map(function (paper) { return paper.year; }))
+      };
+    }
+
+    Object.keys(nodePositions).forEach(function (title) {
+      var theme = themeByTitle[title];
+      if (!theme) { return; }
+      var position = nodePositions[title];
+      var meta = statusMeta[theme.status];
+      var profile = themeProfile(theme);
+      var group = svgEl("g", {
+        "class": "journey-node",
+        transform: "translate(" + position[0] + " " + position[1] + ")",
+        tabindex: "0",
+        role: "button",
+        "aria-label": title + ", " + meta.label + ", " + theme.refs.length + " references",
+        "data-theme-title": title,
+        "data-earliest-year": String(profile.earliest)
+      });
+      group.appendChild(svgEl("rect", {
+        x: "-108", y: "-28", width: "216", height: "56", rx: "9",
+        stroke: meta.color
+      }));
+      var statusText = svgEl("text", { x: "0", y: "-12", "class": "node-status", fill: meta.color });
+      statusText.textContent = meta.short;
+      group.appendChild(statusText);
+      var lines = labelLines(title);
+      var label = svgEl("text", { x: "0", y: lines.length === 1 ? "10" : "5" });
+      lines.forEach(function (lineText, index) {
+        var span = svgEl("tspan", { x: "0", dy: index === 0 ? "0" : "15" });
+        span.textContent = lineText;
+        label.appendChild(span);
+      });
+      group.appendChild(label);
+      group.addEventListener("click", function () { selectJourneyTheme(theme); });
+      group.addEventListener("keydown", function (event) {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          selectJourneyTheme(theme);
+        }
+      });
+      graph.appendChild(group);
+    });
+
+    var journeyDetail = document.getElementById("journey-detail");
+    function selectJourneyTheme(theme) {
+      var meta = statusMeta[theme.status];
+      var profile = themeProfile(theme);
+      graph.querySelectorAll(".journey-node").forEach(function (node) {
+        node.classList.toggle("is-active", node.getAttribute("data-theme-title") === theme.title);
+      });
+      graph.querySelectorAll(".journey-edge").forEach(function (edge) {
+        edge.classList.toggle("is-active",
+          edge.getAttribute("data-from") === theme.title || edge.getAttribute("data-to") === theme.title);
+      });
+      while (journeyDetail.firstChild) { journeyDetail.removeChild(journeyDetail.firstChild); }
+      journeyDetail.style.borderTopColor = meta.color;
+      journeyDetail.appendChild(el("p", "journey-detail-kicker", meta.label));
+      journeyDetail.appendChild(el("h3", null, theme.title));
+      journeyDetail.appendChild(el("p", null, theme.cat));
+      var profileRow = el("div", "journey-profile");
+      profileRow.appendChild(el("span", null, theme.refs.length + " references"));
+      profileRow.appendChild(el("span", null, profile.direct + " directly rural"));
+      profileRow.appendChild(el("span", null, profile.high + " high-strength"));
+      profileRow.appendChild(el("span", null, "Evidence since " + profile.earliest));
+      journeyDetail.appendChild(profileRow);
+      var actionLabel = el("strong", null, "Priority RAV action");
+      actionLabel.className = "journey-detail-kicker";
+      journeyDetail.appendChild(actionLabel);
+      var actionList = el("ul", "journey-detail-list");
+      theme.rav.slice(0, 3).forEach(function (item) { actionList.appendChild(el("li", null, item)); });
+      journeyDetail.appendChild(actionList);
+      var actions = el("div", "journey-detail-actions");
+      var evidenceButton = el("button", "btn-primary", "Open full Evidence Map detail");
+      evidenceButton.type = "button";
+      evidenceButton.addEventListener("click", function () { window.openEvidenceTheme(theme.title, true); });
+      var compareButton = el("button", "utility-btn", "Add to Compare Board");
+      compareButton.type = "button";
+      compareButton.addEventListener("click", function () { window.addThemeToCompare(theme.title, true); });
+      var papersButton = el("button", "utility-btn", "Explore " + theme.refs.length + " supporting papers");
+      papersButton.type = "button";
+      papersButton.addEventListener("click", function () {
+        setEvidenceFilter(theme.title, theme.refs);
+        document.getElementById("explorer").scrollIntoView({ behavior: "smooth" });
+      });
+      actions.appendChild(evidenceButton);
+      actions.appendChild(compareButton);
+      actions.appendChild(papersButton);
+      journeyDetail.appendChild(actions);
+    }
+
+    var journeyView = { x: 0, y: 0, width: 1200, height: 790 };
+    function applyJourneyView() {
+      graph.setAttribute("viewBox", [journeyView.x, journeyView.y, journeyView.width, journeyView.height].join(" "));
+    }
+    function zoomJourney(factor, anchorX, anchorY) {
+      var nextWidth = Math.max(620, Math.min(1600, journeyView.width * factor));
+      var nextHeight = nextWidth * (790 / 1200);
+      var ratioX = anchorX === undefined ? .5 : anchorX;
+      var ratioY = anchorY === undefined ? .5 : anchorY;
+      journeyView.x += (journeyView.width - nextWidth) * ratioX;
+      journeyView.y += (journeyView.height - nextHeight) * ratioY;
+      journeyView.width = nextWidth;
+      journeyView.height = nextHeight;
+      applyJourneyView();
+    }
+    document.getElementById("journey-zoom-in").addEventListener("click", function () { zoomJourney(.82); });
+    document.getElementById("journey-zoom-out").addEventListener("click", function () { zoomJourney(1.18); });
+    document.getElementById("journey-zoom-reset").addEventListener("click", function () {
+      journeyView = { x: 0, y: 0, width: 1200, height: 790 };
+      applyJourneyView();
+    });
+    graph.addEventListener("wheel", function (event) {
+      event.preventDefault();
+      var box = graph.getBoundingClientRect();
+      zoomJourney(event.deltaY > 0 ? 1.1 : .9,
+        (event.clientX - box.left) / box.width,
+        (event.clientY - box.top) / box.height);
+    }, { passive: false });
+    var panState = null;
+    graph.addEventListener("pointerdown", function (event) {
+      if (event.target.closest(".journey-node")) { return; }
+      panState = {
+        clientX: event.clientX,
+        clientY: event.clientY,
+        x: journeyView.x,
+        y: journeyView.y
+      };
+      graph.setPointerCapture(event.pointerId);
+      document.getElementById("journey-viewport").classList.add("is-dragging");
+    });
+    graph.addEventListener("pointermove", function (event) {
+      if (!panState) { return; }
+      var box = graph.getBoundingClientRect();
+      journeyView.x = panState.x - (event.clientX - panState.clientX) * journeyView.width / box.width;
+      journeyView.y = panState.y - (event.clientY - panState.clientY) * journeyView.height / box.height;
+      applyJourneyView();
+    });
+    function stopPan(event) {
+      if (!panState) { return; }
+      panState = null;
+      document.getElementById("journey-viewport").classList.remove("is-dragging");
+      if (event && graph.hasPointerCapture(event.pointerId)) { graph.releasePointerCapture(event.pointerId); }
+    }
+    graph.addEventListener("pointerup", stopPan);
+    graph.addEventListener("pointercancel", stopPan);
+
+    window.updateJourneyYear = function (year) {
+      graph.querySelectorAll(".journey-node").forEach(function (node) {
+        node.classList.toggle("is-future", Number(node.getAttribute("data-earliest-year")) > year);
+      });
+    };
+    applyJourneyView();
+    selectJourneyTheme(themeByTitle["Perception - single-sensor limitations"]);
+
+    /* compare board */
+    var compareSelect = document.getElementById("compare-theme-select");
+    var compareGrid = document.getElementById("compare-grid");
+    var compareStatus = document.getElementById("compare-status");
+    var compareTitles = [];
+    themes.forEach(function (theme) {
+      var option = el("option", null, theme.cat + " — " + theme.title);
+      option.value = theme.title;
+      compareSelect.appendChild(option);
+    });
+
+    function saveComparison() {
+      try { window.localStorage.setItem("rav-theme-comparison", JSON.stringify(compareTitles)); } catch (ignore) {}
+    }
+    function renderComparison() {
+      while (compareGrid.firstChild) { compareGrid.removeChild(compareGrid.firstChild); }
+      if (!compareTitles.length) {
+        compareGrid.appendChild(el("div", "compare-empty", "Add two to four themes to compare their evidence, trade-offs, and RAV actions."));
+      }
+      compareTitles.forEach(function (title) {
+        var theme = themeByTitle[title];
+        if (!theme) { return; }
+        var meta = statusMeta[theme.status];
+        var profile = themeProfile(theme);
+        var card = el("article", "card compare-card");
+        card.style.setProperty("--theme-color", meta.color);
+        var head = el("div", "compare-card-head");
+        var heading = el("div");
+        heading.appendChild(el("h3", null, theme.title));
+        heading.appendChild(el("p", "compare-category", theme.cat + " · " + meta.short));
+        var remove = el("button", "compare-remove", "×");
+        remove.type = "button";
+        remove.setAttribute("aria-label", "Remove " + theme.title + " from comparison");
+        remove.addEventListener("click", function () {
+          compareTitles = compareTitles.filter(function (candidate) { return candidate !== title; });
+          saveComparison();
+          renderComparison();
+        });
+        head.appendChild(heading);
+        head.appendChild(remove);
+        card.appendChild(head);
+        var metrics = el("div", "compare-metrics");
+        metrics.appendChild(el("span", null, theme.refs.length + " references"));
+        metrics.appendChild(el("span", null, profile.direct + " directly rural"));
+        metrics.appendChild(el("span", null, profile.high + " high-strength"));
+        metrics.appendChild(el("span", null, profile.field + " empirical / field"));
+        card.appendChild(metrics);
+        var columns = el("div", "compare-columns");
+        [["Pros", theme.pros], ["Cons", theme.cons]].forEach(function (column) {
+          var part = el("div");
+          part.appendChild(el("h4", null, column[0]));
+          var list = el("ul");
+          column[1].forEach(function (item) { list.appendChild(el("li", null, item)); });
+          part.appendChild(list);
+          columns.appendChild(part);
+        });
+        card.appendChild(columns);
+        var action = el("div", "compare-action");
+        action.appendChild(el("strong", null, "RAV action"));
+        var actionList = el("ul");
+        theme.rav.slice(0, 2).forEach(function (item) { actionList.appendChild(el("li", null, item)); });
+        action.appendChild(actionList);
+        card.appendChild(action);
+        var open = el("button", "compare-open", "Open Evidence Map detail →");
+        open.type = "button";
+        open.addEventListener("click", function () { window.openEvidenceTheme(theme.title, true); });
+        card.appendChild(open);
+        compareGrid.appendChild(card);
+      });
+      compareStatus.textContent = compareTitles.length + " of 4 themes selected" +
+        (compareTitles.length > 1 ? " — compare the evidence profiles below." : ".");
+    }
+
+    window.addThemeToCompare = function (title, openBoard) {
+      if (!themeByTitle[title]) { return; }
+      if (compareTitles.indexOf(title) === -1) {
+        if (compareTitles.length >= 4) {
+          compareStatus.textContent = "Comparison is full. Remove a theme before adding another.";
+        } else {
+          compareTitles.push(title);
+          saveComparison();
+          renderComparison();
+        }
+      }
+      if (openBoard) {
+        activateLabTab("compare", false);
+        document.getElementById("decision-lab").scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    };
+    document.getElementById("compare-add").addEventListener("click", function () {
+      window.addThemeToCompare(compareSelect.value, false);
+    });
+    document.getElementById("compare-clear").addEventListener("click", function () {
+      compareTitles = [];
+      saveComparison();
+      renderComparison();
+    });
+    try {
+      var savedComparison = JSON.parse(window.localStorage.getItem("rav-theme-comparison") || "[]");
+      compareTitles = savedComparison.filter(function (title) { return themeByTitle[title]; }).slice(0, 4);
+    } catch (ignore) {
+      compareTitles = [];
+    }
+    if (!compareTitles.length) {
+      compareTitles = ["Perception - single-sensor limitations", "Perception - multi-sensor fusion"];
+    }
+    renderComparison();
+
+    /* research gap radar */
+    var radar = document.getElementById("gap-radar");
+    var radarLegend = document.getElementById("radar-legend");
+    var radarSummary = document.getElementById("radar-summary");
+    var radarModules = CATEGORIES.filter(function (category) { return category !== "Pilots"; });
+    var radarAxes = ["Evidence volume", "Direct rural", "High-strength", "Empirical / field", "Recent evidence"];
+    var rawProfiles = {};
+    radarModules.forEach(function (category) {
+      var papers = PAPERS.filter(function (paper) {
+        return paper.cat === category || (paper.mods && paper.mods.indexOf(category) !== -1);
+      });
+      rawProfiles[category] = {
+        papers: papers,
+        count: papers.length,
+        direct: papers.filter(function (paper) { return paper.rural === "Direct rural evidence"; }).length,
+        high: papers.filter(function (paper) { return paper.strength === "High"; }).length,
+        empirical: papers.filter(function (paper) {
+          return paper.etype === "Empirical / testbed" || paper.etype === "Field pilot / case";
+        }).length,
+        recent: papers.filter(function (paper) { return paper.year >= 2022; }).length
+      };
+    });
+    var maxVolume = Math.max.apply(null, radarModules.map(function (category) { return rawProfiles[category].count; }));
+    function radarValues(profile) {
+      return [
+        profile.count / maxVolume * 100,
+        profile.count ? profile.direct / profile.count * 100 : 0,
+        profile.count ? profile.high / profile.count * 100 : 0,
+        profile.count ? profile.empirical / profile.count * 100 : 0,
+        profile.count ? profile.recent / profile.count * 100 : 0
+      ];
+    }
+    var radarCenter = [250, 214];
+    var radarRadius = 150;
+    function radarPoint(axisIndex, value) {
+      var angle = -Math.PI / 2 + axisIndex * Math.PI * 2 / radarAxes.length;
+      var radius = radarRadius * value / 100;
+      return [radarCenter[0] + Math.cos(angle) * radius, radarCenter[1] + Math.sin(angle) * radius];
+    }
+    [25, 50, 75, 100].forEach(function (level) {
+      var points = radarAxes.map(function (_, index) { return radarPoint(index, level).join(","); }).join(" ");
+      radar.appendChild(svgEl("polygon", { points: points, "class": "radar-grid" }));
+    });
+    radarAxes.forEach(function (label, index) {
+      var outer = radarPoint(index, 100);
+      radar.appendChild(svgEl("line", {
+        x1: radarCenter[0], y1: radarCenter[1], x2: outer[0], y2: outer[1], "class": "radar-axis"
+      }));
+      var labelPoint = radarPoint(index, 118);
+      var labelNode = svgEl("text", { x: labelPoint[0], y: labelPoint[1] + 4, "class": "radar-label" });
+      labelNode.textContent = label;
+      radar.appendChild(labelNode);
+    });
+    var activeRadarModule = radarModules[0];
+    radarModules.forEach(function (category) {
+      var values = radarValues(rawProfiles[category]);
+      var polygon = svgEl("polygon", {
+        points: values.map(function (value, index) { return radarPoint(index, value).join(","); }).join(" "),
+        "class": "radar-shape",
+        "data-radar-module": category,
+        stroke: CAT_COLORS[category],
+        fill: CAT_COLORS[category]
+      });
+      radar.appendChild(polygon);
+      values.forEach(function (value, index) {
+        var point = radarPoint(index, value);
+        radar.appendChild(svgEl("circle", {
+          cx: point[0], cy: point[1], r: "4", fill: CAT_COLORS[category],
+          "class": "radar-dot", "data-radar-module": category
+        }));
+      });
+      var legendButton = el("button");
+      legendButton.type = "button";
+      legendButton.style.setProperty("--module-color", CAT_COLORS[category]);
+      legendButton.setAttribute("data-radar-module", category);
+      legendButton.setAttribute("aria-pressed", category === activeRadarModule ? "true" : "false");
+      legendButton.appendChild(el("i"));
+      legendButton.appendChild(el("span", null, category));
+      legendButton.appendChild(el("b", null, rawProfiles[category].count));
+      legendButton.addEventListener("click", function () { selectRadarModule(category); });
+      radarLegend.appendChild(legendButton);
+    });
+    var radarExplore = el("button", "utility-btn", "Explore selected module");
+    radarExplore.type = "button";
+    radarSummary.insertAdjacentElement("afterend", radarExplore);
+    function selectRadarModule(category) {
+      activeRadarModule = category;
+      radar.querySelectorAll("[data-radar-module]").forEach(function (shape) {
+        shape.classList.toggle("is-muted", shape.getAttribute("data-radar-module") !== category);
+      });
+      radarLegend.querySelectorAll("button").forEach(function (button) {
+        button.setAttribute("aria-pressed",
+          button.getAttribute("data-radar-module") === category ? "true" : "false");
+      });
+      var profile = rawProfiles[category];
+      var weakest = [
+        ["direct rural evidence", profile.direct / Math.max(1, profile.count)],
+        ["high-strength synthesis", profile.high / Math.max(1, profile.count)],
+        ["empirical or field validation", profile.empirical / Math.max(1, profile.count)]
+      ].sort(function (a, b) { return a[1] - b[1]; })[0][0];
+      radarSummary.textContent = category + ": " + profile.count + " linked references, " +
+        profile.direct + " directly rural, " + profile.high + " high-strength, and " +
+        profile.empirical + " empirical / field records. The thinnest dimension is " + weakest + ".";
+      radarExplore.textContent = "Explore " + category + " evidence";
+    }
+    radarExplore.addEventListener("click", function () {
+      setStatFilter("cat", activeRadarModule);
+      document.getElementById("explorer").scrollIntoView({ behavior: "smooth" });
+    });
+    selectRadarModule(activeRadarModule);
+
+    /* timeline playback */
+    var timelineInput = document.getElementById("timeline-year");
+    var timelineValue = document.getElementById("timeline-year-value");
+    var timelineBars = document.getElementById("timeline-bars");
+    var timelineTotal = document.getElementById("timeline-total");
+    var timelineMilestone = document.getElementById("timeline-milestone");
+    var timelinePlay = document.getElementById("timeline-play");
+    var timelineExplore = document.getElementById("timeline-explore");
+    var timelineTimer = null;
+    var timelineMaxByCategory = {};
+    CATEGORIES.forEach(function (category) {
+      timelineMaxByCategory[category] = PAPERS.filter(function (paper) { return paper.cat === category; }).length;
+    });
+    function milestoneFor(year) {
+      if (year <= 2017) { return "The corpus begins with infrastructure-focused evidence."; }
+      if (year <= 2019) { return "Perception, communications, and cooperative-driving evidence enters the review."; }
+      if (year <= 2021) { return "Coverage broadens across the full RAV technology stack."; }
+      if (year <= 2023) { return "Cooperative driving and field-operational evidence accelerate."; }
+      if (year <= 2025) { return "Recent work deepens sensing, infrastructure, communications, and pilot coverage."; }
+      return "Full review coverage across 118 verified references.";
+    }
+    function updateTimeline() {
+      var year = Number(timelineInput.value);
+      timelineValue.textContent = String(year);
+      var available = PAPERS.filter(function (paper) { return paper.year <= year; });
+      timelineTotal.textContent = available.length + " reference" + (available.length === 1 ? "" : "s") + " available";
+      timelineMilestone.textContent = milestoneFor(year);
+      timelineExplore.textContent = "Explore papers from " + year;
+      while (timelineBars.firstChild) { timelineBars.removeChild(timelineBars.firstChild); }
+      CATEGORIES.forEach(function (category) {
+        var count = available.filter(function (paper) { return paper.cat === category; }).length;
+        var row = el("div", "timeline-bar");
+        row.appendChild(el("span", null, category));
+        var track = el("span", "timeline-bar-track");
+        var fill = el("span", "timeline-bar-fill");
+        fill.style.setProperty("--bar-width", (count / Math.max(1, timelineMaxByCategory[category]) * 100) + "%");
+        fill.style.setProperty("--bar-color", CAT_COLORS[category]);
+        track.appendChild(fill);
+        row.appendChild(track);
+        row.appendChild(el("b", null, String(count)));
+        timelineBars.appendChild(row);
+      });
+      if (window.updateJourneyYear) { window.updateJourneyYear(year); }
+    }
+    function stopTimeline() {
+      if (timelineTimer) { window.clearInterval(timelineTimer); timelineTimer = null; }
+      timelinePlay.textContent = "Play";
+      timelinePlay.setAttribute("aria-pressed", "false");
+    }
+    timelineInput.addEventListener("input", updateTimeline);
+    timelinePlay.addEventListener("click", function () {
+      if (timelineTimer) { stopTimeline(); return; }
+      if (Number(timelineInput.value) >= Number(timelineInput.max)) { timelineInput.value = timelineInput.min; }
+      timelinePlay.textContent = "Pause";
+      timelinePlay.setAttribute("aria-pressed", "true");
+      updateTimeline();
+      timelineTimer = window.setInterval(function () {
+        var next = Number(timelineInput.value) + 1;
+        if (next > Number(timelineInput.max)) { stopTimeline(); return; }
+        timelineInput.value = String(next);
+        updateTimeline();
+      }, window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 1200 : 650);
+    });
+    timelineExplore.addEventListener("click", function () {
+      var year = timelineInput.value;
+      filters.year.clear();
+      filters.year.add(year);
+      paperScope = null;
+      scopeLabel = "";
+      clearRecommendationActive();
+      syncDropdownFilter("year");
+      render();
+      document.getElementById("explorer").scrollIntoView({ behavior: "smooth" });
+    });
+    updateTimeline();
+  })();
+
+  /* ---------- global command search and reading progress ---------- */
+
+  (function () {
+    var dialog = document.getElementById("command-palette");
+    var openButton = document.getElementById("command-open");
+    var closeButton = document.getElementById("command-close");
+    var input = document.getElementById("command-input");
+    var resultsBox = document.getElementById("command-results");
+    if (!dialog || !openButton || !input || !resultsBox) { return; }
+    var resultItems = [];
+    var activeIndex = 0;
+    var sectionItems = Array.prototype.slice.call(document.querySelectorAll(".nav-pills a")).map(function (link) {
+      return {
+        type: "Section",
+        title: link.textContent.trim(),
+        detail: "Jump to " + link.textContent.trim(),
+        hay: link.textContent.toLowerCase(),
+        action: function () {
+          var target = document.querySelector(link.getAttribute("href"));
+          if (target) { target.scrollIntoView({ behavior: "smooth", block: "start" }); }
+        }
+      };
+    });
+    var pilotItems = [
+      { title: "goMARTI", detail: "On-demand · Grand Rapids, Minnesota", refs: [14,15], label: "goMARTI" },
+      { title: "ADASTEC", detail: "Fixed route · Sleeping Bear Dunes", refs: [16], label: "ADASTEC at Sleeping Bear Dunes" },
+      { title: "TEDDY", detail: "Fixed route · Yellowstone National Park", refs: [116], label: "TEDDY at Yellowstone" },
+      { title: "CASSI", detail: "Fixed route · North Carolina", refs: [116,117], label: "CASSI in North Carolina" }
+    ].map(function (pilot) {
+      return {
+        type: "Pilot",
+        title: pilot.title,
+        detail: pilot.detail,
+        hay: (pilot.title + " " + pilot.detail).toLowerCase(),
+        action: function () {
+          setRecommendationFilter(pilot.label, pilot.refs, null, "Pilot program");
+          document.getElementById("explorer").scrollIntoView({ behavior: "smooth" });
+        }
+      };
+    });
+    function themeItems() {
+      return (window.RAV_THEMES || []).map(function (theme) {
+        return {
+          type: "Theme",
+          title: theme.title,
+          detail: theme.cat + " · " + theme.refs.length + " references",
+          hay: (theme.title + " " + theme.cat + " " + theme.definition.join(" ") + " " + theme.rav.join(" ")).toLowerCase(),
+          action: function () { window.openEvidenceTheme(theme.title, true); }
+        };
+      });
+    }
+    var paperItems = PAPERS.map(function (paper) {
+      return {
+        type: "Reference",
+        title: "[" + paper.n + "] " + paper.title,
+        detail: paper.authors + " · " + paper.year,
+        hay: paper._hay,
+        action: function () {
+          setEvidenceFilter("Reference [" + paper.n + "]", [paper.n]);
+          document.getElementById("explorer").scrollIntoView({ behavior: "smooth" });
+        }
+      };
+    });
+
+    function closeCommand() {
+      if (typeof dialog.close === "function" && dialog.open) { dialog.close(); }
+      else { dialog.removeAttribute("open"); }
+    }
+    function openCommand() {
+      if (typeof dialog.showModal === "function") { dialog.showModal(); }
+      else { dialog.setAttribute("open", ""); }
+      input.value = "";
+      renderCommandResults("");
+      window.setTimeout(function () { input.focus(); }, 20);
+    }
+    function scoreItem(item, terms) {
+      var score = 0;
+      terms.forEach(function (term) {
+        var title = item.title.toLowerCase();
+        if (title.indexOf(term) === 0) { score += 8; }
+        else if (title.indexOf(term) !== -1) { score += 5; }
+        else if (item.hay.indexOf(term) !== -1) { score += 2; }
+        else { score -= 100; }
+      });
+      if (item.type === "Theme") { score += 2; }
+      if (item.type === "Section") { score += 1; }
+      return score;
+    }
+    function setCommandActive(index) {
+      if (!resultItems.length) { return; }
+      activeIndex = (index + resultItems.length) % resultItems.length;
+      resultsBox.querySelectorAll(".command-result").forEach(function (button, buttonIndex) {
+        var active = buttonIndex === activeIndex;
+        button.classList.toggle("is-active", active);
+        button.setAttribute("aria-selected", active ? "true" : "false");
+        if (active) { button.scrollIntoView({ block: "nearest" }); }
+      });
+    }
+    function renderCommandResults(value) {
+      var queryText = value.trim().toLowerCase();
+      var terms = queryText.split(/\s+/).filter(Boolean);
+      var pool = sectionItems.concat(themeItems(), pilotItems, paperItems);
+      if (!terms.length) {
+        resultItems = sectionItems.concat(themeItems().slice(0, 5));
+      } else {
+        resultItems = pool.map(function (item) {
+          return { item: item, score: scoreItem(item, terms) };
+        }).filter(function (entry) {
+          return entry.score > -50;
+        }).sort(function (a, b) {
+          return b.score - a.score || a.item.title.localeCompare(b.item.title);
+        }).slice(0, 14).map(function (entry) { return entry.item; });
+      }
+      while (resultsBox.firstChild) { resultsBox.removeChild(resultsBox.firstChild); }
+      if (!resultItems.length) {
+        resultsBox.appendChild(el("p", "command-empty", "No matching theme, pilot, paper, or section."));
+        return;
+      }
+      resultItems.forEach(function (item, index) {
+        var button = el("button", "command-result");
+        button.type = "button";
+        button.setAttribute("role", "option");
+        button.appendChild(el("span", "command-result-type", item.type));
+        button.appendChild(el("strong", null, item.title));
+        button.appendChild(el("b", null, "→"));
+        button.appendChild(el("small", null, item.detail));
+        button.addEventListener("mouseenter", function () { setCommandActive(index); });
+        button.addEventListener("click", function () {
+          closeCommand();
+          item.action();
+        });
+        resultsBox.appendChild(button);
+      });
+      setCommandActive(0);
+    }
+    openButton.addEventListener("click", openCommand);
+    closeButton.addEventListener("click", closeCommand);
+    input.addEventListener("input", function () { renderCommandResults(input.value); });
+    input.addEventListener("keydown", function (event) {
+      if (event.key === "ArrowDown") {
+        event.preventDefault();
+        setCommandActive(activeIndex + 1);
+      } else if (event.key === "ArrowUp") {
+        event.preventDefault();
+        setCommandActive(activeIndex - 1);
+      } else if (event.key === "Enter" && resultItems[activeIndex]) {
+        event.preventDefault();
+        closeCommand();
+        resultItems[activeIndex].action();
+      }
+    });
+    dialog.addEventListener("click", function (event) {
+      if (event.target === dialog) { closeCommand(); }
+    });
+    document.addEventListener("keydown", function (event) {
+      if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "k") {
+        event.preventDefault();
+        if (dialog.open) { closeCommand(); } else { openCommand(); }
+      }
+    });
+
+    var progressBar = document.getElementById("reading-progress-bar");
+    var progressPending = false;
+    function updateProgress() {
+      progressPending = false;
+      var available = document.documentElement.scrollHeight - window.innerHeight;
+      var progress = available > 0 ? Math.max(0, Math.min(1, window.scrollY / available)) : 0;
+      progressBar.style.transform = "scaleX(" + progress + ")";
+    }
+    window.addEventListener("scroll", function () {
+      if (!progressPending) {
+        progressPending = true;
+        window.requestAnimationFrame(updateProgress);
+      }
+    }, { passive: true });
+    updateProgress();
   })();
 
   /* ---------- init ---------- */

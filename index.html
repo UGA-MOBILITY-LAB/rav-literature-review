@@ -22,7 +22,7 @@
 <link rel="icon" href="logo.png">
 <link rel="manifest" href="site.webmanifest">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
-<link rel="stylesheet" href="style.css?v=20260727j">
+<link rel="stylesheet" href="style.css?v=20260727k">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -44,6 +44,7 @@
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
+<div class="reading-progress" aria-hidden="true"><span id="reading-progress-bar"></span></div>
 
 <header class="site-header">
   <div class="container nav-row">
@@ -57,6 +58,7 @@
         <li><a class="pill" href="#overview">Overview</a></li>
         <li><a class="pill" href="#framework">Framework</a></li>
         <li><a class="pill" href="#evidence">Evidence</a></li>
+        <li><a class="pill" href="#decision-lab">Journey</a></li>
         <li><a class="pill" href="#recommendations">Recommendations</a></li>
         <li><a class="pill" href="#statistics">Statistics</a></li>
         <li><a class="pill" href="#explorer">Explorer</a></li>
@@ -65,6 +67,9 @@
         <li><a class="pill" href="#cite">Cite</a></li>
       </ul>
     </nav>
+    <button class="command-trigger" id="command-open" type="button" aria-haspopup="dialog" aria-controls="command-palette">
+      <span>Search</span><kbd>Ctrl K</kbd>
+    </button>
   </div>
 </header>
 
@@ -321,6 +326,89 @@
     </div>
   </section>
 
+  <section id="decision-lab" class="section">
+    <div class="container">
+      <div class="section-head">
+        <h2>Evidence Journey &amp; Decision Lab</h2>
+        <span class="date-pill">Interactive synthesis</span>
+      </div>
+      <p class="section-lede">Trace how documented limitations motivate technical directions, compare themes side by side, and explore where the review is strong or still rural-evidence limited.</p>
+      <div class="lab-tabs" role="tablist" aria-label="Decision lab views">
+        <button type="button" role="tab" id="lab-tab-journey" aria-controls="lab-journey" aria-selected="true" data-lab-tab="journey">Evidence Journey</button>
+        <button type="button" role="tab" id="lab-tab-compare" aria-controls="lab-compare" aria-selected="false" data-lab-tab="compare">Compare Board</button>
+        <button type="button" role="tab" id="lab-tab-intelligence" aria-controls="lab-intelligence" aria-selected="false" data-lab-tab="intelligence">Gaps &amp; Timeline</button>
+      </div>
+
+      <section class="lab-panel" id="lab-journey" role="tabpanel" aria-labelledby="lab-tab-journey">
+        <div class="journey-toolbar">
+          <div>
+            <strong>Progression network</strong>
+            <span>Wheel to zoom; drag to pan; select a node for its evidence profile.</span>
+          </div>
+          <div class="journey-zoom" role="group" aria-label="Evidence Journey zoom controls">
+            <button type="button" id="journey-zoom-out" aria-label="Zoom out">&minus;</button>
+            <button type="button" id="journey-zoom-reset">Reset</button>
+            <button type="button" id="journey-zoom-in" aria-label="Zoom in">+</button>
+          </div>
+        </div>
+        <div class="journey-layout">
+          <div class="journey-viewport" id="journey-viewport">
+            <svg id="journey-graph" viewBox="0 0 1200 760" role="img" aria-label="Interactive network of RAV evidence progressions"></svg>
+          </div>
+          <aside class="card journey-detail" id="journey-detail" aria-live="polite">
+            <p class="journey-detail-kicker">Selected theme</p>
+            <h3>Select a node</h3>
+            <p>Open any node to inspect its evidence role, rural relevance, and next RAV action.</p>
+          </aside>
+        </div>
+        <p class="lab-note">Only literature-supported progressions are connected. Alternative service models and field pilots remain parallel where no causal sequence is established.</p>
+      </section>
+
+      <section class="lab-panel" id="lab-compare" role="tabpanel" aria-labelledby="lab-tab-compare" hidden>
+        <div class="compare-toolbar card">
+          <label for="compare-theme-select">Add a theme</label>
+          <select id="compare-theme-select"></select>
+          <button type="button" class="btn-primary" id="compare-add">Add to comparison</button>
+          <button type="button" class="utility-btn" id="compare-clear">Clear</button>
+          <span id="compare-status" role="status" aria-live="polite">Compare up to four themes.</span>
+        </div>
+        <div class="compare-grid" id="compare-grid"></div>
+      </section>
+
+      <section class="lab-panel" id="lab-intelligence" role="tabpanel" aria-labelledby="lab-tab-intelligence" hidden>
+        <div class="intelligence-grid">
+          <article class="card radar-card">
+            <div class="lab-card-head">
+              <div><p class="rec-kicker">Evidence coverage</p><h3>Research Gap Radar</h3></div>
+              <span>Higher is stronger</span>
+            </div>
+            <div class="radar-layout">
+              <svg id="gap-radar" viewBox="0 0 520 430" role="img" aria-label="Radar chart comparing evidence coverage by RAV module"></svg>
+              <div id="radar-legend" class="radar-legend" role="group" aria-label="Select a RAV module"></div>
+            </div>
+            <p id="radar-summary" class="lab-note" aria-live="polite"></p>
+          </article>
+          <article class="card timeline-card">
+            <div class="lab-card-head">
+              <div><p class="rec-kicker">2014&ndash;2026</p><h3>Timeline Playback</h3></div>
+              <button type="button" class="utility-btn" id="timeline-play" aria-pressed="false">Play</button>
+            </div>
+            <label class="timeline-year-label" for="timeline-year">Evidence available through <strong id="timeline-year-value">2026</strong></label>
+            <input id="timeline-year" type="range" min="2014" max="2026" value="2026" step="1">
+            <div class="timeline-track-labels"><span>2014</span><span>2020</span><span>2026</span></div>
+            <div id="timeline-bars" class="timeline-bars" aria-live="polite"></div>
+            <div class="timeline-summary">
+              <strong id="timeline-total">118 references</strong>
+              <span id="timeline-milestone">Full review coverage</span>
+            </div>
+            <button type="button" class="btn-primary" id="timeline-explore">Explore this year</button>
+          </article>
+        </div>
+        <p class="lab-note">Coverage indicators describe this review corpus; they are not a formal meta-analysis or deployment-readiness certification.</p>
+      </section>
+    </div>
+  </section>
+
   <section id="recommendations" class="section">
     <div class="container">
       <div class="section-head">
@@ -328,8 +416,24 @@
         <span class="date-pill">From the literature review</span>
       </div>
       <p class="section-lede">The evidence points to a staged rural deployment strategy: keep safety-critical capability onboard, add infrastructure where it closes a demonstrated gap, and use pilots to calibrate the system with rural data.</p>
+      <div class="stakeholder-view card" id="stakeholder-view">
+        <div class="stakeholder-view-head">
+          <div><p class="rec-kicker">Stakeholder view</p><h3>Build a focused one-page briefing</h3></div>
+          <button type="button" class="utility-btn" id="stakeholder-print">Print / save as PDF</button>
+        </div>
+        <div class="stakeholder-switcher" role="group" aria-label="Choose a stakeholder perspective">
+          <button type="button" data-stakeholder="all" aria-pressed="true">All stakeholders</button>
+          <button type="button" data-stakeholder="vehicle" aria-pressed="false">RAV team</button>
+          <button type="button" data-stakeholder="fleet" aria-pressed="false">Fleet operator</button>
+          <button type="button" data-stakeholder="road" aria-pressed="false">DOT &amp; planners</button>
+          <button type="button" data-stakeholder="connect" aria-pressed="false">Connectivity</button>
+          <button type="button" data-stakeholder="pilot" aria-pressed="false">Program &amp; community</button>
+        </div>
+        <p id="stakeholder-summary" aria-live="polite">Showing the complete staged deployment strategy across all stakeholder groups.</p>
+        <p id="stakeholder-reference-line" class="stakeholder-reference-line">Choose one perspective to include its supporting reference numbers in the printable brief.</p>
+      </div>
       <div class="recommendation-grid">
-        <article class="card recommendation-card rec-vehicle" data-label="RAV vehicle platform" data-refs="1,2,3,4,17,18,19,20,21,22,23,24,25,26,27,56,57,58,59,60,61,62,63,64,65,66,67" tabindex="0" role="button" aria-pressed="false" aria-label="View supporting references for the RAV vehicle platform recommendation">
+        <article class="card recommendation-card rec-vehicle" data-stakeholder-card="vehicle" data-label="RAV vehicle platform" data-refs="1,2,3,4,17,18,19,20,21,22,23,24,25,26,27,56,57,58,59,60,61,62,63,64,65,66,67" tabindex="0" role="button" aria-pressed="false" aria-label="View supporting references for the RAV vehicle platform recommendation">
           <p class="rec-kicker">RAV vehicle platform</p>
           <h3>Build a resilient onboard core</h3>
           <ul>
@@ -339,7 +443,7 @@
           </ul>
           <p class="rec-evidence">Evidence base: 27 references <span class="rec-action">Explore evidence <span aria-hidden="true">&rarr;</span></span></p>
         </article>
-        <article class="card recommendation-card rec-fleet" data-label="Fleet and service operators" data-refs="5,14,15,16,28,29,30,31,68,69,70,71,72,73,74,75,76,77,78,79" tabindex="0" role="button" aria-pressed="false" aria-label="View supporting references for the fleet and service operators recommendation">
+        <article class="card recommendation-card rec-fleet" data-stakeholder-card="fleet" data-label="Fleet and service operators" data-refs="5,14,15,16,28,29,30,31,68,69,70,71,72,73,74,75,76,77,78,79" tabindex="0" role="button" aria-pressed="false" aria-label="View supporting references for the fleet and service operators recommendation">
           <p class="rec-kicker">Fleet and service operators</p>
           <h3>Match operations to thin demand</h3>
           <ul>
@@ -349,7 +453,7 @@
           </ul>
           <p class="rec-evidence">Evidence base: 20 references <span class="rec-action">Explore evidence <span aria-hidden="true">&rarr;</span></span></p>
         </article>
-        <article class="card recommendation-card rec-road" data-label="Road and infrastructure agencies" data-refs="7,25,37,38,39,46,47,48,49,80,81,82,83,84,85,86,87,88,89,90,91,118" tabindex="0" role="button" aria-pressed="false" aria-label="View supporting references for the road and infrastructure agencies recommendation">
+        <article class="card recommendation-card rec-road" data-stakeholder-card="road" data-label="Road and infrastructure agencies" data-refs="7,25,37,38,39,46,47,48,49,80,81,82,83,84,85,86,87,88,89,90,91,118" tabindex="0" role="button" aria-pressed="false" aria-label="View supporting references for the road and infrastructure agencies recommendation">
           <p class="rec-kicker">Road and infrastructure agencies</p>
           <h3>Upgrade selectively, digitize systematically</h3>
           <ul>
@@ -359,7 +463,7 @@
           </ul>
           <p class="rec-evidence">Evidence base: 22 references <span class="rec-action">Explore evidence <span aria-hidden="true">&rarr;</span></span></p>
         </article>
-        <article class="card recommendation-card rec-connect" data-label="Connectivity and cybersecurity partners" data-refs="8,9,32,33,44,45,50,51,52,53,54,55,92,93,94,95,96,97,98,99,100,101,102,103" tabindex="0" role="button" aria-pressed="false" aria-label="View supporting references for the connectivity and cybersecurity partners recommendation">
+        <article class="card recommendation-card rec-connect" data-stakeholder-card="connect" data-label="Connectivity and cybersecurity partners" data-refs="8,9,32,33,44,45,50,51,52,53,54,55,92,93,94,95,96,97,98,99,100,101,102,103" tabindex="0" role="button" aria-pressed="false" aria-label="View supporting references for the connectivity and cybersecurity partners recommendation">
           <p class="rec-kicker">Connectivity and cybersecurity partners</p>
           <h3>Design for disconnection</h3>
           <ul>
@@ -369,7 +473,7 @@
           </ul>
           <p class="rec-evidence">Evidence base: 24 references <span class="rec-action">Explore evidence <span aria-hidden="true">&rarr;</span></span></p>
         </article>
-        <article class="card recommendation-card rec-pilot" data-label="Program, policy, and pilot partners" data-refs="10,11,12,13,14,15,16,34,35,36,37,38,39,40,41,42,43,104,105,106,107,108,109,110,111,112,113,114,115,116,117" tabindex="0" role="button" aria-pressed="false" aria-label="View supporting references for the program, policy, and pilot partners recommendation">
+        <article class="card recommendation-card rec-pilot" data-stakeholder-card="pilot" data-label="Program, policy, and pilot partners" data-refs="10,11,12,13,14,15,16,34,35,36,37,38,39,40,41,42,43,104,105,106,107,108,109,110,111,112,113,114,115,116,117" tabindex="0" role="button" aria-pressed="false" aria-label="View supporting references for the program, policy, and pilot partners recommendation">
           <p class="rec-kicker">Program, policy, and pilot partners</p>
           <h3>Use pilots to close the rural evidence gap</h3>
           <ul>
@@ -464,6 +568,12 @@
             <button type="button" class="pilot-map-filter is-active" data-pilot-filter="all" aria-pressed="true">All programs</button>
             <button type="button" class="pilot-map-filter" data-pilot-filter="on-demand" aria-pressed="false">On-demand</button>
             <button type="button" class="pilot-map-filter" data-pilot-filter="fixed" aria-pressed="false">Fixed route</button>
+            <span class="pilot-story-spacer"></span>
+            <button type="button" class="pilot-story-button" id="pilot-corridor-toggle" aria-pressed="false">Show concept corridor</button>
+            <button type="button" class="pilot-story-button" id="pilot-story-toggle" aria-pressed="false">Start story</button>
+            <button type="button" class="pilot-story-nav" id="pilot-story-prev" aria-label="Previous pilot" hidden>&larr;</button>
+            <span id="pilot-story-status" class="pilot-story-status" hidden>1 of 4</span>
+            <button type="button" class="pilot-story-nav" id="pilot-story-next" aria-label="Next pilot" hidden>&rarr;</button>
           </div>
           <div class="pilot-map-layout">
             <div id="pilot-map" class="pilot-map" role="region" aria-label="Interactive map of four rural and remote autonomous shuttle programs">
@@ -481,12 +591,14 @@
                 <div><dt>Operating frame</dt><dd id="map-detail-frame">Low-speed, geofenced service with an onboard safety operator.</dd></div>
                 <div><dt>RAV lesson</dt><dd id="map-detail-lesson">Pair flexible booking with explicit safety gates and accessible rider support.</dd></div>
               </dl>
+              <p class="map-corridor-note" id="map-corridor-note" hidden>Concept corridor is an illustrative planning overlay, not a documented pilot route.</p>
               <button type="button" class="btn-primary" id="map-detail-evidence">Explore 2 source records</button>
             </aside>
           </div>
           <div class="pilot-map-legend" aria-label="Pilot map legend">
             <span><i class="on-demand"></i>On-demand service</span>
             <span><i class="fixed"></i>Fixed-route service</span>
+            <span><i class="concept-corridor"></i>Illustrative RAV corridor</span>
             <span>Map data © OpenStreetMap contributors</span>
           </div>
         </div>
@@ -734,6 +846,17 @@
 
 </main>
 
+<dialog class="command-palette" id="command-palette" aria-labelledby="command-title">
+  <div class="command-head">
+    <div><p class="rec-kicker">Quick navigation</p><h2 id="command-title">Search the review</h2></div>
+    <button type="button" id="command-close" aria-label="Close search">&times;</button>
+  </div>
+  <label class="visually-hidden" for="command-input">Search sections, themes, pilots, and references</label>
+  <input id="command-input" type="search" autocomplete="off" placeholder="Search a theme, author, paper, pilot, or section...">
+  <div id="command-results" class="command-results" role="listbox" aria-label="Search results"></div>
+  <p class="command-hint"><kbd>&uarr;</kbd><kbd>&darr;</kbd> move <kbd>Enter</kbd> open <kbd>Esc</kbd> close</p>
+</dialog>
+
 <footer class="site-footer">
   <div class="container footer-grid">
     <div>
@@ -743,7 +866,7 @@
         <a href="mailto:Handong.Yao@uga.edu">Handong Yao</a>
       </p>
       <p>College of Engineering, University of Georgia</p>
-      <p class="footer-muted">Version 2.5 &middot; Updated July 27, 2026 &middot; 118 verified references</p>
+      <p class="footer-muted">Version 2.6 &middot; Updated July 27, 2026 &middot; 118 verified references</p>
     </div>
     <aside class="follow-card" aria-label="Follow UGA Mobility Lab">
       <img src="qr-uga-mobility-lab.png" width="112" height="112" alt="QR code linking to the UGA Mobility Lab homepage">
@@ -757,8 +880,8 @@
 </footer>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-<script src="data.js?v=20260727j"></script>
-<script src="edges.js?v=20260727j"></script>
-<script src="app.js?v=20260727j"></script>
+<script src="data.js?v=20260727k"></script>
+<script src="edges.js?v=20260727k"></script>
+<script src="app.js?v=20260727k"></script>
 </body>
 </html>

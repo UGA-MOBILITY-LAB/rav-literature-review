@@ -79,6 +79,14 @@ def main() -> None:
     section_ids = re.findall(r'<section id="([^"]+)"', index)
     assert section_ids[-1] == "cite"
     assert "methodology" in section_ids
+    assert "decision-lab" in section_ids
+    all_ids = re.findall(r'\sid="([^"]+)"', index)
+    assert len(all_ids) == len(set(all_ids))
+    nav_targets = re.findall(r'<a class="pill" href="#([^"]+)"', index)
+    assert set(nav_targets) <= set(section_ids)
+    theme_titles = set(re.findall(r'title: "([^"]+)", status:', app))
+    progression_targets = set(re.findall(r'target: "([^"]+)"', app))
+    assert progression_targets <= theme_titles
     retired_label = re.compile(r"\x70ick[\s_-]*u\x70.{0,8}dis\x70atch", re.I)
     assert not retired_label.search(app + index + data_raw)
     assert "Haohua.Que@uga.edu" in index
@@ -92,8 +100,26 @@ def main() -> None:
     assert "export-bibtex" in index
     assert "qr-uga-mobility-lab.png" in index
     assert "syncStatSelection();" in app
+    required_interactions = {
+        "journey-graph",
+        "compare-grid",
+        "gap-radar",
+        "timeline-year",
+        "stakeholder-view",
+        "pilot-story-toggle",
+        "pilot-corridor-toggle",
+        "command-palette",
+        "reading-progress-bar",
+    }
+    assert all(f'id="{interaction_id}"' in index for interaction_id in required_interactions)
+    assert "Version 2.6" in index
+    assert "app.js?v=20260727k" in index
+    assert "style.css?v=20260727k" in index
 
-    print(f"Validated {expected_count} papers, review coding, OA audit, cross-references, authors, section order, and interaction hooks")
+    print(
+        f"Validated {expected_count} papers, {len(theme_titles)} themes, "
+        "review coding, OA audit, cross-references, authors, section order, and interaction hooks"
+    )
     print("Category counts:", dict(category_counts))
     print("Evidence edges:", len(edges))
 

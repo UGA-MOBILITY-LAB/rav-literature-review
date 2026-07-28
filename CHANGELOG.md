@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.6 — 2026-07-27
+
+- Added a zoomable Evidence Journey with clickable progression nodes and synchronized evidence details.
+- Added a four-theme Compare Board, Research Gap Radar, and animated 2014–2026 Timeline Playback.
+- Added stakeholder-specific recommendation views with print-to-PDF briefing support.
+- Added a guided field-pilot map story and Ctrl+K global search across sections, themes, pilots, and references.
+- Added reading progress, reduced-motion handling, and responsive layouts for the new interactions.
+
 ## 2.5 — 2026-07-27
 
 - Added clickable evidence progressions across perception, localization, data integration, fleet operations, infrastructure, communication, and cooperative driving.
