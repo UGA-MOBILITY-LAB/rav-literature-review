@@ -1,8 +1,8 @@
 {
-  "auditDate": "2026-07-25",
+  "auditDate": "2026-07-27",
   "method": "Crossref DOI metadata, arXiv official record metadata, or authoritative source-page metadata",
-  "paperCount": 117,
-  "verifiedCount": 117,
+  "paperCount": 118,
+  "verifiedCount": 118,
   "failedCount": 0,
   "entries": [
     {
@@ -1172,6 +1172,16 @@
       "identifier": "https://www.ncdot.gov/divisions/integrated-mobility/innovation/cassi/Documents/cassi-program-development-final-report.pdf",
       "resolved": "https://www.ncdot.gov/divisions/integrated-mobility/innovation/cassi/Documents/cassi-program-development-final-report.pdf",
       "metadataTitle": "Connected Autonomous Shuttle Supporting Innovation (CASSI) Program Development Final Report",
+      "titleSimilarity": 1.0,
+      "verified": true
+    },
+    {
+      "n": 118,
+      "title": "Test Bed Lower Saxony – Innovation Laboratory for the Mobility of the Future",
+      "source": "Authoritative URL",
+      "identifier": "https://www.dlr.de/en/ts/research-transfer/research-services/test-bed-lower-saxony",
+      "resolved": "https://www.dlr.de/en/ts/research-transfer/research-services/test-bed-lower-saxony",
+      "metadataTitle": "Test Bed Lower Saxony – Innovation laboratory for the mobility of the future",
       "titleSimilarity": 1.0,
       "verified": true
     }

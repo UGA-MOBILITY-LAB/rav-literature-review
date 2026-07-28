@@ -1438,8 +1438,8 @@
         title: "Verify and code",
         summary: "Resolve every retained item to a real source and apply a consistent evidence taxonomy for the interactive review.",
         rule: "Require a working DOI, arXiv record, or authoritative source page before a record enters the evidence database.",
-        evidence: "92 DOI records, 14 arXiv records, and 11 authoritative pages; 84 records are openly accessible.",
-        output: "117 verified records coded by RAV module, study design, rural relevance, evidence strength, year, and access status."
+        evidence: "92 DOI records, 14 arXiv records, and 12 authoritative pages; 85 records are openly accessible.",
+        output: "118 verified records coded by RAV module, study design, rural relevance, evidence strength, year, and access status."
       }
     ];
     var step = detail.querySelector(".method-detail-step");
@@ -1711,7 +1711,7 @@
         rav: ["Validate survey tools under local road, weather, and maintenance conditions.", "Combine results into segment-level physical-upgrade priorities."]
       },
       {
-        cat: "Infrastructure", title: "Digital road-information layer", status: "m", refs: [7,25,37,38,80,87,89,90,91],
+        cat: "Infrastructure", title: "Digital road-information layer", status: "m", refs: [7,25,37,38,80,87,89,90,91,118],
         definition: ["HD maps provide the spatial base.", "Roadside sensing updates conditions, while a digital twin combines the layers."],
         pros: ["Combines static maps with changing roadside observations.", "Supports shared vehicle and infrastructure decisions."],
         cons: ["Requires instrumented corridors and ongoing data maintenance.", "Implementation cost rises with sensor density and update frequency."],
@@ -1799,7 +1799,7 @@
     var byNum = {};
     PAPERS.forEach(function (p) { byNum[p.n] = p; });
     var themeCount = document.getElementById("theme-count");
-    if (themeCount) { themeCount.textContent = THEMES.length + " sub-themes · 117 references"; }
+    if (themeCount) { themeCount.textContent = THEMES.length + " sub-themes · 118 references"; }
     var initialTheme = null;
     CATEGORIES.forEach(function (c, categoryIndex) {
       var row = el("div", "mrow");

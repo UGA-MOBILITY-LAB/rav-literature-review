@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.1 — 2026-07-27
+
+- Added the DLR Test Bed Lower Saxony source from the latest Word review as reference 118.
+- Added interactive Tier 2 submodules for infrastructure, communication, and cooperative driving.
+- Updated all evidence, source-verification, and open-access totals.
+
 ## 2.0 — 2026-07-25
 
 - Expanded the evidence base to 117 verified references across six categories.

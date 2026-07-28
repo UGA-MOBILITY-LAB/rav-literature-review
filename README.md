@@ -6,7 +6,7 @@ Interactive companion website for the TRAVELS Rural Autonomous Vehicle (RAV) lit
 
 ## Evidence base
 
-- 117 real, verified references mapped to six RAV categories and 26 evidence sub-themes
+- 118 real, verified references mapped to six RAV categories and 26 evidence sub-themes
 - Every record resolves through Crossref DOI metadata, an arXiv record, or an authoritative source page
 - Paper-level review coding for study type, rural relevance, evidence strength, and open-access status
 - Separate source and Unpaywall audit files for traceability

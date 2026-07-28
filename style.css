@@ -525,6 +525,7 @@ h1 { font-size: 42px; line-height: 1.12; margin: 0 0 10px; }
 .thesis-svg { width: 100%; min-width: 720px; height: auto; display: block; }
 
 .thesis-svg .flow { stroke: #9aa0a6; stroke-width: 2; }
+.thesis-svg .extension-flow { stroke-dasharray: 5 4; }
 .thesis-svg .sub-flow { stroke: #6F88AD; stroke-width: 1.4; fill: none; }
 .thesis-svg .loop-seg { fill: none; stroke: #9aa0a6; stroke-width: 1.6; stroke-dasharray: 6 5; }
 

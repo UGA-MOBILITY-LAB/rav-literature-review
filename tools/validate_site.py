@@ -31,12 +31,13 @@ def main() -> None:
     audit = json.loads((ROOT / "sources-audit.json").read_text(encoding="utf-8"))
     oa_audit = json.loads((ROOT / "open-access-audit.json").read_text(encoding="utf-8"))
 
-    assert len(papers) == meta["paperCount"] == 117
-    assert audit["paperCount"] == audit["verifiedCount"] == 117
+    expected_count = meta["paperCount"]
+    assert len(papers) == expected_count
+    assert audit["paperCount"] == audit["verifiedCount"] == expected_count
     assert audit["failedCount"] == 0
-    assert [paper["n"] for paper in papers] == list(range(1, 118))
-    assert len({paper["key"] for paper in papers}) == 117
-    assert len({paper["title"].casefold() for paper in papers}) == 117
+    assert [paper["n"] for paper in papers] == list(range(1, expected_count + 1))
+    assert len({paper["key"] for paper in papers}) == expected_count
+    assert len({paper["title"].casefold() for paper in papers}) == expected_count
     assert all(paper.get("doi") or paper.get("arxiv") or paper.get("url") for paper in papers)
     assert all(paper.get("authors") for paper in papers)
     required_coding = {"etype", "rural", "strength", "access", "focus", "rav"}
@@ -92,7 +93,7 @@ def main() -> None:
     assert "qr-uga-mobility-lab.png" in index
     assert "syncStatSelection();" in app
 
-    print("Validated 117 papers, review coding, OA audit, cross-references, authors, section order, and interaction hooks")
+    print(f"Validated {expected_count} papers, review coding, OA audit, cross-references, authors, section order, and interaction hooks")
     print("Category counts:", dict(category_counts))
     print("Evidence edges:", len(edges))
 
