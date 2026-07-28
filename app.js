@@ -493,8 +493,10 @@
       legendItems[i].setAttribute("aria-pressed", "true");
     }
     clearRecommendationActive();
-    activeCard.classList.add("is-active");
-    activeCard.setAttribute("aria-pressed", "true");
+    if (activeCard) {
+      activeCard.classList.add("is-active");
+      activeCard.setAttribute("aria-pressed", "true");
+    }
     render();
   }
 
@@ -1585,6 +1587,381 @@
         }
       });
     });
+  })();
+
+  /* ---------- scenario planner ---------- */
+
+  (function () {
+    var root = document.getElementById("scenario-planner");
+    if (!root) { return; }
+    var allowed = {
+      road: ["paved", "unpaved", "park"],
+      weather: ["normal", "adverse", "winter"],
+      connectivity: ["reliable", "intermittent", "dead-zones"],
+      demand: ["fixed", "thin", "on-demand"]
+    };
+    var state = {
+      road: "paved",
+      weather: "normal",
+      connectivity: "intermittent",
+      demand: "thin"
+    };
+    var initialParams = new URLSearchParams(window.location.search);
+    Object.keys(state).forEach(function (key) {
+      var requested = initialParams.get(key);
+      if (allowed[key].indexOf(requested) !== -1) { state[key] = requested; }
+    });
+    var scoreBox = document.getElementById("planner-score");
+    var posture = document.getElementById("planner-posture");
+    var summary = document.getElementById("planner-summary");
+    var stackBox = document.getElementById("planner-stack");
+    var actionBox = document.getElementById("planner-actions");
+    var evidenceButton = document.getElementById("planner-evidence");
+    var shareButton = document.getElementById("planner-share");
+    var currentRefs = [];
+    var currentLabel = "";
+
+    function addUnique(target, values) {
+      values.forEach(function (value) {
+        if (target.indexOf(value) === -1) { target.push(value); }
+      });
+    }
+
+    function writeScenarioUrl() {
+      var params = new URLSearchParams(window.location.search);
+      Object.keys(state).forEach(function (key) { params.set(key, state[key]); });
+      var next = window.location.pathname + "?" + params.toString() + window.location.hash;
+      window.history.replaceState(null, "", next);
+    }
+
+    function renderPlanner(updateUrl) {
+      var score = 82;
+      var stacks = ["Camera + radar baseline", "GNSS/INS + map prior"];
+      var actions = ["Validate the onboard fallback on the target route before adding infrastructure support."];
+      var refs = [1,2,17,18,19,20,23,24,56,57,58,60,61,62,63,64];
+
+      if (state.road === "unpaved") {
+        score -= 20;
+        addUnique(stacks, ["Local surface dataset", "Road-condition assessment"]);
+        addUnique(actions, [
+          "Survey gravel condition, geometry, signs, and markings before defining the operational design domain.",
+          "Retrain perception and localization on sparse geometry and unpaved surfaces."
+        ]);
+        addUnique(refs, [39,46,47,48,49,80,83,84,85,86,88]);
+      } else if (state.road === "park") {
+        score -= 8;
+        addUnique(stacks, ["Geofenced route plan", "Onboard supervision"]);
+        addUnique(actions, [
+          "Use explicit stop, interruption, charging, and visitor-interaction procedures.",
+          "Treat the fixed route as a controlled learning environment, not proof of open-road readiness."
+        ]);
+        addUnique(refs, [16,77,116,117]);
+      } else {
+        addUnique(stacks, ["Selective roadside support"]);
+        addUnique(actions, ["Instrument only high-risk conflict points and segments with a demonstrated onboard sensing gap."]);
+        addUnique(refs, [37,38,80,81,82,84,87,118]);
+      }
+
+      if (state.weather === "adverse") {
+        score -= 14;
+        addUnique(stacks, ["Adverse-weather perception", "Risk-triggered fallback"]);
+        addUnique(actions, ["Calibrate visibility and sensor-degradation thresholds for local rain, fog, and glare."]);
+        addUnique(refs, [3,12,13,21,22,58,61]);
+      } else if (state.weather === "winter") {
+        score -= 19;
+        addUnique(stacks, ["Winter sensor fusion", "Road-weather feed", "Minimum-risk stop"]);
+        addUnique(actions, [
+          "Validate combined snow, low-light, occlusion, and road-surface degradation.",
+          "Preserve a safe onboard response when road-weather information is unavailable."
+        ]);
+        addUnique(refs, [3,12,13,21,22,58,61,86]);
+      } else {
+        addUnique(actions, ["Retain weather fallback criteria even if the initial pilot operates in fair conditions."]);
+      }
+
+      if (state.connectivity === "reliable") {
+        score -= 3;
+        addUnique(stacks, ["V2X + edge support"]);
+        addUnique(actions, ["Keep safety-critical control onboard even when the route has reliable communications."]);
+        addUnique(refs, [9,50,51,52,92,93,95,96,97,98,103]);
+      } else if (state.connectivity === "intermittent") {
+        score -= 13;
+        addUnique(stacks, ["Multi-channel communications", "Store-and-forward telemetry"]);
+        addUnique(actions, ["Switch among direct V2X, cellular, and satellite support using measured coverage and latency."]);
+        addUnique(refs, [8,50,79,92,93,94,103]);
+      } else {
+        score -= 24;
+        addUnique(stacks, ["Onboard safety core", "Delayed fleet synchronization"]);
+        addUnique(actions, [
+          "Design the service to remain safe through extended network loss.",
+          "Use remote supervision only within a verified latency and video-quality envelope."
+        ]);
+        addUnique(refs, [8,50,79,92,93,94,103]);
+      }
+
+      if (state.demand === "fixed") {
+        score -= 4;
+        addUnique(stacks, ["Fixed-route scheduler", "Energy + headway plan"]);
+        addUnique(actions, ["Plan headways, charging, and service recovery for thin rural demand."]);
+        addUnique(refs, [16,69,77,78,116,117]);
+      } else if (state.demand === "on-demand") {
+        score -= 7;
+        addUnique(stacks, ["Ride matching", "Accessible booking", "Dynamic dispatch"]);
+        addUnique(actions, ["Calibrate service zones, fleet size, wait-time targets, and non-app booking support."]);
+        addUnique(refs, [5,14,15,28,29,30,31,68,70,71,73,75]);
+      } else {
+        score -= 10;
+        addUnique(stacks, ["Demand-responsive scheduling", "Fleet rebalancing"]);
+        addUnique(actions, ["Test whether a hybrid scheduled and on-demand service avoids low utilization and long waits."]);
+        addUnique(refs, [5,28,29,30,31,68,69,70,73,75,78]);
+      }
+
+      score = Math.max(22, Math.min(88, score));
+      var postureText;
+      var summaryText;
+      var scoreColor;
+      if (score >= 72) {
+        postureText = "Pilot-ready with safeguards";
+        summaryText = "The scenario can start with existing technology, route-specific validation, and explicit safety gates.";
+        scoreColor = "#4B8B3B";
+      } else if (score >= 48) {
+        postureText = "Adapt before deployment";
+        summaryText = "Use a resilient onboard core, close the highlighted rural gaps, and validate them in a supervised pilot.";
+        scoreColor = "#D99114";
+      } else {
+        postureText = "High-assurance pilot only";
+        summaryText = "The combined road, weather, communications, and service risks require a tightly scoped operational design domain.";
+        scoreColor = "#BA0C2F";
+      }
+
+      scoreBox.style.setProperty("--score", String(score));
+      scoreBox.style.setProperty("--score-color", scoreColor);
+      scoreBox.querySelector("strong").textContent = String(score);
+      posture.textContent = postureText;
+      summary.textContent = summaryText;
+      while (stackBox.firstChild) { stackBox.removeChild(stackBox.firstChild); }
+      stacks.forEach(function (item) { stackBox.appendChild(el("span", null, item)); });
+      while (actionBox.firstChild) { actionBox.removeChild(actionBox.firstChild); }
+      actions.slice(0, 5).forEach(function (item) { actionBox.appendChild(el("li", null, item)); });
+      currentRefs = refs.sort(function (a, b) { return a - b; });
+      currentLabel = state.road + " / " + state.weather + " / " + state.connectivity + " / " + state.demand;
+      evidenceButton.textContent = "Explore " + currentRefs.length + " supporting references";
+      root.querySelectorAll("[data-planner-key]").forEach(function (button) {
+        var active = state[button.getAttribute("data-planner-key")] === button.getAttribute("data-planner-value");
+        button.setAttribute("aria-pressed", active ? "true" : "false");
+      });
+      if (updateUrl) { writeScenarioUrl(); }
+    }
+
+    root.querySelectorAll("[data-planner-key]").forEach(function (button) {
+      button.addEventListener("click", function () {
+        state[button.getAttribute("data-planner-key")] = button.getAttribute("data-planner-value");
+        renderPlanner(true);
+      });
+    });
+    evidenceButton.addEventListener("click", function () {
+      setRecommendationFilter(currentLabel, currentRefs, null, "Scenario planner");
+      document.getElementById("explorer").scrollIntoView({ behavior: "smooth" });
+    });
+    shareButton.addEventListener("click", function () {
+      writeScenarioUrl();
+      var done = function () {
+        shareButton.textContent = "Scenario link copied";
+        window.setTimeout(function () { shareButton.textContent = "Copy scenario link"; }, 1600);
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(window.location.href).then(done);
+      } else {
+        var input = el("textarea");
+        input.value = window.location.href;
+        input.setAttribute("readonly", "");
+        input.style.position = "fixed";
+        input.style.opacity = "0";
+        document.body.appendChild(input);
+        input.select();
+        document.execCommand("copy");
+        document.body.removeChild(input);
+        done();
+      }
+    });
+    renderPlanner(false);
+  })();
+
+  /* ---------- field-pilot map ---------- */
+
+  (function () {
+    var mapElement = document.getElementById("pilot-map");
+    if (!mapElement) { return; }
+    var programs = [
+      {
+        key: "gomarti",
+        label: "goMARTI",
+        name: "goMARTI",
+        location: "Grand Rapids, Minnesota",
+        coords: [47.2372, -93.5302],
+        mode: "on-demand",
+        modeLabel: "On-demand",
+        refs: [14,15],
+        summary: "Accessible demand-responsive service across a dispersed rural community.",
+        frame: "Low-speed, geofenced service with an onboard safety operator.",
+        lesson: "Pair flexible booking with explicit safety gates and accessible rider support."
+      },
+      {
+        key: "adastec",
+        label: "ADASTEC at Sleeping Bear Dunes",
+        name: "ADASTEC",
+        location: "Sleeping Bear Dunes, Michigan",
+        coords: [44.8561, -86.0581],
+        mode: "fixed",
+        modeLabel: "Fixed route",
+        refs: [16],
+        summary: "A scheduled automated bus in a remote public-land setting.",
+        frame: "Defined geofenced route with supervised operation.",
+        lesson: "Predictable routes simplify deployment but still require energy and interruption planning."
+      },
+      {
+        key: "teddy",
+        label: "TEDDY at Yellowstone",
+        name: "TEDDY",
+        location: "Yellowstone National Park",
+        coords: [44.4280, -110.5885],
+        mode: "fixed",
+        modeLabel: "Fixed route",
+        refs: [116],
+        summary: "Visitor shuttle evidence from a remote national-park environment.",
+        frame: "Low-speed, geofenced operation with onboard supervision.",
+        lesson: "Plan weather, communications, energy, and service interruption as one operating system."
+      },
+      {
+        key: "cassi",
+        label: "CASSI in North Carolina",
+        name: "CASSI",
+        location: "Wright Brothers Memorial + N.C. sites",
+        coords: [36.0161, -75.6693],
+        mode: "fixed",
+        modeLabel: "Fixed route",
+        refs: [116,117],
+        summary: "Automated shuttle demonstrations across remote and public sites in North Carolina.",
+        frame: "Geofenced routes with onboard safety operators.",
+        lesson: "Comparable reporting across sites exposes repeatable operational barriers."
+      }
+    ];
+    var detailName = document.getElementById("map-detail-name");
+    var detailMode = document.getElementById("map-detail-mode");
+    var detailLocation = document.getElementById("map-detail-location");
+    var detailSummary = document.getElementById("map-detail-summary");
+    var detailFrame = document.getElementById("map-detail-frame");
+    var detailLesson = document.getElementById("map-detail-lesson");
+    var detailEvidence = document.getElementById("map-detail-evidence");
+    var selected = programs[0];
+    var markers = {};
+    var map = null;
+
+    function programCard(program) {
+      return document.querySelector('.pilot-card[data-label="' + program.label + '"]');
+    }
+
+    function updateSelection(program, shouldFly) {
+      selected = program;
+      detailName.textContent = program.name;
+      detailMode.textContent = program.modeLabel;
+      detailLocation.textContent = program.location;
+      detailSummary.textContent = program.summary;
+      detailFrame.textContent = program.frame;
+      detailLesson.textContent = program.lesson;
+      detailEvidence.textContent = "Explore " + program.refs.length + " source record" + (program.refs.length === 1 ? "" : "s");
+      programs.forEach(function (item) {
+        var card = programCard(item);
+        if (card) { card.classList.toggle("map-selected", item.key === program.key); }
+        var marker = markers[item.key];
+        if (marker && marker.getElement()) {
+          var dot = marker.getElement().querySelector(".pilot-marker");
+          if (dot) { dot.classList.toggle("is-selected", item.key === program.key); }
+        }
+      });
+      if (map && markers[program.key] && map.hasLayer(markers[program.key]) && shouldFly) {
+        map.flyTo(program.coords, 6, { duration: .65 });
+      }
+    }
+
+    detailEvidence.addEventListener("click", function () {
+      setRecommendationFilter(selected.label, selected.refs, programCard(selected), "Pilot program");
+      document.getElementById("explorer").scrollIntoView({ behavior: "smooth" });
+    });
+
+    if (typeof L === "undefined") {
+      mapElement.innerHTML = '<p class="pilot-map-loading">The interactive map could not load. The accessible pilot cards below remain available.</p>';
+      updateSelection(programs[0], false);
+      return;
+    }
+
+    mapElement.innerHTML = "";
+    map = L.map(mapElement, {
+      center: [39.4, -97.2],
+      zoom: 4,
+      minZoom: 3,
+      maxZoom: 9,
+      scrollWheelZoom: false,
+      keyboard: true,
+      zoomControl: true
+    });
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      maxZoom: 19,
+      attribution: "&copy; OpenStreetMap contributors"
+    }).addTo(map);
+
+    programs.forEach(function (program, index) {
+      var color = program.mode === "on-demand" ? "#00A3AD" : "#4B8B3B";
+      var icon = L.divIcon({
+        className: "pilot-marker-icon",
+        html: '<span class="pilot-marker" style="--marker-color:' + color + '"><b>' + (index + 1) + '</b></span>',
+        iconSize: [40, 40],
+        iconAnchor: [20, 38]
+      });
+      var marker = L.marker(program.coords, {
+        icon: icon,
+        keyboard: true,
+        title: program.name + " — " + program.location,
+        alt: program.name + " pilot location"
+      }).addTo(map);
+      marker.bindTooltip(program.name + " · " + program.modeLabel, { direction: "top", offset: [0, -30] });
+      marker.on("click", function () { updateSelection(program, true); });
+      markers[program.key] = marker;
+      var card = programCard(program);
+      if (card) {
+        card.addEventListener("focus", function () { updateSelection(program, false); });
+        card.addEventListener("click", function () { updateSelection(program, false); });
+      }
+    });
+
+    function applyMapFilter(mode) {
+      var visible = programs.filter(function (program) { return mode === "all" || program.mode === mode; });
+      programs.forEach(function (program) {
+        var show = visible.indexOf(program) !== -1;
+        var marker = markers[program.key];
+        var card = programCard(program);
+        if (show && marker && !map.hasLayer(marker)) { marker.addTo(map); }
+        if (!show && marker && map.hasLayer(marker)) { marker.removeFrom(map); }
+        if (card) { card.hidden = !show; }
+      });
+      document.querySelectorAll(".pilot-map-filter").forEach(function (button) {
+        var active = button.getAttribute("data-pilot-filter") === mode;
+        button.classList.toggle("is-active", active);
+        button.setAttribute("aria-pressed", active ? "true" : "false");
+      });
+      if (visible.indexOf(selected) === -1) { updateSelection(visible[0], false); }
+      var bounds = L.latLngBounds(visible.map(function (program) { return program.coords; }));
+      map.fitBounds(bounds.pad(mode === "all" ? .18 : .45), { maxZoom: mode === "all" ? 4 : 6, animate: true });
+      window.setTimeout(function () { map.invalidateSize(); }, 120);
+    }
+
+    document.querySelectorAll(".pilot-map-filter").forEach(function (button) {
+      button.addEventListener("click", function () {
+        applyMapFilter(button.getAttribute("data-pilot-filter"));
+      });
+    });
+    updateSelection(programs[0], false);
+    applyMapFilter("all");
   })();
 
   /* ---------- stakeholder recommendations ---------- */

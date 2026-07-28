@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.3 — 2026-07-27
+
+- Added an interactive map linking four rural and remote field-pilot programs to their source records.
+- Added service-model filters and synchronized map, detail-panel, and pilot-card states.
+- Added an interactive RAV Scenario Planner with shareable inputs and evidence-backed deployment recommendations.
+
 ## 2.2 — 2026-07-27
 
 - Added a compact mobile navigation menu and a dedicated vertical mobile Framework.
