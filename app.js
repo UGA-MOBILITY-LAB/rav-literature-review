@@ -1901,7 +1901,7 @@
       zoom: 4,
       minZoom: 3,
       maxZoom: 9,
-      scrollWheelZoom: false,
+      scrollWheelZoom: true,
       keyboard: true,
       zoomControl: true
     });
