@@ -7,7 +7,7 @@
 <meta name="description" content="Companion website for the TRAVELS project literature review: linking Rural Autonomous Vehicle (RAV) challenges to research evidence and AV pilots.">
 <meta name="author" content="Haohua Que, Tianle Zhu, Handong Yao">
 <link rel="canonical" href="https://uga-mobility-lab.github.io/rav-literature-review/">
-<meta property="og:type" content="article">
+<meta property="og:type" content="website">
 <meta property="og:site_name" content="UGA Mobility Lab">
 <meta property="og:title" content="Rural Autonomous Vehicles — Literature Review">
 <meta property="og:description" content="Explore 118 verified references, 25 evidence themes, four named field-pilot programs, and actionable recommendations for RAV stakeholders.">
@@ -22,13 +22,13 @@
 <link rel="icon" href="logo.png">
 <link rel="manifest" href="site.webmanifest">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
-<link rel="stylesheet" href="style.css?v=20260727l">
+<link rel="stylesheet" href="style.css?v=20260808e">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "ScholarlyArticle",
-  "headline": "Rural Autonomous Vehicles: A Literature Review Linking RAV Challenges to Research Evidence and AV Pilots",
-  "description": "A verified and interactive literature review of rural autonomous vehicle technology, operations, enabling infrastructure, and field pilots.",
+  "@type": "WebSite",
+  "name": "Rural Autonomous Vehicles Literature Review",
+  "description": "A verified and interactive literature-review website covering rural autonomous vehicle technology, operations, enabling infrastructure, and field pilots.",
   "author": [
     {"@type": "Person", "name": "Haohua Que", "email": "Haohua.Que@uga.edu"},
     {"@type": "Person", "name": "Tianle Zhu", "email": "Tianle.Zhu@uga.edu"},
@@ -36,7 +36,7 @@
   ],
   "publisher": {"@type": "CollegeOrUniversity", "name": "University of Georgia"},
   "datePublished": "2026-06-01",
-  "dateModified": "2026-07-27",
+  "dateModified": "2026-08-08",
   "url": "https://uga-mobility-lab.github.io/rav-literature-review/",
   "inLanguage": "en"
 }
@@ -55,16 +55,12 @@
     </button>
     <nav id="primary-nav" class="primary-nav" aria-label="Page sections">
       <ul class="nav-pills">
-        <li><a class="pill" href="#overview">Overview</a></li>
+        <li><a class="pill" href="#findings">Key findings</a></li>
         <li><a class="pill" href="#framework">Framework</a></li>
         <li><a class="pill" href="#evidence">Evidence</a></li>
-        <li><a class="pill" href="#decision-lab">Journey</a></li>
         <li><a class="pill" href="#recommendations">Recommendations</a></li>
-        <li><a class="pill" href="#statistics">Statistics</a></li>
-        <li><a class="pill" href="#explorer">Explorer</a></li>
-        <li><a class="pill" href="#methodology">Methods</a></li>
         <li><a class="pill" href="#papers">References</a></li>
-        <li><a class="pill" href="#cite">Cite</a></li>
+        <li><a class="pill" href="#cite">Cite website</a></li>
       </ul>
     </nav>
     <button class="command-trigger" id="command-open" type="button" aria-haspopup="dialog" aria-controls="command-palette">
@@ -87,6 +83,10 @@
         <a href="mailto:Handong.Yao@uga.edu">Handong Yao</a><br>
         College of Engineering, University of Georgia
       </p>
+      <div class="hero-actions" aria-label="Start reading the review">
+        <a class="btn-primary button-link" href="#findings">Read the key findings</a>
+        <span class="forthcoming-status" role="status">Narrative review PDF &amp; Word: forthcoming</span>
+      </div>
       <div class="stat-chips" aria-label="Review statistics">
         <span class="stat-chip"><strong id="stat-count">118</strong> references</span>
         <span class="stat-chip"><strong id="stat-cats">5</strong> RAV modules</span>
@@ -96,12 +96,50 @@
     </div>
   </section>
 
+  <section id="findings" class="section narrative-section">
+    <div class="container">
+      <div class="section-head">
+        <h2>What the Literature Says</h2>
+        <span class="date-pill">Start here &middot; 5-minute synthesis</span>
+      </div>
+      <p class="narrative-intro">Rural autonomous-vehicle deployment is not simply an urban AV system moved onto a quieter road. Sparse markings and mapping, intermittent connectivity, long service distances, thin demand, and limited roadside support change both the technical design and the operating model. Across the reviewed evidence, one argument recurs: build a resilient vehicle first, add shared infrastructure selectively, and expand only through measured rural validation.</p>
+      <div class="narrative-flow" aria-label="Narrative logic of the literature review">
+        <article>
+          <span>1 &middot; Rural constraints</span>
+          <h3>Design for incomplete support</h3>
+          <p>Perception and localization must remain dependable when lane markings, GNSS, maps, weather, and communications are unreliable. Fleet planning must also account for dispersed riders, long headways, charging, and remote-supervision limits.</p>
+          <a href="#framework">See the system framework <span aria-hidden="true">&rarr;</span></a>
+        </article>
+        <article>
+          <span>2 &middot; Transferable baseline</span>
+          <h3>Keep the safety-critical core onboard</h3>
+          <p>Multi-sensor perception, fused localization, local planning, and graceful fallback form the reusable baseline. Connectivity, roadside sensing, HD maps, and digital twins are most credible as targeted support rather than universal prerequisites.</p>
+          <a href="#evidence">Trace claims to evidence <span aria-hidden="true">&rarr;</span></a>
+        </article>
+        <article>
+          <span>3 &middot; Deployment implication</span>
+          <h3>Validate in stages, then scale</h3>
+          <p>Supervised, low-speed, geofenced pilots provide the strongest near-term path to rural learning. Comparable reporting on interventions, connectivity loss, accessibility, energy, and operator workload is needed before broader operation.</p>
+          <a href="#recommendations">Review the actions <span aria-hidden="true">&rarr;</span></a>
+        </article>
+      </div>
+      <aside class="manuscript-status-card" aria-label="Narrative review availability">
+        <div>
+          <p class="rec-kicker">Manuscript status</p>
+          <h3>Narrative review in preparation</h3>
+          <p>The formal review article has not yet been completed. PDF and editable Word downloads will be added here only after the manuscript is finalized.</p>
+        </div>
+        <span class="forthcoming-status">PDF &amp; Word downloads forthcoming</span>
+      </aside>
+    </div>
+  </section>
+
   <section id="framework" class="section">
     <div class="container">
       <div class="section-head">
         <h2>The Two-Tier Framework</h2>
       </div>
-      <p class="section-lede">Existing technology <em>carries</em> the rural service today; advanced, infrastructure-integrated technology <em>extends</em> it; four named field-pilot programs <em>validate</em> it. <span class="lede-hint">Hover or tap a module.</span></p>
+      <p class="section-lede">Existing technology <em>carries</em> the rural service today; advanced, infrastructure-integrated technology <em>extends</em> it; four named field-pilot programs <em>validate</em> it. <span class="lede-hint">Hover over or tap a module.</span></p>
       <div class="card thesis-card">
         <div class="framework-flow-toolbar">
           <div>
@@ -303,7 +341,7 @@
         </div>
         <div class="thesis-detail" id="thesis-detail" aria-live="polite">
           <span class="td-tag">Two tiers, one system</span>
-          <p class="td-text">Existing technology carries the service today; advanced, infrastructure-integrated technology extends it; four named field-pilot programs ground it in practice. Hover a module.</p>
+          <p class="td-text">Existing technology carries the service today; advanced, infrastructure-integrated technology extends it; four named field-pilot programs ground it in practice. Hover over or tap a module.</p>
           <div id="framework-flow-path" class="framework-flow-path">Select a submodule to reveal its cross-tier path.</div>
           <div class="framework-detail-actions">
             <button type="button" class="utility-btn" id="framework-open-evidence">Open related Evidence Map</button>
@@ -320,7 +358,7 @@
         <h2>Evidence Map</h2>
         <span class="date-pill" id="theme-count">25 sub-themes</span>
       </div>
-      <p class="section-lede">Research sub-themes aligned with the latest Word review and coloured by their role in the RAV evidence chain. <span class="lede-hint">Limitations motivate recommended directions; reusable baselines show what can transfer now. Select a theme, then follow its clickable progression links.</span></p>
+      <p class="section-lede">Research sub-themes aligned with the current evidence coding and coloured by their role in the RAV evidence chain. <span class="lede-hint">Limitations motivate recommended directions; reusable baselines show what can transfer now. Select a theme, then follow its clickable progression links.</span></p>
       <div class="card">
         <div class="elegend">
           <span><i style="background:#4B8B3B"></i>Reusable baseline</span>
@@ -329,7 +367,7 @@
         </div>
         <div class="evidence-multiselect" id="evidence-multiselect">
           <span><strong id="evidence-selected-count">0</strong> pinned themes</span>
-          <p id="evidence-overlap-summary">Shift-click themes to compare their supporting evidence.</p>
+          <p id="evidence-overlap-summary">Use the pin beside any theme to compare supporting evidence.</p>
           <button type="button" class="utility-btn" id="evidence-compare-selected" disabled>Compare pinned</button>
           <button type="button" class="utility-btn" id="evidence-clear-selected" disabled>Clear</button>
         </div>
@@ -346,6 +384,12 @@
         <span class="date-pill">Interactive synthesis</span>
       </div>
       <p class="section-lede">Trace how documented limitations motivate technical directions, compare themes side by side, and explore where the review is strong or still rural-evidence limited.</p>
+      <details class="advanced-disclosure">
+        <summary>
+          <span>Open advanced synthesis tools</span>
+          <small>Progression network, theme comparison, evidence-gap radar, and timeline</small>
+        </summary>
+        <div class="advanced-disclosure-body">
       <div class="lab-tabs" role="tablist" aria-label="Decision lab views">
         <button type="button" role="tab" id="lab-tab-journey" aria-controls="lab-journey" aria-selected="true" data-lab-tab="journey">Evidence Journey</button>
         <button type="button" role="tab" id="lab-tab-compare" aria-controls="lab-compare" aria-selected="false" data-lab-tab="compare">Compare Board</button>
@@ -419,6 +463,8 @@
         </div>
         <p class="lab-note">Coverage indicators describe this review corpus; they are not a formal meta-analysis or deployment-readiness certification.</p>
       </section>
+        </div>
+      </details>
     </div>
   </section>
 
@@ -497,6 +543,12 @@
           <p class="rec-evidence">Evidence base: 31 references <span class="rec-action">Explore evidence <span aria-hidden="true">&rarr;</span></span></p>
         </article>
       </div>
+      <details class="advanced-disclosure recommendation-tools">
+        <summary>
+          <span>Open the RAV scenario planner</span>
+          <small>Generate and compare two evidence-informed deployment starting points</small>
+        </summary>
+        <div class="advanced-disclosure-body">
       <div id="scenario-planner" class="scenario-planner">
         <div class="planner-head">
           <div>
@@ -578,6 +630,8 @@
           </div>
         </section>
       </div>
+        </div>
+      </details>
       <div id="pilot-comparison" class="pilot-comparison">
         <div class="pilot-comparison-head">
           <div>
@@ -587,11 +641,22 @@
           <p>Select a program to inspect its supporting sources in the Reference Explorer.</p>
         </div>
         <div class="pilot-map-shell">
-          <div class="pilot-map-toolbar" role="group" aria-label="Filter pilot map by service model">
+          <div class="pilot-map-toolbar" role="group" aria-label="Pilot map controls">
             <span>Show</span>
             <button type="button" class="pilot-map-filter is-active" data-pilot-filter="all" aria-pressed="true">All programs</button>
             <button type="button" class="pilot-map-filter" data-pilot-filter="on-demand" aria-pressed="false">On-demand</button>
             <button type="button" class="pilot-map-filter" data-pilot-filter="fixed" aria-pressed="false">Fixed route</button>
+            <div class="pilot-location-controls">
+              <label for="pilot-location-select">Location</label>
+              <select id="pilot-location-select">
+                <option value="gomarti">goMARTI</option>
+                <option value="adastec">ADASTEC</option>
+                <option value="teddy">TEDDY</option>
+                <option value="cassi">CASSI</option>
+              </select>
+              <button type="button" class="pilot-story-button" id="pilot-location-view">View on map</button>
+              <button type="button" class="pilot-story-button" id="pilot-show-all">Show all locations</button>
+            </div>
             <span class="pilot-story-spacer"></span>
             <button type="button" class="pilot-story-button" id="pilot-corridor-toggle" aria-pressed="false">Show concept corridor</button>
             <button type="button" class="pilot-story-button" id="pilot-story-toggle" aria-pressed="false">Start story</button>
@@ -626,6 +691,12 @@
             <span>Map data © OpenStreetMap contributors</span>
           </div>
         </div>
+        <details class="advanced-disclosure pilot-compare-disclosure">
+          <summary>
+            <span>Compare two pilot programs</span>
+            <small>Inspect service models, operating frames, and shared transfer lessons</small>
+          </summary>
+          <div class="advanced-disclosure-body">
         <section class="pilot-side-compare card">
           <div class="pilot-side-controls">
             <div><p class="rec-kicker">Pilot side-by-side</p><h4>Compare two deployment programs</h4></div>
@@ -637,6 +708,8 @@
           </div>
           <div class="pilot-side-result" id="pilot-side-result" aria-live="polite"></div>
         </section>
+          </div>
+        </details>
         <div class="pilot-grid">
           <article class="pilot-card" data-label="goMARTI" data-refs="14,15" tabindex="0" role="button" aria-pressed="false">
             <div class="pilot-card-head"><strong>goMARTI</strong><span>On-demand</span></div>
@@ -697,9 +770,10 @@
         <div class="year-brush" id="year-brush">
           <span class="stats-filter-label">Publication-year range</span>
           <div class="year-brush-inputs">
-            <label>From <strong id="year-brush-min-value">2014</strong><input id="year-brush-min" type="range" min="2014" max="2026" value="2014" step="1"></label>
-            <label>To <strong id="year-brush-max-value">2026</strong><input id="year-brush-max" type="range" min="2014" max="2026" value="2026" step="1"></label>
+            <label>From <strong id="year-brush-min-value">2014</strong><input id="year-brush-min" type="range" min="2014" max="2026" value="2014" step="1" aria-label="Earliest publication year"></label>
+            <label>To <strong id="year-brush-max-value">2026</strong><input id="year-brush-max" type="range" min="2014" max="2026" value="2026" step="1" aria-label="Latest publication year"></label>
           </div>
+          <p id="year-brush-status">Showing the complete publication range.</p>
         </div>
         <button type="button" id="stats-clear" class="reset-btn">Clear all filters</button>
       </div>
@@ -757,8 +831,13 @@
             <option value="strength">Evidence strength</option>
             <option value="number">Reference number</option>
           </select>
-          <button type="button" id="export-csv" class="utility-btn">Export CSV</button>
-          <button type="button" id="export-bibtex" class="utility-btn">Export BibTeX</button>
+          <details class="export-menu">
+            <summary>Export</summary>
+            <div class="export-menu-panel">
+              <button type="button" id="export-csv" class="utility-btn">CSV</button>
+              <button type="button" id="export-bibtex" class="utility-btn">BibTeX</button>
+            </div>
+          </details>
           <button type="button" id="copy-filter-link" class="utility-btn">Copy filter link</button>
           <span class="count" id="count" role="status" aria-live="polite">Showing 118 of 118 references</span>
         </div>
@@ -785,7 +864,7 @@
           </div>
         </div>
       </section>
-      <details class="card chart-card" open>
+      <details class="card chart-card">
         <summary>Evidence network chart</summary>
         <div class="legend" id="legend"></div>
         <div class="chart-wrap">
@@ -908,6 +987,13 @@
         <span class="date-pill" id="papers-range">2014~2026</span>
       </div>
       <p class="section-lede">All references from the review bibliography, grouped by RAV module. Lists respect the filters and search above.</p>
+      <div class="reference-list-toolbar card">
+        <p id="reference-list-summary" role="status" aria-live="polite">All 118 references are shown below.</p>
+        <div>
+          <button type="button" class="utility-btn" id="references-expand-all">Expand all groups</button>
+          <button type="button" class="utility-btn" id="references-collapse-all">Collapse groups</button>
+        </div>
+      </div>
       <div id="paper-groups"></div>
     </div>
   </section>
@@ -916,17 +1002,23 @@
     <div class="container">
       <div class="section-head">
         <h2>Citation</h2>
-        <span class="date-pill">How to cite this review</span>
+        <span class="date-pill">How to cite this website</span>
       </div>
       <div class="card cite-card">
-        <p>For use in publications and presentations, please cite this review as follows:</p>
+        <p>For use in publications and presentations, please cite this interactive website as follows:</p>
         <div class="citation-style-switcher" role="group" aria-label="Citation style">
           <button type="button" data-citation-style="apa" aria-pressed="true">APA</button>
           <button type="button" data-citation-style="ieee" aria-pressed="false">IEEE</button>
           <button type="button" data-citation-style="chicago" aria-pressed="false">Chicago</button>
         </div>
-        <blockquote id="cite-text">Que, Haohua, Tianle Zhu, and Handong Yao. &ldquo;Rural Autonomous Vehicles: A Literature Review Linking RAV Challenges to Research Evidence and AV Pilots.&rdquo; College of Engineering, University of Georgia, June 2026.</blockquote>
-        <button type="button" id="copy-cite" class="btn-primary">Copy citation</button>
+        <blockquote id="cite-text">Que, H., Zhu, T., &amp; Yao, H. (2026). Rural autonomous vehicles: A literature review linking RAV challenges to research evidence and AV pilots [Interactive website]. College of Engineering, University of Georgia. https://uga-mobility-lab.github.io/rav-literature-review/</blockquote>
+        <div class="citation-actions" aria-label="Copy or export the website citation">
+          <button type="button" id="copy-cite" class="btn-primary">Copy citation</button>
+          <button type="button" id="cite-export-bibtex" class="utility-btn">Download BibTeX</button>
+          <button type="button" id="cite-export-ris" class="utility-btn">Download RIS</button>
+          <button type="button" id="cite-export-xml" class="utility-btn">Download EndNote XML</button>
+        </div>
+        <p class="cite-download-note">These exports cite the current interactive website. The formal narrative review and its PDF/Word downloads are forthcoming.</p>
       </div>
     </div>
   </section>
@@ -953,7 +1045,7 @@
         <a href="mailto:Handong.Yao@uga.edu">Handong Yao</a>
       </p>
       <p>College of Engineering, University of Georgia</p>
-      <p class="footer-muted">Version 2.7 &middot; Updated July 27, 2026 &middot; 118 verified references</p>
+      <p class="footer-muted">Version 2.8 &middot; Updated August 8, 2026 &middot; 118 verified references</p>
     </div>
     <aside class="follow-card" aria-label="Follow UGA Mobility Lab">
       <img src="qr-uga-mobility-lab.png" width="112" height="112" alt="QR code linking to the UGA Mobility Lab homepage">
@@ -966,9 +1058,14 @@
   </div>
 </footer>
 
+<button type="button" class="scroll-to-top" id="scroll-to-top" aria-label="Scroll to top" title="Scroll to top">
+  <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 19V5M6.5 10.5 12 5l5.5 5.5" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  <span class="scroll-to-top-label" aria-hidden="true">Top</span>
+</button>
+
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-<script src="data.js?v=20260727l"></script>
-<script src="edges.js?v=20260727l"></script>
-<script src="app.js?v=20260727l"></script>
+<script src="data.js?v=20260808e"></script>
+<script src="edges.js?v=20260808e"></script>
+<script src="app.js?v=20260808e"></script>
 </body>
 </html>

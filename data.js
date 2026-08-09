@@ -1,5 +1,20 @@
 var SURVEY_META = {"paperCount": 118, "yearMin": 2014, "yearMax": 2026};
 
+var WEBSITE_CITATION = {
+  "key": "que2026ravwebsite",
+  "title": "Rural Autonomous Vehicles: A Literature Review Linking RAV Challenges to Research Evidence and AV Pilots",
+  "authors": [
+    {"given": "Haohua", "family": "Que"},
+    {"given": "Tianle", "family": "Zhu"},
+    {"given": "Handong", "family": "Yao"}
+  ],
+  "year": 2026,
+  "month": "June",
+  "publisher": "College of Engineering, University of Georgia",
+  "type": "WebSite",
+  "url": "https://uga-mobility-lab.github.io/rav-literature-review/"
+};
+
 var PAPERS = [
   {"key": "r1", "n": 1, "title": "Review of Autonomous Vehicles in Rural Areas: Challenges, Opportunities, and Solutions", "authors": "Melika Ansarinejad, Kian Ansarinejad, Pan Lu, Ying Huang, Denver Tolliver", "venue": "Applied Sciences 15(8), 4195", "year": 2025, "cat": "Autonomous Driving", "vtype": "Journal", "mods": ["Autonomous Driving"], "doi": "10.3390/app15084195", "etype": "Review", "rural": "Direct rural evidence", "strength": "High", "focus": "Synthesis of autonomous driving systems.", "rav": "Informs the onboard perception, localization, integration, or route-planning stack that must remain safe when rural infrastructure and connectivity are sparse.", "access": "Open", "oa_url": "https://www.mdpi.com/2076-3417/15/8/4195/pdf?version=1744351234"},
   {"key": "r2", "n": 2, "title": "Building the Future of Transportation: A Comprehensive Survey on AV Perception, Localization, and Mapping", "authors": "Ashok Kumar Patil, Bhargav Punugupati, Himanshi Gupta, Niranjan S. Mayur, Srivatsa Ramesh, Prasad B. Honnavalli", "venue": "Sensors 25(7), 2004", "year": 2025, "cat": "Autonomous Driving", "vtype": "Journal", "mods": ["Autonomous Driving"], "doi": "10.3390/s25072004", "etype": "Review", "rural": "Transferable to rural", "strength": "High", "focus": "Synthesis of perception and sensing.", "rav": "Informs the onboard perception, localization, integration, or route-planning stack that must remain safe when rural infrastructure and connectivity are sparse.", "access": "Open", "oa_url": "https://www.mdpi.com/1424-8220/25/7/2004/pdf?version=1742697215"},

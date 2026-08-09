@@ -190,7 +190,14 @@
     var params = new URLSearchParams(window.location.search);
     Object.keys(URL_FILTER_KEYS).forEach(function (key) {
       params.getAll(URL_FILTER_KEYS[key]).forEach(function (value) {
-        if (value) { filters[key].add(value); }
+        if (!value) { return; }
+        if (key === "year") {
+          var year = Number(value);
+          if (!Number.isInteger(year) || year < SURVEY_META.yearMin || year > SURVEY_META.yearMax) { return; }
+          filters[key].add(String(year));
+          return;
+        }
+        filters[key].add(value);
       });
     });
     query = (params.get("q") || "").trim().toLowerCase();
@@ -250,6 +257,7 @@
 
   function createDropdown(filterKey, label, options) {
     var wrap = el("div", "dropdown");
+    wrap.setAttribute("data-filter-key", filterKey);
     var btn = el("button", "dd-btn");
     btn.type = "button";
     btn.setAttribute("aria-expanded", "false");
@@ -345,11 +353,16 @@
 
   ddRow.insertBefore(createDropdown("cat", "Module", catOptions), resetBtn);
   ddRow.insertBefore(createDropdown("year", "Year", yearOptions), resetBtn);
-  ddRow.insertBefore(createDropdown("vtype", "Source Type", typeOptions), resetBtn);
-  ddRow.insertBefore(createDropdown("etype", "Evidence Type", evidenceTypeOptions), resetBtn);
-  ddRow.insertBefore(createDropdown("rural", "Rural Relevance", ruralOptions), resetBtn);
-  ddRow.insertBefore(createDropdown("strength", "Evidence Strength", strengthOptions), resetBtn);
-  ddRow.insertBefore(createDropdown("access", "Access", accessOptions), resetBtn);
+  var advancedFilters = el("details", "advanced-filters");
+  advancedFilters.appendChild(el("summary", null, "More filters"));
+  var advancedFilterRow = el("div", "advanced-filter-row");
+  advancedFilterRow.appendChild(createDropdown("vtype", "Source Type", typeOptions));
+  advancedFilterRow.appendChild(createDropdown("etype", "Evidence Type", evidenceTypeOptions));
+  advancedFilterRow.appendChild(createDropdown("rural", "Rural Relevance", ruralOptions));
+  advancedFilterRow.appendChild(createDropdown("strength", "Evidence Strength", strengthOptions));
+  advancedFilterRow.appendChild(createDropdown("access", "Access", accessOptions));
+  advancedFilters.appendChild(advancedFilterRow);
+  ddRow.insertBefore(advancedFilters, resetBtn);
 
   var searchInput = document.getElementById("search");
   searchInput.addEventListener("input", function () {
@@ -1192,10 +1205,12 @@
 
   var groupsBox = document.getElementById("paper-groups");
   var groupRefs = {};
+  var referenceGroups = [];
 
   function buildGroups() {
     CATEGORIES.forEach(function (c) {
       var details = el("details", "paper-group");
+      details.open = true;
       var summary = el("summary");
       var dot = el("span", "dot");
       dot.style.background = CAT_COLORS[c];
@@ -1221,6 +1236,20 @@
       details.appendChild(scrollBox);
       groupsBox.appendChild(details);
       groupRefs[c] = { tbody: tbody, badge: badge };
+      referenceGroups.push(details);
+    });
+  }
+
+  var referencesExpandAll = document.getElementById("references-expand-all");
+  var referencesCollapseAll = document.getElementById("references-collapse-all");
+  if (referencesExpandAll) {
+    referencesExpandAll.addEventListener("click", function () {
+      referenceGroups.forEach(function (group) { group.open = true; });
+    });
+  }
+  if (referencesCollapseAll) {
+    referencesCollapseAll.addEventListener("click", function () {
+      referenceGroups.forEach(function (group) { group.open = false; });
     });
   }
 
@@ -1408,6 +1437,18 @@
     }
   }
 
+  function formatYearSelection(values) {
+    var years = values.map(Number).filter(Number.isFinite).sort(function (a, b) { return a - b; });
+    if (!years.length) { return { label: "", contiguous: true }; }
+    var contiguous = years.every(function (year, index) {
+      return index === 0 || year === years[index - 1] + 1;
+    });
+    if (contiguous) {
+      return { label: years.length === 1 ? String(years[0]) : years[0] + "–" + years[years.length - 1], contiguous: true };
+    }
+    return { label: years.join(", "), contiguous: false };
+  }
+
   function updateStatsSummary() {
     var summary = document.getElementById("stats-filter-summary");
     if (!summary) { return; }
@@ -1423,13 +1464,29 @@
     var parts = [];
     Object.keys(filters).forEach(function (key) {
       if (filters[key].size) {
-        parts.push(labels[key] + ": " + Array.from(filters[key]).join(", "));
+        if (key === "year") {
+          var yearSelection = formatYearSelection(Array.from(filters.year));
+          parts.push((yearSelection.contiguous ? "Years" : "Selected years") + ": " + yearSelection.label);
+        } else {
+          parts.push(labels[key] + ": " + Array.from(filters[key]).join(", "));
+        }
       }
     });
     if (query) { parts.push("Search: “" + query + "”"); }
     if (scopeLabel) { parts.push(scopeLabel); }
-    summary.textContent = currentFiltered.length + " of " + SURVEY_META.paperCount +
-      " references" + (parts.length ? " — " + parts.join(" · ") : " — all evidence");
+    summary.textContent = "Showing " + currentFiltered.length + " of " + SURVEY_META.paperCount +
+      " references" + (parts.length ? " | " + parts.join(" | ") : " | All years and evidence");
+  }
+
+  function updateReferenceListSummary() {
+    var summary = document.getElementById("reference-list-summary");
+    if (!summary) { return; }
+    if (currentFiltered.length === SURVEY_META.paperCount && !scopeLabel && !query) {
+      summary.textContent = "All " + SURVEY_META.paperCount + " references are shown below.";
+      return;
+    }
+    summary.textContent = "Showing " + currentFiltered.length + " of " + SURVEY_META.paperCount +
+      " references" + (scopeLabel ? " · " + scopeLabel : "") + ".";
   }
 
   function render() {
@@ -1440,6 +1497,7 @@
     if (window.syncYearBrushFromFilters) { window.syncYearBrushFromFilters(); }
     updateCountLine();
     updateStatsSummary();
+    updateReferenceListSummary();
     syncUrlState();
   }
 
@@ -1461,7 +1519,7 @@
     document.body.appendChild(anchor);
     anchor.click();
     document.body.removeChild(anchor);
-    URL.revokeObjectURL(url);
+    window.setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
   }
 
   function csvCell(value) {
@@ -1489,27 +1547,66 @@
   }
 
   function bibValue(value) {
-    return String(value || "").replace(/[{}]/g, "").replace(/\s+/g, " ").trim();
+    var texEscapes = {
+      "\\": "\\textbackslash{}",
+      "{": "\\{",
+      "}": "\\}",
+      "#": "\\#",
+      "$": "\\$",
+      "%": "\\%",
+      "&": "\\&",
+      "_": "\\_",
+      "~": "\\textasciitilde{}",
+      "^": "\\textasciicircum{}"
+    };
+    return String(value || "")
+      .replace(/\s+/g, " ")
+      .trim()
+      .replace(/[\\{}#$%&_~^]/g, function (character) { return texEscapes[character]; });
+  }
+
+  function xmlValue(value) {
+    return String(value === undefined || value === null ? "" : value)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&apos;");
+  }
+
+  function paperAuthorList(p) {
+    return String(p.authors || "")
+      .split(",")
+      .map(function (author) { return author.trim(); })
+      .filter(Boolean);
+  }
+
+  function paperBibtex(p) {
+    var entryType = p.vtype === "Journal" ? "article" :
+      (p.vtype === "Conference" ? "inproceedings" : "misc");
+    var key = "rav" + p.year + "ref" + p.n;
+    var venueField = p.vtype === "Journal" ? "journal" :
+      (p.vtype === "Conference" ? "booktitle" : (p.vtype === "Report" ? "institution" : "note"));
+    var fields = ["  title = {{" + bibValue(p.title) + "}}"];
+    var authors = paperAuthorList(p);
+    if (authors.length) { fields.push("  author = {" + bibValue(authors.join(" and ")) + "}"); }
+    fields.push("  year = {" + p.year + "}");
+    if (p.venue) { fields.push("  " + venueField + " = {" + bibValue(p.venue) + "}"); }
+    if (p.doi) { fields.push("  doi = {" + bibValue(p.doi) + "}"); }
+    if (p.arxiv) { fields.push("  eprint = {" + bibValue(p.arxiv) + "}", "  archivePrefix = {arXiv}"); }
+    if (!p.doi && p._link) { fields.push("  url = {" + bibValue(p._link) + "}"); }
+    return "@" + entryType + "{" + key + ",\n" + fields.join(",\n") + "\n}";
+  }
+
+  function endNoteXml(records) {
+    return '<?xml version="1.0" encoding="UTF-8"?>\n<xml>\n  <records>\n' +
+      records.join("\n") + "\n  </records>\n</xml>\n";
   }
 
   var exportBibtex = document.getElementById("export-bibtex");
   if (exportBibtex) {
     exportBibtex.addEventListener("click", function () {
-      var entries = sortPapers(currentFiltered.slice()).map(function (p) {
-        var entryType = p.vtype === "Journal" ? "article" :
-          (p.vtype === "Conference" ? "inproceedings" : "misc");
-        var key = "rav" + p.year + "ref" + p.n;
-        var fields = [
-          "  title = {" + bibValue(p.title) + "}",
-          "  year = {" + p.year + "}",
-          "  note = {" + bibValue(p.venue) + "}"
-        ];
-        if (p.authors) { fields.splice(1, 0, "  author = {" + bibValue(p.authors) + "}"); }
-        if (p.doi) { fields.push("  doi = {" + bibValue(p.doi) + "}"); }
-        if (p.arxiv) { fields.push("  eprint = {" + bibValue(p.arxiv) + "}", "  archivePrefix = {arXiv}"); }
-        if (!p.doi && p._link) { fields.push("  url = {" + bibValue(p._link) + "}"); }
-        return "@" + entryType + "{" + key + ",\n" + fields.join(",\n") + "\n}";
-      });
+      var entries = sortPapers(currentFiltered.slice()).map(paperBibtex);
       downloadText("rav-literature-review.bib", entries.join("\n\n") + "\n", "application/x-bibtex");
     });
   }
@@ -1518,10 +1615,24 @@
 
   var copyBtn = document.getElementById("copy-cite");
   var citeBlock = document.getElementById("cite-text");
+  var websiteCitation = typeof WEBSITE_CITATION !== "undefined" ? WEBSITE_CITATION : {
+    key: "que2026ravwebsite",
+    title: "Rural Autonomous Vehicles: A Literature Review Linking RAV Challenges to Research Evidence and AV Pilots",
+    authors: [
+      { given: "Haohua", family: "Que" },
+      { given: "Tianle", family: "Zhu" },
+      { given: "Handong", family: "Yao" }
+    ],
+    year: 2026,
+    month: "June",
+    publisher: "College of Engineering, University of Georgia",
+    type: "WebSite",
+    url: "https://uga-mobility-lab.github.io/rav-literature-review/"
+  };
   var siteCitations = {
-    apa: "Que, H., Zhu, T., & Yao, H. (2026). Rural autonomous vehicles: A literature review linking RAV challenges to research evidence and AV pilots. College of Engineering, University of Georgia.",
-    ieee: 'H. Que, T. Zhu, and H. Yao, "Rural Autonomous Vehicles: A Literature Review Linking RAV Challenges to Research Evidence and AV Pilots," College of Engineering, University of Georgia, 2026.',
-    chicago: 'Que, Haohua, Tianle Zhu, and Handong Yao. "Rural Autonomous Vehicles: A Literature Review Linking RAV Challenges to Research Evidence and AV Pilots." College of Engineering, University of Georgia, 2026.'
+    apa: "Que, H., Zhu, T., & Yao, H. (2026). Rural autonomous vehicles: A literature review linking RAV challenges to research evidence and AV pilots [Interactive website]. College of Engineering, University of Georgia. https://uga-mobility-lab.github.io/rav-literature-review/",
+    ieee: 'H. Que, T. Zhu, and H. Yao, "Rural Autonomous Vehicles: A Literature Review Linking RAV Challenges to Research Evidence and AV Pilots," interactive website, College of Engineering, University of Georgia, 2026. [Online]. Available: https://uga-mobility-lab.github.io/rav-literature-review/',
+    chicago: 'Que, Haohua, Tianle Zhu, and Handong Yao. "Rural Autonomous Vehicles: A Literature Review Linking RAV Challenges to Research Evidence and AV Pilots." Interactive website. College of Engineering, University of Georgia, 2026. https://uga-mobility-lab.github.io/rav-literature-review/.'
   };
   var citationButtons = document.querySelectorAll("[data-citation-style]");
   function applyCitationStyle(style) {
@@ -1538,10 +1649,82 @@
       applyCitationStyle(button.getAttribute("data-citation-style"));
     });
   });
+  var preferredCitationStyle = "apa";
   try {
     var storedCitationStyle = window.localStorage.getItem("rav-citation-style");
-    if (siteCitations[storedCitationStyle]) { applyCitationStyle(storedCitationStyle); }
+    if (siteCitations[storedCitationStyle]) { preferredCitationStyle = storedCitationStyle; }
   } catch (err) { /* storage is optional */ }
+  applyCitationStyle(preferredCitationStyle);
+
+  function websiteBibtex() {
+    var authors = websiteCitation.authors.map(function (author) {
+      return author.family + ", " + author.given;
+    }).join(" and ");
+    return "@misc{" + websiteCitation.key + ",\n" + [
+      "  title = {{" + bibValue(websiteCitation.title) + "}}",
+      "  author = {" + bibValue(authors) + "}",
+      "  year = {" + websiteCitation.year + "}",
+      "  month = {" + bibValue(websiteCitation.month) + "}",
+      "  howpublished = {Interactive literature review website}",
+      "  publisher = {" + bibValue(websiteCitation.publisher) + "}",
+      "  url = {" + bibValue(websiteCitation.url) + "}"
+    ].join(",\n") + "\n}\n";
+  }
+
+  function websiteRis() {
+    var lines = ["TY  - ELEC"];
+    websiteCitation.authors.forEach(function (author) {
+      lines.push("AU  - " + author.family + ", " + author.given);
+    });
+    lines.push(
+      "TI  - " + websiteCitation.title,
+      "PY  - " + websiteCitation.year,
+      "DA  - " + websiteCitation.year + "/" + ({
+        January: "01", February: "02", March: "03", April: "04", May: "05", June: "06",
+        July: "07", August: "08", September: "09", October: "10", November: "11", December: "12"
+      }[websiteCitation.month] || websiteCitation.month),
+      "PB  - " + websiteCitation.publisher,
+      "UR  - " + websiteCitation.url,
+      "ER  -"
+    );
+    return lines.join("\r\n") + "\r\n";
+  }
+
+  function websiteEndNoteXml() {
+    var authors = websiteCitation.authors.map(function (author) {
+      return "<author>" + xmlValue(author.family + ", " + author.given) + "</author>";
+    }).join("");
+    var record = [
+      "    <record>",
+      "      <ref-type name=\"Web Page\">12</ref-type>",
+      "      <contributors><authors>" + authors + "</authors></contributors>",
+      "      <titles><title>" + xmlValue(websiteCitation.title) + "</title></titles>",
+      "      <dates><year>" + websiteCitation.year + "</year><pub-dates><date>" + xmlValue(websiteCitation.month) + "</date></pub-dates></dates>",
+      "      <publisher>" + xmlValue(websiteCitation.publisher) + "</publisher>",
+      "      <urls><web-urls><url>" + xmlValue(websiteCitation.url) + "</url></web-urls></urls>",
+      "    </record>"
+    ].join("\n");
+    return endNoteXml([record]);
+  }
+
+  var citeExportBibtex = document.getElementById("cite-export-bibtex");
+  var citeExportRis = document.getElementById("cite-export-ris");
+  var citeExportXml = document.getElementById("cite-export-xml");
+  if (citeExportBibtex) {
+    citeExportBibtex.addEventListener("click", function () {
+      downloadText("rav-literature-review-website.bib", websiteBibtex(), "application/x-bibtex");
+    });
+  }
+  if (citeExportRis) {
+    citeExportRis.addEventListener("click", function () {
+      downloadText("rav-literature-review-website.ris", websiteRis(), "application/x-research-info-systems");
+    });
+  }
+  if (citeExportXml) {
+    citeExportXml.addEventListener("click", function () {
+      downloadText("rav-literature-review-website.xml", websiteEndNoteXml(), "application/xml");
+    });
+  }
   copyBtn.addEventListener("click", function () {
     var text = citeBlock.textContent;
     function flash(msg) {
@@ -2040,6 +2223,9 @@
     var corridorNote = document.getElementById("map-corridor-note");
     var corridorLayer = null;
     var corridorVisible = false;
+    var locationSelect = document.getElementById("pilot-location-select");
+    var locationView = document.getElementById("pilot-location-view");
+    var showAllLocations = document.getElementById("pilot-show-all");
     var compareA = document.getElementById("pilot-compare-a");
     var compareB = document.getElementById("pilot-compare-b");
     var compareRun = document.getElementById("pilot-compare-run");
@@ -2110,6 +2296,7 @@
 
     function updateSelection(program, shouldFly) {
       selected = program;
+      if (locationSelect) { locationSelect.value = program.key; }
       detailName.textContent = program.name;
       detailMode.textContent = program.modeLabel;
       detailLocation.textContent = program.location;
@@ -2149,6 +2336,9 @@
       mapElement.innerHTML = '<p class="pilot-map-loading">The interactive map could not load. The accessible pilot cards below remain available.</p>';
       if (storyButton) { storyButton.disabled = true; storyButton.textContent = "Story unavailable"; }
       if (corridorButton) { corridorButton.disabled = true; corridorButton.textContent = "Corridor unavailable"; }
+      if (locationSelect) { locationSelect.disabled = true; }
+      if (locationView) { locationView.disabled = true; }
+      if (showAllLocations) { showAllLocations.disabled = true; }
       updateSelection(programs[0], false);
       return;
     }
@@ -2159,7 +2349,7 @@
       zoom: 4,
       minZoom: 3,
       maxZoom: 9,
-      scrollWheelZoom: true,
+      scrollWheelZoom: false,
       keyboard: true,
       zoomControl: true
     });
@@ -2253,6 +2443,20 @@
         applyMapFilter(button.getAttribute("data-pilot-filter"));
       });
     });
+    if (locationView && locationSelect) {
+      locationView.addEventListener("click", function () {
+        stopStory();
+        applyMapFilter("all");
+        var program = programs.find(function (item) { return item.key === locationSelect.value; }) || programs[0];
+        updateSelection(program, true);
+      });
+    }
+    if (showAllLocations) {
+      showAllLocations.addEventListener("click", function () {
+        stopStory();
+        applyMapFilter("all");
+      });
+    }
 
     function clearStoryTimer() {
       if (storyTimer) { window.clearInterval(storyTimer); storyTimer = null; }
@@ -2466,7 +2670,7 @@
       "Rail Grade Crossings": { path: "Crossing state → early warning → onboard stop decision", theme: "Rail grade crossings", related: ["Rail Grade Crossings"] },
       "Cooperative Response to Extreme Weather": { path: "Weather observation → cooperative warning → speed adjustment or rerouting", theme: "Cooperative Response to Extreme Weather", related: ["Cooperative Response to Extreme Weather"] }
     };
-    var DEFAULT = ["Two tiers, one system", "Existing technology carries the service today; advanced, infrastructure-integrated technology extends it; four named field-pilot programs ground it in practice. Hover a module."];
+    var DEFAULT = ["Two tiers, one system", "Existing technology carries the service today; advanced, infrastructure-integrated technology extends it; four named field-pilot programs ground it in practice. Hover over or tap a module."];
     var tagEl = detail.querySelector(".td-tag");
     var txtEl = detail.querySelector(".td-text");
     function show(stage, substage) {
@@ -2832,6 +3036,8 @@
     var themeCount = document.getElementById("theme-count");
     if (themeCount) { themeCount.textContent = THEMES.length + " sub-themes · 118 references"; }
     var initialTheme = null;
+    var activeTheme = null;
+    var activePill = null;
     CATEGORIES.forEach(function (c, categoryIndex) {
       var row = el("div", "mrow");
       if (categoryIndex === 0) { row.classList.add("is-open"); }
@@ -2849,13 +3055,14 @@
       var cells = el("div", "mcells");
       cells.id = cellsId;
       toggle.addEventListener("click", function () {
-        if (!window.matchMedia("(max-width: 720px)").matches) { return; }
+        if (!window.matchMedia("(max-width: 760px)").matches) { return; }
         var opening = !row.classList.contains("is-open");
         row.classList.toggle("is-open", opening);
         toggle.setAttribute("aria-expanded", opening ? "true" : "false");
       });
       THEMES.forEach(function (t) {
         if (t.cat !== c) { return; }
+        var pillWrap = el("span", "epill-wrap");
         var pill = el("button", "epill " + t.status);
         pill.type = "button";
         pill.appendChild(document.createTextNode(t.title));
@@ -2869,10 +3076,31 @@
         pill.addEventListener("mouseenter", function () { showDetail(t, pill); });
         pill.addEventListener("focus", function () { showDetail(t, pill); });
         pill.addEventListener("click", function (event) {
-          showDetail(t, pill);
           if (event.shiftKey || event.ctrlKey || event.metaKey) { togglePinnedTheme(t, pill); }
+          showDetail(t, pill);
+          if (window.matchMedia("(max-width: 760px)").matches) {
+            window.setTimeout(function () { edetail.scrollIntoView({ behavior: "smooth", block: "start" }); }, 0);
+          }
         });
-        cells.appendChild(pill);
+        var pin = el("button", "epill-pin");
+        pin.type = "button";
+        pin.setAttribute("data-theme-title", t.title);
+        pin.setAttribute("aria-pressed", "false");
+        pin.setAttribute("aria-label", "Pin " + t.title + " for comparison");
+        pin.title = "Pin for comparison";
+        var pinIcon = svgEl("svg", { viewBox: "0 0 24 24", "aria-hidden": "true" });
+        pinIcon.appendChild(svgEl("path", {
+          d: "M8 3h8l-1 5 3 3v2h-5v7l-1 1-1-1v-7H6v-2l3-3-1-5z",
+          fill: "none", stroke: "currentColor", "stroke-width": "1.8", "stroke-linejoin": "round"
+        }));
+        pin.appendChild(pinIcon);
+        pin.addEventListener("click", function () {
+          togglePinnedTheme(t, pill);
+          showDetail(t, pill);
+        });
+        pillWrap.appendChild(pill);
+        pillWrap.appendChild(pin);
+        cells.appendChild(pillWrap);
         if (!initialTheme) { initialTheme = { theme: t, pill: pill }; }
       });
       row.appendChild(lab);
@@ -2880,6 +3108,8 @@
       emap.appendChild(row);
     });
     function showDetail(t, pill) {
+      activeTheme = t;
+      activePill = pill;
       var st = STATUS[t.status];
       var pills = emap.querySelectorAll(".epill.on");
       for (var i = 0; i < pills.length; i++) {
@@ -2890,6 +3120,13 @@
       pill.setAttribute("aria-pressed", "true");
       while (edetail.firstChild) { edetail.removeChild(edetail.firstChild); }
       edetail.style.borderLeftColor = st[1];
+      var backButton = el("button", "ed-back", "← Back to themes");
+      backButton.type = "button";
+      backButton.addEventListener("click", function () {
+        emap.scrollIntoView({ behavior: "smooth", block: "start" });
+        pill.focus();
+      });
+      edetail.appendChild(backButton);
       var heading = el("div", "ed-heading");
       var tag = el("span", "ed-tag", st[0]);
       tag.style.background = st[1];
@@ -2992,11 +3229,11 @@
         if (window.addThemeToCompare) { window.addThemeToCompare(t.title, true); }
       });
       edetail.appendChild(compareButton);
-      var pinButton = el("button", "ed-compare", pinnedThemes.indexOf(t.title) === -1 ? "Pin for multi-select" : "Unpin theme");
+      var pinButton = el("button", "ed-compare", pinnedThemes.indexOf(t.title) === -1 ? "Pin for comparison" : "Unpin theme");
       pinButton.type = "button";
       pinButton.addEventListener("click", function () {
         togglePinnedTheme(t, pill);
-        pinButton.textContent = pinnedThemes.indexOf(t.title) === -1 ? "Pin for multi-select" : "Unpin theme";
+        showDetail(t, pill);
       });
       edetail.appendChild(pinButton);
       var explore = el("button", "ed-explore", "Explore " + t.refs.length + " supporting reference" + (t.refs.length === 1 ? "" : "s") + " in the literature explorer");
@@ -3012,12 +3249,19 @@
       emap.querySelectorAll(".epill").forEach(function (pill) {
         pill.classList.toggle("is-pinned", pinnedThemes.indexOf(pill.getAttribute("data-theme-title")) !== -1);
       });
+      emap.querySelectorAll(".epill-pin").forEach(function (button) {
+        var pinned = pinnedThemes.indexOf(button.getAttribute("data-theme-title")) !== -1;
+        button.classList.toggle("is-pinned", pinned);
+        button.setAttribute("aria-pressed", pinned ? "true" : "false");
+        button.setAttribute("aria-label", (pinned ? "Unpin " : "Pin ") + button.getAttribute("data-theme-title") + " for comparison");
+        button.title = pinned ? "Unpin from comparison" : "Pin for comparison";
+      });
       if (selectedCount) { selectedCount.textContent = String(selected.length); }
       if (compareSelected) { compareSelected.disabled = selected.length < 2; }
       if (clearSelected) { clearSelected.disabled = selected.length === 0; }
       if (!overlapSummary) { return; }
       if (!selected.length) {
-        overlapSummary.textContent = "Shift-click themes, or use Pin in the detail card, to compare evidence overlap.";
+        overlapSummary.textContent = "Use the pin beside any theme to compare supporting evidence.";
         return;
       }
       var union = [];
@@ -3032,9 +3276,14 @@
     }
     function togglePinnedTheme(theme, pill) {
       var index = pinnedThemes.indexOf(theme.title);
+      if (index === -1 && pinnedThemes.length >= 4) {
+        if (overlapSummary) { overlapSummary.textContent = "Compare up to four themes. Unpin one before adding another."; }
+        return false;
+      }
       if (index === -1) { pinnedThemes.push(theme.title); } else { pinnedThemes.splice(index, 1); }
       if (pill) { pill.classList.toggle("is-pinned", index === -1); }
       updatePinnedThemes();
+      return true;
     }
     if (compareSelected) {
       compareSelected.addEventListener("click", function () {
@@ -3047,6 +3296,7 @@
       clearSelected.addEventListener("click", function () {
         pinnedThemes = [];
         updatePinnedThemes();
+        if (activeTheme && activePill) { showDetail(activeTheme, activePill); }
       });
     }
     window.openEvidenceTheme = function (title, shouldScroll) {
@@ -3054,7 +3304,7 @@
       var pill = emap.querySelector('[data-theme-title="' + title + '"]');
       if (!theme || !pill) { return; }
       var row = pill.closest(".mrow");
-      if (row && window.matchMedia("(max-width: 720px)").matches) {
+      if (row && window.matchMedia("(max-width: 760px)").matches) {
         row.classList.add("is-open");
         var rowToggle = row.querySelector(".mlab-toggle");
         if (rowToggle) { rowToggle.setAttribute("aria-expanded", "true"); }
@@ -3065,7 +3315,9 @@
       }
     };
     updatePinnedThemes();
-    if (initialTheme) { showDetail(initialTheme.theme, initialTheme.pill); }
+    if (initialTheme && !window.matchMedia("(max-width: 760px)").matches) {
+      showDetail(initialTheme.theme, initialTheme.pill);
+    }
   })();
 
   /* ---------- evidence journey and decision lab ---------- */
@@ -3628,7 +3880,7 @@
       var available = PAPERS.filter(function (paper) { return paper.year <= year; });
       timelineTotal.textContent = available.length + " reference" + (available.length === 1 ? "" : "s") + " available";
       timelineMilestone.textContent = milestoneFor(year);
-      timelineExplore.textContent = "Explore papers from " + year;
+      timelineExplore.textContent = "Explore evidence through " + year;
       while (timelineBars.firstChild) { timelineBars.removeChild(timelineBars.firstChild); }
       CATEGORIES.forEach(function (category) {
         var count = available.filter(function (paper) { return paper.cat === category; }).length;
@@ -3665,9 +3917,11 @@
       }, window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 1200 : 650);
     });
     timelineExplore.addEventListener("click", function () {
-      var year = timelineInput.value;
+      var year = Number(timelineInput.value);
       filters.year.clear();
-      filters.year.add(year);
+      yearsPresent.forEach(function (candidate) {
+        if (candidate <= year) { filters.year.add(String(candidate)); }
+      });
       paperScope = null;
       scopeLabel = "";
       clearRecommendationActive();
@@ -3840,12 +4094,19 @@
     });
 
     var progressBar = document.getElementById("reading-progress-bar");
+    var scrollTopButton = document.getElementById("scroll-to-top");
     var progressPending = false;
     function updateProgress() {
       progressPending = false;
       var available = document.documentElement.scrollHeight - window.innerHeight;
       var progress = available > 0 ? Math.max(0, Math.min(1, window.scrollY / available)) : 0;
       progressBar.style.transform = "scaleX(" + progress + ")";
+      if (scrollTopButton) {
+        var visible = window.scrollY > 640;
+        scrollTopButton.classList.toggle("is-visible", visible);
+        scrollTopButton.setAttribute("aria-hidden", visible ? "false" : "true");
+        scrollTopButton.tabIndex = visible ? 0 : -1;
+      }
     }
     window.addEventListener("scroll", function () {
       if (!progressPending) {
@@ -3853,6 +4114,14 @@
         window.requestAnimationFrame(updateProgress);
       }
     }, { passive: true });
+    if (scrollTopButton) {
+      scrollTopButton.addEventListener("click", function () {
+        window.scrollTo({
+          top: 0,
+          behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth"
+        });
+      });
+    }
     updateProgress();
   })();
 
@@ -3863,6 +4132,7 @@
     var maxInput = document.getElementById("year-brush-max");
     var minValue = document.getElementById("year-brush-min-value");
     var maxValue = document.getElementById("year-brush-max-value");
+    var status = document.getElementById("year-brush-status");
     if (!minInput || !maxInput) { return; }
     var earliest = Math.min.apply(null, yearsPresent);
     var latest = Math.max.apply(null, yearsPresent);
@@ -3873,17 +4143,28 @@
     minInput.value = String(earliest);
     maxInput.value = String(latest);
 
-    function updateLabels() {
+    function updateLabels(message) {
       if (minValue) { minValue.textContent = minInput.value; }
       if (maxValue) { maxValue.textContent = maxInput.value; }
+      if (status && message) { status.textContent = message; }
     }
-    function applyYearBrush(event) {
+    function clampYearBrush(event) {
       var minimum = Number(minInput.value);
       var maximum = Number(maxInput.value);
       if (minimum > maximum) {
-        if (event && event.target === minInput) { maxInput.value = String(minimum); maximum = minimum; }
-        else { minInput.value = String(maximum); minimum = maximum; }
+        if (event && event.target === minInput) { minInput.value = String(maximum); minimum = maximum; }
+        else { maxInput.value = String(minimum); maximum = minimum; }
       }
+      return { minimum: minimum, maximum: maximum };
+    }
+    function previewYearBrush(event) {
+      var range = clampYearBrush(event);
+      updateLabels("Release to apply " + range.minimum + "–" + range.maximum + ".");
+    }
+    function applyYearBrush(event) {
+      var range = clampYearBrush(event);
+      var minimum = range.minimum;
+      var maximum = range.maximum;
       filters.year.clear();
       if (minimum !== earliest || maximum !== latest) {
         yearsPresent.forEach(function (year) {
@@ -3894,23 +4175,33 @@
       scopeLabel = "";
       clearRecommendationActive();
       syncDropdownFilter("year");
-      updateLabels();
+      updateLabels(minimum === earliest && maximum === latest
+        ? "Showing the complete publication range."
+        : "Showing the continuous range " + minimum + "–" + maximum + ".");
       render();
     }
     window.syncYearBrushFromFilters = function () {
       if (!filters.year.size) {
         minInput.value = String(earliest);
         maxInput.value = String(latest);
+        document.getElementById("year-brush").classList.remove("has-discrete-years");
+        updateLabels("Showing the complete publication range.");
       } else {
         var selectedYears = Array.from(filters.year).map(Number);
         minInput.value = String(Math.min.apply(null, selectedYears));
         maxInput.value = String(Math.max.apply(null, selectedYears));
+        var selection = formatYearSelection(Array.from(filters.year));
+        document.getElementById("year-brush").classList.toggle("has-discrete-years", !selection.contiguous);
+        updateLabels(selection.contiguous
+          ? "Showing " + (selectedYears.length === 1 ? "publication year " : "the continuous range ") + selection.label + "."
+          : selectedYears.length + " individual years selected. Move a handle to replace them with a continuous range.");
       }
-      updateLabels();
     };
-    minInput.addEventListener("input", applyYearBrush);
-    maxInput.addEventListener("input", applyYearBrush);
-    updateLabels();
+    minInput.addEventListener("input", previewYearBrush);
+    maxInput.addEventListener("input", previewYearBrush);
+    minInput.addEventListener("change", applyYearBrush);
+    maxInput.addEventListener("change", applyYearBrush);
+    updateLabels("Showing the complete publication range.");
   })();
 
   /* ---------- research workspace / citation cart ---------- */
@@ -4013,18 +4304,7 @@
     }
     if (exportButton) {
       exportButton.addEventListener("click", function () {
-        var entries = savedPapers().map(function (paper) {
-          var type = paper.vtype === "Journal" ? "article" : (paper.vtype === "Conference" ? "inproceedings" : "misc");
-          var fields = [
-            "  title = {" + bibValue(paper.title) + "}",
-            "  author = {" + bibValue(paper.authors) + "}",
-            "  year = {" + paper.year + "}",
-            "  note = {" + bibValue(paper.venue) + "}"
-          ];
-          if (paper.doi) { fields.push("  doi = {" + bibValue(paper.doi) + "}"); }
-          else if (paper._link) { fields.push("  url = {" + bibValue(paper._link) + "}"); }
-          return "@" + type + "{rav" + paper.year + "ref" + paper.n + ",\n" + fields.join(",\n") + "\n}";
-        });
+        var entries = savedPapers().map(paperBibtex);
         downloadText("rav-citation-cart.bib", entries.join("\n\n") + "\n", "application/x-bibtex");
       });
     }
@@ -4046,7 +4326,7 @@
   Object.keys(filters).forEach(syncDropdownFilter);
   if (sortSelect) { sortSelect.value = sortMode; }
   var chartDetails = document.querySelector(".chart-card");
-  if (chartDetails && window.matchMedia("(max-width: 720px)").matches) {
+  if (chartDetails && window.matchMedia("(max-width: 760px)").matches) {
     chartDetails.removeAttribute("open");
   }
   urlStateReady = true;

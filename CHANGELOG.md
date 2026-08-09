@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.8 — 2026-08-08
+
+- Added a start-here findings path and clearly marked the narrative manuscript as forthcoming, without advertising an unavailable document download.
+- Added BibTeX, RIS, and EndNote XML exports for the current website record, while retaining CSV and BibTeX bibliography exports.
+- Made Evidence Map pinning visible and added direct pilot-location and show-all map controls.
+- Stabilized the year-range interface, expanded the unfiltered Reference List by default, added scroll-to-top, and fixed responsive wrapping and clipping.
+- Restored the collapsed Evidence network heading on desktop and added a visible label to the floating return-to-top arrow.
+
 ## 2.7 — 2026-07-27
 
 - Added Framework Flow Mode with evidence and reference handoffs for every displayed submodule.
@@ -42,7 +50,7 @@
 
 ## 2.1 — 2026-07-27
 
-- Added the DLR Test Bed Lower Saxony source from the latest Word review as reference 118.
+- Added the DLR Test Bed Lower Saxony source from the latest bibliography audit as reference 118.
 - Added interactive Tier 2 submodules for infrastructure, communication, and cooperative driving.
 - Updated all evidence, source-verification, and open-access totals.
 
