@@ -38,6 +38,8 @@ def main() -> None:
     app = (ROOT / "app.js").read_text(encoding="utf-8")
     index = (ROOT / "index.html").read_text(encoding="utf-8")
     style = (ROOT / "style.css").read_text(encoding="utf-8")
+    readme = (ROOT / "README.md").read_text(encoding="utf-8")
+    changelog = (ROOT / "CHANGELOG.md").read_text(encoding="utf-8")
     audit = json.loads((ROOT / "sources-audit.json").read_text(encoding="utf-8"))
     oa_audit = json.loads((ROOT / "open-access-audit.json").read_text(encoding="utf-8"))
 
@@ -85,6 +87,7 @@ def main() -> None:
     assert "var REVIEW_CITATION =" not in data_raw
 
     category_counts = Counter(paper["cat"] for paper in papers)
+    rural_counts = Counter(paper["rural"] for paper in papers)
     expected_categories = {
         "Autonomous Driving",
         "Fleet Management",
@@ -124,6 +127,34 @@ def main() -> None:
     assert not re.search(
         r'href=["\'][^"\']*rav-narrative-review\.(?:pdf|docx)["\']', index, re.I
     )
+    assert not re.search(
+        r'<a\b[^>]*\bhref=["\'][^"\']+\.(?:pdf|docx)(?:[?#][^"\']*)?["\']', index, re.I
+    )
+    body_tag = re.search(r"<body\b[^>]*>", index, re.I)
+    assert body_tag and 'data-experience="basic"' in body_tag.group(0)
+    experience_modes = re.findall(r'data-experience-mode="(basic|advanced)"', index)
+    assert set(experience_modes) == {"basic", "advanced"}
+    synthesis_start = index.find("synthesis-essay")
+    synthesis_end = index.find('class="manuscript-status-card"', synthesis_start)
+    assert 0 <= synthesis_start < synthesis_end
+    synthesis_block = index[synthesis_start:synthesis_end]
+    assert len(re.findall(r"<p\b", synthesis_block, re.I)) >= 4
+    synthesis_text = re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", synthesis_block)).casefold()
+    assert re.search(r"consensus|converg|consistent", synthesis_text)
+    assert re.search(r"contrast|whereas|however", synthesis_text)
+    assert re.search(r"evidence gap|evidence boundary|validation is still thin", synthesis_text)
+    assert f"{expected_count} retained records" in synthesis_text
+    assert f'{rural_counts["Direct rural evidence"]} as direct rural' in synthesis_text
+    assert f'{rural_counts["Transferable to rural"]} as transferable' in synthesis_text
+    assert f'{rural_counts["Context-limited"]} as context-limited' in synthesis_text
+    synthesis_citation_labels = re.findall(r'class="synthesis-citations"[^>]*aria-label="([^"]+)"', index)
+    assert len(synthesis_citation_labels) >= 5
+    assert all(
+        int(number) in valid_numbers
+        for label in synthesis_citation_labels
+        for number in re.findall(r"\d+", label)
+    )
+    assert re.search(r"implication|taken together|staged deployment", synthesis_text)
     nav_targets = re.findall(r'<a class="pill" href="#([^"]+)"', index)
     assert set(nav_targets) <= set(section_ids)
     theme_titles = set(re.findall(r'title: "([^"]+)", status:', app))
@@ -176,6 +207,11 @@ def main() -> None:
         "pilot-location-select",
         "pilot-location-view",
         "pilot-show-all",
+        "experience-switch",
+        "experience-mode-description",
+        "experience-mode-status",
+        "advanced-mode-invite",
+        "advanced-mode-enable",
         "command-palette",
         "reading-progress-bar",
         "scroll-to-top",
@@ -198,27 +234,53 @@ def main() -> None:
     assert all(f'id="{interaction_id}"' in index for interaction_id in required_interactions)
     assert 'details.open = true;' in app
     assert 'referenceGroups.push(details);' in app
-    assert 'el("button", "epill-pin")' in app
+    assert 'el("button", "epill-pin advanced-only")' in app
     assert 'classList.toggle("is-visible", visible)' in app
     assert 'scrollTopButton.tabIndex = visible ? 0 : -1;' in app
     assert 'getElementById("pilot-show-all")' in app
     assert 'applyMapFilter("all")' in app
     assert 'getElementById("year-brush-status")' in app
     assert "formatYearSelection" in app and "clampYearBrush" in app
-    assert "Version 2.8 feedback-led reading and navigation" in style
+    assert "ensureAdvancedMode" in app and "navigateExperienceTarget" in app
+    assert "syncExperienceVisibility" in app and "initialExperienceMode" in app
+    assert 'return experienceMode === "basic" ? PAPERS : currentFiltered' in app
+    assert 'target.getAttribute("data-lab-tab")' in app
+    assert 'params.set("mode", "advanced")' in app and '"#scenario-planner"' in app
+    assert 'shareUrl.searchParams.has("focus") ? "scatter" : "explorer"' in app
+    assert "var themeComparisonStore" in app and "themeComparisonStore.subscribe" in app
+    assert "pinnedThemes" not in app and "compareTitles" not in app
+    assert 'getElementById("explorer").scrollIntoView' not in app
+    assert 'getElementById("decision-lab").scrollIntoView' not in app
+    assert 'class="synthesis-essay"' in index
+    assert index.count('class="synthesis-citations"') >= 5
+    assert index.count('name="synthesis-finding"') == 5
+    assert index.count('name="synthesis-finding" open') == 0
+    assert ".synthesis-section[open]" in style
+    assert "Tier 1 &middot; Drive + Operate" in index
+    assert "Tier 2 &middot; Road + Connect + Cooperate" in index
+    assert "Validation &middot; Field pilots" in index
+    assert ".synthesis-section:not([open])" in style and "min-height: 96px" in style
+    assert 'class="advanced-only"' in index or " advanced-only" in index
+    assert 'body[data-experience="basic"] .advanced-only' in style
+    assert 'body[data-experience="advanced"] .basic-only' in style
+    assert "Add to Compare Board" not in app + index
+    assert "Version 2.9" in style
     assert ".epill-wrap" in style and ".scroll-to-top.is-visible" in style
     chart_summary_style = re.search(r"\.chart-card > summary\s*\{([^}]+)\}", style)
     assert chart_summary_style and "display: list-item" in chart_summary_style.group(1)
     assert 'class="scroll-to-top-label"' in index and ">Top</span>" in index
     assert len(theme_titles) == 25
-    assert "Version 2.8" in index
+    assert "Version 2.9" in index
     assert "Updated August 8, 2026" in index
-    assert "app.js?v=20260808e" in index
-    assert "style.css?v=20260808e" in index
+    assert "app.js?v=20260808k" in index
+    assert "style.css?v=20260808k" in index
+    assert "data.js?v=20260808k" in index and "edges.js?v=20260808k" in index
+    assert "Current release:** Version 2.9" in readme
+    assert re.search(r"^## 2\.9\b", changelog, re.M)
 
     print(
         f"Validated {expected_count} papers, {len(theme_titles)} themes, "
-        "review coding, forthcoming manuscript status, website citation exports, section order, and interaction hooks"
+        "review coding, across-study synthesis, Basic/Advanced experience, and interaction hooks"
     )
     print("Category counts:", dict(category_counts))
     print("Evidence edges:", len(edges))

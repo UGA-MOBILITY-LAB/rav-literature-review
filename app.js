@@ -103,6 +103,296 @@
     });
   }
 
+  /* ---------- Basic / Advanced experience routing ---------- */
+
+  var experienceMode = "basic";
+  var experienceStatus = document.getElementById("experience-mode-status");
+  var experienceDescription = document.getElementById("experience-mode-description");
+  var experienceButtons = Array.prototype.slice.call(document.querySelectorAll("[data-experience-mode]"));
+  var ADVANCED_FILTER_PARAMS = [
+    "module", "year", "source", "evidence", "rural", "strength", "access",
+    "q", "sort", "scope", "scopeLabel", "focus"
+  ];
+  var SCENARIO_PARAMS = ["road", "weather", "connectivity", "demand"];
+
+  function prefersReducedMotion() {
+    return window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  }
+
+  function targetFromId(targetOrId) {
+    if (!targetOrId) { return null; }
+    if (targetOrId.nodeType === 1) { return targetOrId; }
+    return document.getElementById(String(targetOrId).replace(/^#/, ""));
+  }
+
+  function syncExperienceVisibility() {
+    document.querySelectorAll(".advanced-only").forEach(function (node) {
+      node.hidden = experienceMode === "basic";
+    });
+    document.querySelectorAll(".basic-only").forEach(function (node) {
+      node.hidden = experienceMode === "advanced";
+    });
+  }
+
+  function replaceModeInUrl(mode) {
+    if (!window.history || !window.URLSearchParams) { return; }
+    var params = new URLSearchParams(window.location.search);
+    params.set("mode", mode);
+    var next = window.location.pathname + (params.toString() ? "?" + params.toString() : "") + window.location.hash;
+    window.history.replaceState(null, "", next);
+  }
+
+  function setExperienceMode(mode, options) {
+    options = options || {};
+    mode = mode === "advanced" ? "advanced" : "basic";
+    var changed = experienceMode !== mode || document.body.getAttribute("data-experience") !== mode;
+    experienceMode = mode;
+    document.body.setAttribute("data-experience", mode);
+    document.documentElement.setAttribute("data-experience", mode);
+    syncExperienceVisibility();
+    experienceButtons.forEach(function (button) {
+      button.setAttribute("aria-pressed", button.getAttribute("data-experience-mode") === mode ? "true" : "false");
+    });
+    if (experienceDescription) {
+      experienceDescription.textContent = mode === "basic"
+        ? "Basic follows the review argument. Advanced adds comparison, statistics, planning, and filtering tools."
+        : "Advanced shows the complete analysis workspace. Switch to Basic at any time for the reading path.";
+    }
+    if (options.persist) {
+      try { window.localStorage.setItem("rav-experience-mode", mode); } catch (ignore) {}
+    }
+    if (options.updateUrl) { replaceModeInUrl(mode); }
+    if (experienceStatus && options.announce !== false && (changed || options.reason)) {
+      experienceStatus.textContent = mode === "advanced"
+        ? "Advanced mode enabled" + (options.reason ? " to show " + options.reason : "") + "."
+        : "Basic reading mode enabled.";
+    }
+    if (changed) {
+      document.dispatchEvent(new CustomEvent("rav:experiencechange", { detail: { mode: mode } }));
+    }
+    return mode;
+  }
+
+  function ensureAdvancedMode(reason) {
+    return setExperienceMode("advanced", {
+      persist: false,
+      updateUrl: true,
+      reason: reason || "the requested analysis"
+    });
+  }
+
+  function openAncestorDetails(target) {
+    var current = target;
+    while (current && current !== document.body) {
+      if (current.tagName === "DETAILS") { current.open = true; }
+      current = current.parentElement;
+    }
+  }
+
+  function decisionLabTabForTarget(target) {
+    if (!target || !target.closest("#decision-lab")) { return ""; }
+    var targetTab = target.getAttribute("data-lab-tab");
+    if (targetTab) { return targetTab; }
+    if (target.closest("#lab-compare") || ["compare-grid", "compare-status", "compare-theme-select"].indexOf(target.id) !== -1) { return "compare"; }
+    if (target.closest("#lab-intelligence") || ["gap-radar", "timeline-year", "timeline-bars"].indexOf(target.id) !== -1) { return "intelligence"; }
+    return "journey";
+  }
+
+  function focusRoutedTarget(target, preferredId) {
+    var focusTarget = preferredId ? document.getElementById(preferredId) : null;
+    if (!focusTarget) {
+      focusTarget = target.matches("h1, h2, h3, [role='status'], button, input, select")
+        ? target
+        : target.querySelector("h1, h2, h3, [role='status'], button, input, select");
+    }
+    if (!focusTarget) { return; }
+    if (!focusTarget.matches("button, input, select, textarea, a[href], [tabindex]")) {
+      focusTarget.setAttribute("tabindex", "-1");
+    }
+    try { focusTarget.focus({ preventScroll: true }); } catch (ignore) { focusTarget.focus(); }
+  }
+
+  function navigateExperienceTarget(targetOrId, options) {
+    options = options || {};
+    var target = targetFromId(targetOrId);
+    if (!target) { return false; }
+    var requiresAdvanced = options.mode === "advanced" || !!target.closest(".advanced-only");
+    if (requiresAdvanced) { ensureAdvancedMode(options.reason || "the requested tool"); }
+    openAncestorDetails(target);
+    var tab = options.labTab || decisionLabTabForTarget(target);
+    if (tab && window.RAV_DECISION_LAB && window.RAV_DECISION_LAB.activate) {
+      window.RAV_DECISION_LAB.activate(tab, false);
+    }
+    if (target.id === "scatter") {
+      var chart = target.closest("details");
+      if (chart) { chart.open = true; }
+    }
+    if (target.closest("#research-workspace") && target.id !== "research-workspace" &&
+        window.RAV_WORKSPACE && window.RAV_WORKSPACE.open) {
+      window.RAV_WORKSPACE.open();
+    }
+    if (options.updateHash !== false && window.history) {
+      var params = new URLSearchParams(window.location.search);
+      var next = window.location.pathname + (params.toString() ? "?" + params.toString() : "") + "#" + target.id;
+      window.history.replaceState(null, "", next);
+    }
+    window.requestAnimationFrame(function () {
+      target.scrollIntoView({ behavior: prefersReducedMotion() ? "auto" : "smooth", block: "start" });
+      focusRoutedTarget(target, options.focusId);
+    });
+    return true;
+  }
+
+  function openExplorer(reason, targetId) {
+    return navigateExperienceTarget(targetId || "explorer", {
+      mode: "advanced",
+      reason: reason || "filtered references",
+      updateHash: true
+    });
+  }
+
+  function openDecisionLab(tab, reason) {
+    var targetId = tab === "compare" ? "compare-status" : (tab === "intelligence" ? "lab-intelligence" : "lab-journey");
+    return navigateExperienceTarget(targetId, {
+      mode: "advanced",
+      labTab: tab || "journey",
+      reason: reason || "the analysis workspace",
+      focusId: tab === "compare" ? "compare-status" : "lab-tab-" + (tab || "journey"),
+      updateHash: true
+    });
+  }
+
+  window.setExperienceMode = setExperienceMode;
+  window.ensureAdvancedMode = ensureAdvancedMode;
+  window.navigateExperienceTarget = navigateExperienceTarget;
+  window.openExplorer = openExplorer;
+  window.openDecisionLab = openDecisionLab;
+  window.syncExperienceVisibility = syncExperienceVisibility;
+
+  function queryHasAny(params, keys) {
+    return keys.some(function (key) { return params.has(key); });
+  }
+
+  function initialExperienceMode() {
+    var params = new URLSearchParams(window.location.search);
+    var hashTarget = targetFromId(window.location.hash);
+    if (hashTarget && hashTarget.closest(".advanced-only")) { return "advanced"; }
+    var requested = params.get("mode");
+    if (requested === "advanced" || requested === "basic") { return requested; }
+    if (queryHasAny(params, ADVANCED_FILTER_PARAMS) || queryHasAny(params, SCENARIO_PARAMS)) { return "advanced"; }
+    try {
+      var saved = window.localStorage.getItem("rav-experience-mode");
+      if (saved === "advanced" || saved === "basic") { return saved; }
+    } catch (ignore) {}
+    return "basic";
+  }
+
+  setExperienceMode(initialExperienceMode(), { persist: false, updateUrl: false, announce: false });
+
+  experienceButtons.forEach(function (button) {
+    button.addEventListener("click", function () {
+      var nextMode = button.getAttribute("data-experience-mode");
+      setExperienceMode(nextMode, { persist: true, updateUrl: true });
+      if (nextMode === "basic") {
+        var activeTarget = targetFromId(window.location.hash);
+        if (activeTarget && activeTarget.closest(".advanced-only")) {
+          navigateExperienceTarget("findings", { mode: "basic", updateHash: true, focusId: "synthesis-title" });
+        }
+      }
+    });
+  });
+  var advancedModeEnable = document.getElementById("advanced-mode-enable");
+  if (advancedModeEnable) {
+    advancedModeEnable.addEventListener("click", function () {
+      setExperienceMode("advanced", { persist: true, updateUrl: true, reason: "the analysis workspace" });
+      openDecisionLab("journey", "the analysis workspace");
+    });
+  }
+  document.addEventListener("click", function (event) {
+    var link = event.target.closest("a[href^='#']");
+    if (!link) { return; }
+    var target = targetFromId(link.getAttribute("href"));
+    if (target && target.closest(".advanced-only")) {
+      event.preventDefault();
+      navigateExperienceTarget(target, { mode: "advanced", reason: link.textContent.trim(), updateHash: true });
+    }
+  });
+  window.addEventListener("hashchange", function () {
+    var target = targetFromId(window.location.hash);
+    if (target && target.closest(".advanced-only")) {
+      navigateExperienceTarget(target, { mode: "advanced", reason: "the linked tool", updateHash: false });
+    }
+  });
+
+  /* ---------- shared theme-comparison state ---------- */
+
+  var themeComparisonStore = (function () {
+    var titles = [];
+    var listeners = [];
+    try {
+      var saved = JSON.parse(window.localStorage.getItem("rav-theme-comparison") || "[]");
+      if (Array.isArray(saved)) {
+        titles = saved.filter(function (title, index) {
+          return typeof title === "string" && saved.indexOf(title) === index;
+        }).slice(0, 4);
+      }
+    } catch (ignore) { titles = []; }
+    function list() { return titles.slice(); }
+    function persist() {
+      try { window.localStorage.setItem("rav-theme-comparison", JSON.stringify(titles)); } catch (ignore) {}
+    }
+    function notify() {
+      persist();
+      listeners.slice().forEach(function (listener) { listener(list()); });
+    }
+    function add(title) {
+      if (!title || titles.indexOf(title) !== -1) { return true; }
+      if (titles.length >= 4) { return false; }
+      titles.push(title);
+      notify();
+      return true;
+    }
+    function remove(title) {
+      var next = titles.filter(function (candidate) { return candidate !== title; });
+      if (next.length === titles.length) { return; }
+      titles = next;
+      notify();
+    }
+    function toggle(title) {
+      if (titles.indexOf(title) !== -1) { remove(title); return true; }
+      return add(title);
+    }
+    function clear() {
+      if (!titles.length) { return; }
+      titles = [];
+      notify();
+    }
+    function replace(nextTitles) {
+      var next = (nextTitles || []).filter(function (title, index, values) {
+        return typeof title === "string" && values.indexOf(title) === index;
+      }).slice(0, 4);
+      if (JSON.stringify(next) === JSON.stringify(titles)) { return; }
+      titles = next;
+      notify();
+    }
+    function subscribe(listener) {
+      listeners.push(listener);
+      listener(list());
+      return function () { listeners = listeners.filter(function (candidate) { return candidate !== listener; }); };
+    }
+    return {
+      list: list,
+      add: add,
+      remove: remove,
+      toggle: toggle,
+      clear: clear,
+      replace: replace,
+      subscribe: subscribe,
+      openBoard: function () { openDecisionLab("compare", "theme comparison"); }
+    };
+  })();
+  window.themeComparisonStore = themeComparisonStore;
+
   /* ---------- enrich papers ---------- */
 
   PAPERS.forEach(function (p) {
@@ -414,6 +704,7 @@
       d.badge.hidden = (n === 0);
     });
     render();
+    openExplorer("references for " + cat);
   }
 
   function syncDropdownFilter(filterKey) {
@@ -442,7 +733,7 @@
     if (!active) { filters[filterKey].add(value); }
     syncDropdownFilter(filterKey);
     render();
-    document.getElementById("explorer").scrollIntoView({ behavior: "smooth" });
+    openExplorer("the selected statistic");
   }
 
   function setStatPair(cat, year) {
@@ -460,7 +751,7 @@
     syncDropdownFilter("cat");
     syncDropdownFilter("year");
     render();
-    document.getElementById("explorer").scrollIntoView({ behavior: "smooth" });
+    openExplorer("the selected module and year");
   }
 
   // Used by framework submodules: keep the parent category selected and
@@ -483,6 +774,7 @@
       d.badge.hidden = (n === 0);
     });
     render();
+    openExplorer("references for " + label);
   }
 
   function setRecommendationFilter(label, refs, activeCard, scopePrefix) {
@@ -511,6 +803,7 @@
       activeCard.setAttribute("aria-pressed", "true");
     }
     render();
+    openExplorer("references for " + label);
   }
 
   function setEvidenceFilter(label, refs) {
@@ -527,6 +820,7 @@
     });
     clearRecommendationActive();
     render();
+    openExplorer("references for " + label);
   }
 
   /* ---------- legend ---------- */
@@ -1481,6 +1775,10 @@
   function updateReferenceListSummary() {
     var summary = document.getElementById("reference-list-summary");
     if (!summary) { return; }
+    if (experienceMode === "basic") {
+      summary.textContent = "All " + SURVEY_META.paperCount + " references are shown below. Switch to Advanced to apply filters.";
+      return;
+    }
     if (currentFiltered.length === SURVEY_META.paperCount && !scopeLabel && !query) {
       summary.textContent = "All " + SURVEY_META.paperCount + " references are shown below.";
       return;
@@ -1489,10 +1787,19 @@
       " references" + (scopeLabel ? " · " + scopeLabel : "") + ".";
   }
 
+  function referenceListPapers() {
+    return experienceMode === "basic" ? PAPERS : currentFiltered;
+  }
+
+  function renderReferenceList() {
+    renderTables(referenceListPapers());
+    updateReferenceListSummary();
+  }
+
   function render() {
     currentFiltered = PAPERS.filter(passesFilters);
     renderScatter(currentFiltered);
-    renderTables(currentFiltered);
+    renderTables(referenceListPapers());
     syncStatSelection();
     if (window.syncYearBrushFromFilters) { window.syncYearBrushFromFilters(); }
     updateCountLine();
@@ -1505,10 +1812,11 @@
   if (sortSelect) {
     sortSelect.addEventListener("change", function () {
       sortMode = sortSelect.value;
-      renderTables(currentFiltered);
+      renderReferenceList();
       syncUrlState();
     });
   }
+  document.addEventListener("rav:experiencechange", renderReferenceList);
 
   function downloadText(filename, text, type) {
     var blob = new Blob([text], { type: type + ";charset=utf-8" });
@@ -1642,7 +1950,7 @@
       button.setAttribute("aria-pressed", button.getAttribute("data-citation-style") === citationStyle ? "true" : "false");
     });
     try { window.localStorage.setItem("rav-citation-style", citationStyle); } catch (err) { /* optional */ }
-    if (Object.keys(groupRefs).length) { renderTables(currentFiltered); }
+    if (Object.keys(groupRefs).length) { renderReferenceList(); }
   }
   citationButtons.forEach(function (button) {
     button.addEventListener("click", function () {
@@ -1892,7 +2200,8 @@
     function writeScenarioUrl() {
       var params = new URLSearchParams(window.location.search);
       Object.keys(state).forEach(function (key) { params.set(key, state[key]); });
-      var next = window.location.pathname + "?" + params.toString() + window.location.hash;
+      params.set("mode", "advanced");
+      var next = window.location.pathname + "?" + params.toString() + "#scenario-planner";
       window.history.replaceState(null, "", next);
     }
 
@@ -2074,7 +2383,6 @@
         evidence.type = "button";
         evidence.addEventListener("click", function () {
           setRecommendationFilter("Scenario A/B comparison", combinedRefs, null, "Scenario comparison");
-          document.getElementById("explorer").scrollIntoView({ behavior: "smooth" });
         });
         delta.appendChild(evidence);
         comparisonGrid.appendChild(delta);
@@ -2089,7 +2397,6 @@
     });
     evidenceButton.addEventListener("click", function () {
       setRecommendationFilter(currentLabel, currentRefs, null, "Scenario planner");
-      document.getElementById("explorer").scrollIntoView({ behavior: "smooth" });
     });
     shareButton.addEventListener("click", function () {
       writeScenarioUrl();
@@ -2258,7 +2565,6 @@
       evidence.type = "button";
       evidence.addEventListener("click", function () {
         setRecommendationFilter(program.label, program.refs, programCard(program), "Pilot comparison");
-        document.getElementById("explorer").scrollIntoView({ behavior: "smooth" });
       });
       card.appendChild(evidence);
       return card;
@@ -2329,7 +2635,6 @@
 
     detailEvidence.addEventListener("click", function () {
       setRecommendationFilter(selected.label, selected.refs, programCard(selected), "Pilot program");
-      document.getElementById("explorer").scrollIntoView({ behavior: "smooth" });
     });
 
     if (typeof L === "undefined") {
@@ -2570,7 +2875,6 @@
       function activate() {
         var prefix = card.classList.contains("pilot-card") ? "Pilot program" : "Recommendation";
         setRecommendationFilter(label, refs, card, prefix);
-        document.getElementById("explorer").scrollIntoView({ behavior: "smooth" });
       }
       card.addEventListener("click", activate);
       card.addEventListener("keydown", function (e) {
@@ -2725,7 +3029,6 @@
         flowLocked = true;
         if (!flowMode) {
           setCatFilter(s);
-          document.getElementById("explorer").scrollIntoView({ behavior: "smooth" });
         }
       });
       p.addEventListener("keydown", function (e) {
@@ -2735,7 +3038,6 @@
           flowLocked = true;
           if (!flowMode) {
             setCatFilter(s);
-            document.getElementById("explorer").scrollIntoView({ behavior: "smooth" });
           }
         }
       });
@@ -2752,7 +3054,6 @@
         flowLocked = true;
         if (!flowMode) {
           setSubthemeFilter(cat, subcat, refs);
-          document.getElementById("explorer").scrollIntoView({ behavior: "smooth" });
         }
       });
       p.addEventListener("keydown", function (e) {
@@ -2763,7 +3064,6 @@
           flowLocked = true;
           if (!flowMode) {
             setSubthemeFilter(cat, subcat, refs);
-            document.getElementById("explorer").scrollIntoView({ behavior: "smooth" });
           }
         }
       });
@@ -2791,7 +3091,6 @@
         } else {
           setCatFilter(selectedFlow.cat);
         }
-        document.getElementById("explorer").scrollIntoView({ behavior: "smooth" });
       });
     }
     if (card) {
@@ -2807,7 +3106,6 @@
     var emap = document.getElementById("emap");
     var edetail = document.getElementById("emap-detail");
     if (!emap || !edetail) { return; }
-    var pinnedThemes = [];
     var selectedCount = document.getElementById("evidence-selected-count");
     var overlapSummary = document.getElementById("evidence-overlap-summary");
     var compareSelected = document.getElementById("evidence-compare-selected");
@@ -3038,6 +3336,9 @@
     var initialTheme = null;
     var activeTheme = null;
     var activePill = null;
+    function evidenceRowsCollapse() {
+      return experienceMode === "basic" || window.matchMedia("(max-width: 760px)").matches;
+    }
     CATEGORIES.forEach(function (c, categoryIndex) {
       var row = el("div", "mrow");
       if (categoryIndex === 0) { row.classList.add("is-open"); }
@@ -3055,7 +3356,7 @@
       var cells = el("div", "mcells");
       cells.id = cellsId;
       toggle.addEventListener("click", function () {
-        if (!window.matchMedia("(max-width: 760px)").matches) { return; }
+        if (!evidenceRowsCollapse()) { return; }
         var opening = !row.classList.contains("is-open");
         row.classList.toggle("is-open", opening);
         toggle.setAttribute("aria-expanded", opening ? "true" : "false");
@@ -3075,19 +3376,18 @@
         pill.title = t.refs.length + " supporting references. Show definition, pros, cons, rural gap, and RAV action.";
         pill.addEventListener("mouseenter", function () { showDetail(t, pill); });
         pill.addEventListener("focus", function () { showDetail(t, pill); });
-        pill.addEventListener("click", function (event) {
-          if (event.shiftKey || event.ctrlKey || event.metaKey) { togglePinnedTheme(t, pill); }
+        pill.addEventListener("click", function () {
           showDetail(t, pill);
           if (window.matchMedia("(max-width: 760px)").matches) {
             window.setTimeout(function () { edetail.scrollIntoView({ behavior: "smooth", block: "start" }); }, 0);
           }
         });
-        var pin = el("button", "epill-pin");
+        var pin = el("button", "epill-pin advanced-only");
         pin.type = "button";
         pin.setAttribute("data-theme-title", t.title);
         pin.setAttribute("aria-pressed", "false");
-        pin.setAttribute("aria-label", "Pin " + t.title + " for comparison");
-        pin.title = "Pin for comparison";
+        pin.setAttribute("aria-label", "Add " + t.title + " to comparison");
+        pin.title = "Add to comparison";
         var pinIcon = svgEl("svg", { viewBox: "0 0 24 24", "aria-hidden": "true" });
         pinIcon.appendChild(svgEl("path", {
           d: "M8 3h8l-1 5 3 3v2h-5v7l-1 1-1-1v-7H6v-2l3-3-1-5z",
@@ -3095,7 +3395,7 @@
         }));
         pin.appendChild(pinIcon);
         pin.addEventListener("click", function () {
-          togglePinnedTheme(t, pill);
+          toggleComparisonTheme(t);
           showDetail(t, pill);
         });
         pillWrap.appendChild(pill);
@@ -3223,45 +3523,52 @@
           edetail.appendChild(bridgeGroup);
         }
       }
-      var compareButton = el("button", "ed-compare", "Add to Compare Board");
-      compareButton.type = "button";
-      compareButton.addEventListener("click", function () {
-        if (window.addThemeToCompare) { window.addThemeToCompare(t.title, true); }
-      });
-      edetail.appendChild(compareButton);
-      var pinButton = el("button", "ed-compare", pinnedThemes.indexOf(t.title) === -1 ? "Pin for comparison" : "Unpin theme");
+      var selectedForComparison = themeComparisonStore.list().indexOf(t.title) !== -1;
+      var pinButton = el("button", "ed-compare ed-comparison-toggle advanced-only",
+        selectedForComparison ? "Remove from comparison" : "Add to comparison");
       pinButton.type = "button";
+      pinButton.setAttribute("data-theme-title", t.title);
+      pinButton.setAttribute("aria-pressed", selectedForComparison ? "true" : "false");
       pinButton.addEventListener("click", function () {
-        togglePinnedTheme(t, pill);
+        toggleComparisonTheme(t);
         showDetail(t, pill);
       });
       edetail.appendChild(pinButton);
-      var explore = el("button", "ed-explore", "Explore " + t.refs.length + " supporting reference" + (t.refs.length === 1 ? "" : "s") + " in the literature explorer");
+      var explore = el("button", "ed-explore", "Explore " + t.refs.length + " supporting reference" +
+        (t.refs.length === 1 ? "" : "s") + " (opens Advanced)");
       explore.type = "button";
       explore.addEventListener("click", function () {
         setEvidenceFilter(t.title, t.refs);
-        document.getElementById("explorer").scrollIntoView({ behavior: "smooth" });
       });
       edetail.appendChild(explore);
+      syncExperienceVisibility();
     }
-    function updatePinnedThemes() {
-      var selected = THEMES.filter(function (theme) { return pinnedThemes.indexOf(theme.title) !== -1; });
+    function updateComparisonSelection(selectedTitles) {
+      selectedTitles = selectedTitles || themeComparisonStore.list();
+      var selected = THEMES.filter(function (theme) { return selectedTitles.indexOf(theme.title) !== -1; });
       emap.querySelectorAll(".epill").forEach(function (pill) {
-        pill.classList.toggle("is-pinned", pinnedThemes.indexOf(pill.getAttribute("data-theme-title")) !== -1);
+        pill.classList.toggle("is-pinned", selectedTitles.indexOf(pill.getAttribute("data-theme-title")) !== -1);
       });
       emap.querySelectorAll(".epill-pin").forEach(function (button) {
-        var pinned = pinnedThemes.indexOf(button.getAttribute("data-theme-title")) !== -1;
-        button.classList.toggle("is-pinned", pinned);
-        button.setAttribute("aria-pressed", pinned ? "true" : "false");
-        button.setAttribute("aria-label", (pinned ? "Unpin " : "Pin ") + button.getAttribute("data-theme-title") + " for comparison");
-        button.title = pinned ? "Unpin from comparison" : "Pin for comparison";
+        var selectedTheme = selectedTitles.indexOf(button.getAttribute("data-theme-title")) !== -1;
+        button.classList.toggle("is-pinned", selectedTheme);
+        button.setAttribute("aria-pressed", selectedTheme ? "true" : "false");
+        button.setAttribute("aria-label", (selectedTheme ? "Remove " : "Add ") +
+          button.getAttribute("data-theme-title") + (selectedTheme ? " from comparison" : " to comparison"));
+        button.title = selectedTheme ? "Remove from comparison" : "Add to comparison";
       });
+      var detailToggle = edetail.querySelector(".ed-comparison-toggle");
+      if (detailToggle) {
+        var detailSelected = selectedTitles.indexOf(detailToggle.getAttribute("data-theme-title")) !== -1;
+        detailToggle.textContent = detailSelected ? "Remove from comparison" : "Add to comparison";
+        detailToggle.setAttribute("aria-pressed", detailSelected ? "true" : "false");
+      }
       if (selectedCount) { selectedCount.textContent = String(selected.length); }
       if (compareSelected) { compareSelected.disabled = selected.length < 2; }
       if (clearSelected) { clearSelected.disabled = selected.length === 0; }
       if (!overlapSummary) { return; }
       if (!selected.length) {
-        overlapSummary.textContent = "Use the pin beside any theme to compare supporting evidence.";
+        overlapSummary.textContent = "Add themes to compare their shared and unique supporting evidence.";
         return;
       }
       var union = [];
@@ -3271,40 +3578,29 @@
       var intersection = selected[0].refs.filter(function (ref) {
         return selected.every(function (theme) { return theme.refs.indexOf(ref) !== -1; });
       });
-      overlapSummary.textContent = union.length + " unique references · " + intersection.length +
-        " shared across every pinned theme";
+      overlapSummary.textContent = selected.length === 1
+        ? union.length + " references selected; add another theme to compare overlap."
+        : union.length + " unique references | " + intersection.length + " shared across every selected theme";
     }
-    function togglePinnedTheme(theme, pill) {
-      var index = pinnedThemes.indexOf(theme.title);
-      if (index === -1 && pinnedThemes.length >= 4) {
-        if (overlapSummary) { overlapSummary.textContent = "Compare up to four themes. Unpin one before adding another."; }
+    function toggleComparisonTheme(theme) {
+      if (!themeComparisonStore.toggle(theme.title)) {
+        if (overlapSummary) { overlapSummary.textContent = "Compare up to four themes. Remove one before adding another."; }
         return false;
       }
-      if (index === -1) { pinnedThemes.push(theme.title); } else { pinnedThemes.splice(index, 1); }
-      if (pill) { pill.classList.toggle("is-pinned", index === -1); }
-      updatePinnedThemes();
       return true;
     }
     if (compareSelected) {
-      compareSelected.addEventListener("click", function () {
-        pinnedThemes.slice(0, 4).forEach(function (title, index, values) {
-          if (window.addThemeToCompare) { window.addThemeToCompare(title, index === values.length - 1); }
-        });
-      });
+      compareSelected.addEventListener("click", function () { themeComparisonStore.openBoard(); });
     }
     if (clearSelected) {
-      clearSelected.addEventListener("click", function () {
-        pinnedThemes = [];
-        updatePinnedThemes();
-        if (activeTheme && activePill) { showDetail(activeTheme, activePill); }
-      });
+      clearSelected.addEventListener("click", function () { themeComparisonStore.clear(); });
     }
     window.openEvidenceTheme = function (title, shouldScroll) {
       var theme = THEMES.find(function (candidate) { return candidate.title === title; });
       var pill = emap.querySelector('[data-theme-title="' + title + '"]');
       if (!theme || !pill) { return; }
       var row = pill.closest(".mrow");
-      if (row && window.matchMedia("(max-width: 760px)").matches) {
+      if (row && evidenceRowsCollapse()) {
         row.classList.add("is-open");
         var rowToggle = row.querySelector(".mlab-toggle");
         if (rowToggle) { rowToggle.setAttribute("aria-expanded", "true"); }
@@ -3314,8 +3610,24 @@
         document.getElementById("evidence").scrollIntoView({ behavior: "smooth", block: "start" });
       }
     };
-    updatePinnedThemes();
-    if (initialTheme && !window.matchMedia("(max-width: 760px)").matches) {
+    function syncEvidenceRowsForMode() {
+      var rows = Array.prototype.slice.call(emap.querySelectorAll(".mrow"));
+      var collapse = evidenceRowsCollapse();
+      var activeRow = activePill ? activePill.closest(".mrow") : rows[0];
+      rows.forEach(function (row) {
+        var open = collapse ? row === activeRow : true;
+        row.classList.toggle("is-open", open);
+        var rowToggle = row.querySelector(".mlab-toggle");
+        if (rowToggle) { rowToggle.setAttribute("aria-expanded", open ? "true" : "false"); }
+      });
+    }
+    themeComparisonStore.subscribe(updateComparisonSelection);
+    document.addEventListener("rav:experiencechange", syncEvidenceRowsForMode);
+    var evidenceBreakpoint = window.matchMedia("(max-width: 760px)");
+    if (evidenceBreakpoint.addEventListener) { evidenceBreakpoint.addEventListener("change", syncEvidenceRowsForMode); }
+    syncEvidenceRowsForMode();
+    syncExperienceVisibility();
+    if (initialTheme && experienceMode === "advanced" && !window.matchMedia("(max-width: 760px)").matches) {
       showDetail(initialTheme.theme, initialTheme.pill);
     }
   })();
@@ -3350,6 +3662,13 @@
         if (panel) { panel.hidden = panelName !== name; }
       });
     }
+    window.RAV_DECISION_LAB = {
+      activate: function (name, focusTab) {
+        var disclosure = root.querySelector(".advanced-disclosure");
+        if (disclosure) { disclosure.open = true; }
+        activateLabTab(name || "journey", !!focusTab);
+      }
+    };
     root.querySelectorAll("[data-lab-tab]").forEach(function (button) {
       button.addEventListener("click", function () {
         activateLabTab(button.getAttribute("data-lab-tab"), false);
@@ -3555,14 +3874,20 @@
       var evidenceButton = el("button", "btn-primary", "Open full Evidence Map detail");
       evidenceButton.type = "button";
       evidenceButton.addEventListener("click", function () { window.openEvidenceTheme(theme.title, true); });
-      var compareButton = el("button", "utility-btn", "Add to Compare Board");
+      var compareButton = el("button", "utility-btn", "Add to comparison");
       compareButton.type = "button";
-      compareButton.addEventListener("click", function () { window.addThemeToCompare(theme.title, true); });
+      compareButton.addEventListener("click", function () {
+        if (!themeComparisonStore.add(theme.title)) {
+          var status = document.getElementById("compare-status");
+          if (status) { status.textContent = "Comparison is full. Remove a theme before adding another."; }
+          return;
+        }
+        themeComparisonStore.openBoard();
+      });
       var papersButton = el("button", "utility-btn", "Explore " + theme.refs.length + " supporting papers");
       papersButton.type = "button";
       papersButton.addEventListener("click", function () {
         setEvidenceFilter(theme.title, theme.refs);
-        document.getElementById("explorer").scrollIntoView({ behavior: "smooth" });
       });
       actions.appendChild(evidenceButton);
       actions.appendChild(compareButton);
@@ -3638,22 +3963,19 @@
     var compareSelect = document.getElementById("compare-theme-select");
     var compareGrid = document.getElementById("compare-grid");
     var compareStatus = document.getElementById("compare-status");
-    var compareTitles = [];
     themes.forEach(function (theme) {
       var option = el("option", null, theme.cat + " — " + theme.title);
       option.value = theme.title;
       compareSelect.appendChild(option);
     });
 
-    function saveComparison() {
-      try { window.localStorage.setItem("rav-theme-comparison", JSON.stringify(compareTitles)); } catch (ignore) {}
-    }
-    function renderComparison() {
+    function renderComparison(selectedTitles) {
+      selectedTitles = selectedTitles || themeComparisonStore.list();
       while (compareGrid.firstChild) { compareGrid.removeChild(compareGrid.firstChild); }
-      if (!compareTitles.length) {
+      if (!selectedTitles.length) {
         compareGrid.appendChild(el("div", "compare-empty", "Add two to four themes to compare their evidence, trade-offs, and RAV actions."));
       }
-      compareTitles.forEach(function (title) {
+      selectedTitles.forEach(function (title) {
         var theme = themeByTitle[title];
         if (!theme) { return; }
         var meta = statusMeta[theme.status];
@@ -3667,11 +3989,7 @@
         var remove = el("button", "compare-remove", "×");
         remove.type = "button";
         remove.setAttribute("aria-label", "Remove " + theme.title + " from comparison");
-        remove.addEventListener("click", function () {
-          compareTitles = compareTitles.filter(function (candidate) { return candidate !== title; });
-          saveComparison();
-          renderComparison();
-        });
+        remove.addEventListener("click", function () { themeComparisonStore.remove(title); });
         head.appendChild(heading);
         head.appendChild(remove);
         card.appendChild(head);
@@ -3703,44 +4021,20 @@
         card.appendChild(open);
         compareGrid.appendChild(card);
       });
-      compareStatus.textContent = compareTitles.length + " of 4 themes selected" +
-        (compareTitles.length > 1 ? " — compare the evidence profiles below." : ".");
+      compareStatus.textContent = selectedTitles.length + " of 4 themes selected" +
+        (selectedTitles.length > 1 ? " — compare the evidence profiles below." : ".");
     }
 
-    window.addThemeToCompare = function (title, openBoard) {
-      if (!themeByTitle[title]) { return; }
-      if (compareTitles.indexOf(title) === -1) {
-        if (compareTitles.length >= 4) {
-          compareStatus.textContent = "Comparison is full. Remove a theme before adding another.";
-        } else {
-          compareTitles.push(title);
-          saveComparison();
-          renderComparison();
-        }
-      }
-      if (openBoard) {
-        activateLabTab("compare", false);
-        document.getElementById("decision-lab").scrollIntoView({ behavior: "smooth", block: "start" });
-      }
-    };
     document.getElementById("compare-add").addEventListener("click", function () {
-      window.addThemeToCompare(compareSelect.value, false);
+      if (!themeComparisonStore.add(compareSelect.value)) {
+        compareStatus.textContent = "Comparison is full. Remove a theme before adding another.";
+      }
     });
     document.getElementById("compare-clear").addEventListener("click", function () {
-      compareTitles = [];
-      saveComparison();
-      renderComparison();
+      themeComparisonStore.clear();
     });
-    try {
-      var savedComparison = JSON.parse(window.localStorage.getItem("rav-theme-comparison") || "[]");
-      compareTitles = savedComparison.filter(function (title) { return themeByTitle[title]; }).slice(0, 4);
-    } catch (ignore) {
-      compareTitles = [];
-    }
-    if (!compareTitles.length) {
-      compareTitles = ["Perception - single-sensor limitations", "Perception - multi-sensor fusion"];
-    }
-    renderComparison();
+    themeComparisonStore.replace(themeComparisonStore.list().filter(function (title) { return !!themeByTitle[title]; }));
+    themeComparisonStore.subscribe(renderComparison);
 
     /* research gap radar */
     var radar = document.getElementById("gap-radar");
@@ -3849,7 +4143,6 @@
     }
     radarExplore.addEventListener("click", function () {
       setStatFilter("cat", activeRadarModule);
-      document.getElementById("explorer").scrollIntoView({ behavior: "smooth" });
     });
     selectRadarModule(activeRadarModule);
 
@@ -3927,7 +4220,7 @@
       clearRecommendationActive();
       syncDropdownFilter("year");
       render();
-      document.getElementById("explorer").scrollIntoView({ behavior: "smooth" });
+      openExplorer("references available through " + year);
     });
     updateTimeline();
   })();
@@ -3951,7 +4244,13 @@
         hay: link.textContent.toLowerCase(),
         action: function () {
           var target = document.querySelector(link.getAttribute("href"));
-          if (target) { target.scrollIntoView({ behavior: "smooth", block: "start" }); }
+          if (target) {
+            navigateExperienceTarget(target, {
+              mode: target.closest(".advanced-only") ? "advanced" : experienceMode,
+              reason: link.textContent.trim(),
+              updateHash: true
+            });
+          }
         }
       };
     });
@@ -3968,7 +4267,6 @@
         hay: (pilot.title + " " + pilot.detail).toLowerCase(),
         action: function () {
           setRecommendationFilter(pilot.label, pilot.refs, null, "Pilot program");
-          document.getElementById("explorer").scrollIntoView({ behavior: "smooth" });
         }
       };
     });
@@ -3991,7 +4289,6 @@
         hay: paper._hay,
         action: function () {
           setEvidenceFilter("Reference [" + paper.n + "]", [paper.n]);
-          document.getElementById("explorer").scrollIntoView({ behavior: "smooth" });
         }
       };
     });
@@ -4284,17 +4581,23 @@
         button.classList.toggle("workspace-saved", saved.has(number));
       }
     };
+    function setWorkspaceOpen(open) {
+      panel.hidden = !open;
+      toggle.setAttribute("aria-expanded", open ? "true" : "false");
+      toggle.textContent = open ? "Close workspace" : "Open workspace";
+    }
+    window.RAV_WORKSPACE = {
+      open: function () { setWorkspaceOpen(true); },
+      close: function () { setWorkspaceOpen(false); }
+    };
     toggle.addEventListener("click", function () {
-      panel.hidden = !panel.hidden;
-      toggle.setAttribute("aria-expanded", panel.hidden ? "false" : "true");
-      toggle.textContent = panel.hidden ? "Open workspace" : "Close workspace";
+      setWorkspaceOpen(panel.hidden);
     });
     if (filterButton) {
       filterButton.addEventListener("click", function () {
         var numbers = Array.from(saved).sort(function (a, b) { return a - b; });
         if (!numbers.length) { return; }
         setRecommendationFilter("Citation Cart", numbers, null, "Research workspace");
-        document.getElementById("explorer").scrollIntoView({ behavior: "smooth" });
       });
     }
     if (copyButton) {
@@ -4313,7 +4616,7 @@
         saved.clear();
         persist();
         renderWorkspace();
-        renderTables(currentFiltered);
+        renderReferenceList();
       });
     }
     renderWorkspace();
@@ -4355,7 +4658,10 @@
   if (copyFilterLink) {
     copyFilterLink.addEventListener("click", function () {
       syncUrlState();
-      var text = window.location.href;
+      var shareUrl = new URL(window.location.href);
+      shareUrl.searchParams.set("mode", "advanced");
+      shareUrl.hash = shareUrl.searchParams.has("focus") ? "scatter" : "explorer";
+      var text = shareUrl.toString();
       var done = function () {
         copyFilterLink.textContent = "Link copied";
         window.setTimeout(function () { copyFilterLink.textContent = "Copy filter link"; }, 1600);
@@ -4380,4 +4686,24 @@
   if (initialFocusKey && paperByKey[initialFocusKey] && markerPosByKey[initialFocusKey]) {
     pinFocus(paperByKey[initialFocusKey]);
   }
+  (function routeInitialExperienceTarget() {
+    var params = new URLSearchParams(window.location.search);
+    var hashTarget = targetFromId(window.location.hash);
+    if (hashTarget && hashTarget.closest(".advanced-only")) {
+      navigateExperienceTarget(hashTarget, { mode: "advanced", reason: "the linked tool", updateHash: false });
+      return;
+    }
+    if (experienceMode === "basic") { return; }
+    if (params.has("focus")) {
+      navigateExperienceTarget("scatter", { mode: "advanced", reason: "the linked reference", updateHash: true });
+      return;
+    }
+    if (queryHasAny(params, ADVANCED_FILTER_PARAMS)) {
+      openExplorer("the linked reference filters");
+      return;
+    }
+    if (queryHasAny(params, SCENARIO_PARAMS)) {
+      navigateExperienceTarget("scenario-planner", { mode: "advanced", reason: "the linked scenario", updateHash: true });
+    }
+  })();
 })();

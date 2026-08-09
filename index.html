@@ -22,7 +22,8 @@
 <link rel="icon" href="logo.png">
 <link rel="manifest" href="site.webmanifest">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
-<link rel="stylesheet" href="style.css?v=20260808e">
+<script>document.documentElement.classList.add("js");</script>
+<link rel="stylesheet" href="style.css?v=20260808k">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -42,7 +43,7 @@
 }
 </script>
 </head>
-<body>
+<body data-experience="basic">
 <a class="skip-link" href="#main">Skip to content</a>
 <div class="reading-progress" aria-hidden="true"><span id="reading-progress-bar"></span></div>
 
@@ -87,6 +88,17 @@
         <a class="btn-primary button-link" href="#findings">Read the key findings</a>
         <span class="forthcoming-status" role="status">Narrative review PDF &amp; Word: forthcoming</span>
       </div>
+      <div class="experience-panel" aria-labelledby="experience-mode-title">
+        <div>
+          <p class="experience-label" id="experience-mode-title">Choose your view</p>
+          <div class="experience-switch" id="experience-switch" role="group" aria-label="Experience mode" aria-describedby="experience-mode-description">
+            <button type="button" data-experience-mode="basic" aria-pressed="true">Basic</button>
+            <button type="button" data-experience-mode="advanced" aria-pressed="false">Advanced</button>
+          </div>
+        </div>
+        <p id="experience-mode-description">Basic follows the review argument. Advanced adds comparison, statistics, planning, and filtering tools.</p>
+        <span class="visually-hidden" id="experience-mode-status" role="status" aria-live="polite"></span>
+      </div>
       <div class="stat-chips" aria-label="Review statistics">
         <span class="stat-chip"><strong id="stat-count">118</strong> references</span>
         <span class="stat-chip"><strong id="stat-cats">5</strong> RAV modules</span>
@@ -100,29 +112,90 @@
     <div class="container">
       <div class="section-head">
         <h2>What the Literature Says</h2>
-        <span class="date-pill">Start here &middot; 5-minute synthesis</span>
+        <span class="date-pill">Start here &middot; evidence synthesis</span>
       </div>
-      <p class="narrative-intro">Rural autonomous-vehicle deployment is not simply an urban AV system moved onto a quieter road. Sparse markings and mapping, intermittent connectivity, long service distances, thin demand, and limited roadside support change both the technical design and the operating model. Across the reviewed evidence, one argument recurs: build a resilient vehicle first, add shared infrastructure selectively, and expand only through measured rural validation.</p>
+      <p class="narrative-intro">Rural autonomous-vehicle deployment is not simply an urban AV system moved onto a quieter road. Sparse markings and mapping, intermittent connectivity, long service distances, thin demand, and limited roadside support change both the technical design and the operating model. The literature follows the framework below: Tier 1 carries the service, Tier 2 extends it selectively, and field pilots validate each expansion step.</p>
       <div class="narrative-flow" aria-label="Narrative logic of the literature review">
         <article>
-          <span>1 &middot; Rural constraints</span>
-          <h3>Design for incomplete support</h3>
-          <p>Perception and localization must remain dependable when lane markings, GNSS, maps, weather, and communications are unreliable. Fleet planning must also account for dispersed riders, long headways, charging, and remote-supervision limits.</p>
-          <a href="#framework">See the system framework <span aria-hidden="true">&rarr;</span></a>
+          <span>Tier 1 &middot; Drive + Operate</span>
+          <h3>Keep the core self-reliant</h3>
+          <p>Autonomous Driving and Fleet Management form the existing-technology baseline: perception, localization, planning, fallback, dispatch, charging, and remote supervision must remain workable with sparse rural support.</p>
+          <a href="#framework">See Tier 1 in the framework <span aria-hidden="true">&rarr;</span></a>
         </article>
         <article>
-          <span>2 &middot; Transferable baseline</span>
-          <h3>Keep the safety-critical core onboard</h3>
-          <p>Multi-sensor perception, fused localization, local planning, and graceful fallback form the reusable baseline. Connectivity, roadside sensing, HD maps, and digital twins are most credible as targeted support rather than universal prerequisites.</p>
-          <a href="#evidence">Trace claims to evidence <span aria-hidden="true">&rarr;</span></a>
+          <span>Tier 2 &middot; Road + Connect + Cooperate</span>
+          <h3>Add support selectively</h3>
+          <p>Infrastructure, multi-channel communication, and cooperative driving extend that baseline at high-value corridors and hazards. The evidence supports targeted augmentation, not universal dependence on continuous connectivity or roadside automation.</p>
+          <a href="#framework">See Tier 2 in the framework <span aria-hidden="true">&rarr;</span></a>
         </article>
         <article>
-          <span>3 &middot; Deployment implication</span>
+          <span>Validation &middot; Field pilots</span>
           <h3>Validate in stages, then scale</h3>
           <p>Supervised, low-speed, geofenced pilots provide the strongest near-term path to rural learning. Comparable reporting on interventions, connectivity loss, accessibility, energy, and operator workload is needed before broader operation.</p>
-          <a href="#recommendations">Review the actions <span aria-hidden="true">&rarr;</span></a>
+          <a href="#framework">See the validation layer <span aria-hidden="true">&rarr;</span></a>
         </article>
       </div>
+      <article class="synthesis-essay" aria-labelledby="synthesis-title">
+        <header class="synthesis-essay-head">
+          <p class="rec-kicker">Cross-cutting framework evidence</p>
+          <h3 id="synthesis-title">How the evidence supports&mdash;and limits&mdash;the framework</h3>
+          <p>These five findings test the sequence across modules rather than duplicate the five framework blocks. They separate what the coded website corpus consistently supports from what remains an inference requiring rural field validation; they are not the forthcoming formal review manuscript.</p>
+        </header>
+        <details class="synthesis-section" name="synthesis-finding">
+          <summary class="synthesis-summary">
+            <span class="synthesis-step" aria-hidden="true">01</span>
+            <h4>The clearest point of convergence is a resilient onboard core.</h4>
+          </summary>
+          <div class="synthesis-detail">
+            <p>High-strength reviews consistently identify perception, multi-sensor fusion, localization, and mapping as the reusable AV baseline. Rural-focused work reaches the same design direction, but only one of these representative reviews is coded as direct rural evidence; the rest establish transfer paths rather than shared proof from rural operations. <a class="synthesis-citations" href="#papers" aria-label="See references 1, 2, 3, 19, 23, and 25">[1&ndash;3, 19, 23, 25]</a></p>
+            <p class="synthesis-implication"><strong>Implication:</strong> keep safety-critical sensing, positioning, planning, and fallback onboard, then validate their failure thresholds on local roads and in local weather.</p>
+          </div>
+        </details>
+        <details class="synthesis-section" name="synthesis-finding">
+          <summary class="synthesis-summary">
+            <span class="synthesis-step" aria-hidden="true">02</span>
+            <h4>Connectivity extends that baseline, but should not replace it.</h4>
+          </summary>
+          <div class="synthesis-detail">
+            <p>Rural measurements and communication studies show that heterogeneous V2X links can add reach and shared context while remaining spatially variable. Cooperative-driving results from urban and suburban arterials demonstrate technical possibilities, not rural effectiveness; they therefore define an extrapolation boundary rather than evidence for continuous roadside support. <a class="synthesis-citations" href="#papers" aria-label="See references 9, 40, 41, 50, 92, 94, and 103">[9, 40, 41, 50, 92, 94, 103]</a></p>
+            <p class="synthesis-implication"><strong>Implication:</strong> combine links opportunistically, instrument only high-value locations, and preserve a safe degraded mode through every disconnection.</p>
+          </div>
+        </details>
+        <details class="synthesis-section" name="synthesis-finding">
+          <summary class="synthesis-summary">
+            <span class="synthesis-step" aria-hidden="true">03</span>
+            <h4>The operational evidence does not select one universal rural service model.</h4>
+          </summary>
+          <div class="synthesis-detail">
+            <p>Modeling studies examine on-demand scheduling and station optimization, whereas named pilots document two different operating logics: demand-responsive service for dispersed riders and fixed routes for predictable park or public-site circulation. These sources are better read as complementary choices tied to demand and operating context than as competing demonstrations of a single best model. <a class="synthesis-citations" href="#papers" aria-label="See references 14, 15, 16, 31, 78, 116, and 117">[14&ndash;16, 31, 78, 116, 117]</a></p>
+            <p class="synthesis-implication"><strong>Boundary:</strong> the pilots remain supervised, bounded precedents; they do not establish unsupervised, high-speed, open-road rural scalability.</p>
+          </div>
+        </details>
+        <details class="synthesis-section" name="synthesis-finding">
+          <summary class="synthesis-summary">
+            <span class="synthesis-step" aria-hidden="true">04</span>
+            <h4>The corpus is broad, but direct rural validation is still thin.</h4>
+          </summary>
+          <div class="synthesis-detail">
+            <p>Of 118 retained records, the review team coded 12 as direct rural evidence, 99 as transferable to rural, and 7 as context-limited. Direct evidence is concentrated in pilots and selected infrastructure, communication, fleet, and vehicle studies; no record whose primary module is Cooperative Driving is coded as direct rural evidence. <a class="synthesis-citations" href="#papers" aria-label="See the direct rural evidence set: references 1, 9, 14 to 16, 31, 50, 78, 88, and 116 to 118">[1, 9, 14&ndash;16, 31, 50, 78, 88, 116&ndash;118]</a></p>
+            <p class="synthesis-implication"><strong>Interpretation:</strong> the literature supports plausible design directions more strongly than it supports claims of broad rural field readiness.</p>
+          </div>
+        </details>
+        <details class="synthesis-section" name="synthesis-finding">
+          <summary class="synthesis-summary">
+            <span class="synthesis-step" aria-hidden="true">05</span>
+            <h4>Together, the studies support a staged deployment inference.</h4>
+          </summary>
+          <div class="synthesis-detail">
+            <p>Read across domains, the evidence suggests a sequence: screen road and connectivity conditions, establish an onboard fallback baseline, add targeted corridor support, operate a bounded pilot, and expand only after comparable safety and service measurements are reviewed. No single study tests this integrated sequence; it is the review team&rsquo;s synthesis of technical, infrastructure, communication, and pilot evidence. <a class="synthesis-citations" href="#papers" aria-label="See references 1, 7, 9, 14, 15, 50, 88, and 116 to 118">[1, 7, 9, 14, 15, 50, 88, 116&ndash;118]</a></p>
+            <p class="synthesis-implication"><strong>Next evidence need:</strong> report interventions, disconnections, energy use, accessibility, rider outcomes, and operator workload consistently enough to compare sites and deployment stages.</p>
+          </div>
+        </details>
+        <aside class="synthesis-boundary">
+          <strong>How to read this synthesis</strong>
+          <span>Reference numbers link to the complete list. Evidence labels are transparent review-team coding, not effect sizes or a formal meta-analysis.</span>
+        </aside>
+      </article>
       <aside class="manuscript-status-card" aria-label="Narrative review availability">
         <div>
           <p class="rec-kicker">Manuscript status</p>
@@ -365,10 +438,10 @@
           <span><i style="background:#D99114"></i>Recommended direction &mdash; rural validation needed</span>
           <span><i style="background:#BA0C2F"></i>Limitation / unresolved RAV problem</span>
         </div>
-        <div class="evidence-multiselect" id="evidence-multiselect">
-          <span><strong id="evidence-selected-count">0</strong> pinned themes</span>
-          <p id="evidence-overlap-summary">Use the pin beside any theme to compare supporting evidence.</p>
-          <button type="button" class="utility-btn" id="evidence-compare-selected" disabled>Compare pinned</button>
+        <div class="evidence-multiselect advanced-only" id="evidence-multiselect">
+          <span><strong id="evidence-selected-count">0</strong> of 4 themes selected</span>
+          <p id="evidence-overlap-summary">Add themes to compare their shared and unique supporting evidence.</p>
+          <button type="button" class="utility-btn" id="evidence-compare-selected" disabled>Open comparison</button>
           <button type="button" class="utility-btn" id="evidence-clear-selected" disabled>Clear</button>
         </div>
         <div class="emap" id="emap"></div>
@@ -377,7 +450,20 @@
     </div>
   </section>
 
-  <section id="decision-lab" class="section">
+  <section class="section basic-only advanced-mode-invite-section" id="advanced-mode-invite" aria-labelledby="advanced-mode-invite-title">
+    <div class="container">
+      <div class="advanced-mode-invite">
+        <div>
+          <p class="rec-kicker">Ready to investigate further?</p>
+          <h2 id="advanced-mode-invite-title">Open the analysis workspace</h2>
+          <p>Advanced mode adds theme comparison, evidence-gap views, statistics, scenario planning, and the filterable Reference Explorer.</p>
+        </div>
+        <button type="button" class="btn-primary" id="advanced-mode-enable">Show advanced tools</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="decision-lab" class="section advanced-only">
     <div class="container">
       <div class="section-head">
         <h2>Evidence Journey &amp; Decision Lab</h2>
@@ -392,7 +478,7 @@
         <div class="advanced-disclosure-body">
       <div class="lab-tabs" role="tablist" aria-label="Decision lab views">
         <button type="button" role="tab" id="lab-tab-journey" aria-controls="lab-journey" aria-selected="true" data-lab-tab="journey">Evidence Journey</button>
-        <button type="button" role="tab" id="lab-tab-compare" aria-controls="lab-compare" aria-selected="false" data-lab-tab="compare">Compare Board</button>
+        <button type="button" role="tab" id="lab-tab-compare" aria-controls="lab-compare" aria-selected="false" data-lab-tab="compare">Theme Comparison</button>
         <button type="button" role="tab" id="lab-tab-intelligence" aria-controls="lab-intelligence" aria-selected="false" data-lab-tab="intelligence">Gaps &amp; Timeline</button>
       </div>
 
@@ -475,7 +561,7 @@
         <span class="date-pill">From the literature review</span>
       </div>
       <p class="section-lede">The evidence points to a staged rural deployment strategy: keep safety-critical capability onboard, add infrastructure where it closes a demonstrated gap, and use pilots to calibrate the system with rural data.</p>
-      <div class="stakeholder-view card" id="stakeholder-view">
+      <div class="stakeholder-view card advanced-only" id="stakeholder-view">
         <div class="stakeholder-view-head">
           <div><p class="rec-kicker">Stakeholder view</p><h3>Build a focused one-page briefing</h3></div>
           <button type="button" class="utility-btn" id="stakeholder-print">Print / save as PDF</button>
@@ -543,7 +629,7 @@
           <p class="rec-evidence">Evidence base: 31 references <span class="rec-action">Explore evidence <span aria-hidden="true">&rarr;</span></span></p>
         </article>
       </div>
-      <details class="advanced-disclosure recommendation-tools">
+      <details class="advanced-disclosure recommendation-tools advanced-only">
         <summary>
           <span>Open the RAV scenario planner</span>
           <small>Generate and compare two evidence-informed deployment starting points</small>
@@ -691,7 +777,7 @@
             <span>Map data © OpenStreetMap contributors</span>
           </div>
         </div>
-        <details class="advanced-disclosure pilot-compare-disclosure">
+        <details class="advanced-disclosure pilot-compare-disclosure advanced-only">
           <summary>
             <span>Compare two pilot programs</span>
             <small>Inspect service models, operating frames, and shared transfer lessons</small>
@@ -756,7 +842,7 @@
     </div>
   </section>
 
-  <section id="statistics" class="section">
+  <section id="statistics" class="section advanced-only">
     <div class="container">
       <div class="section-head">
         <h2>Statistics</h2>
@@ -810,7 +896,7 @@
     </div>
   </section>
 
-  <section id="explorer" class="section alt">
+  <section id="explorer" class="section alt advanced-only">
     <div class="container">
       <div class="section-head">
         <h2>Reference Explorer</h2>
@@ -923,7 +1009,7 @@
           <div><span>Evidence handled</span><p>2014&ndash;2026 research across five technical modules plus operational field-pilot validation.</p></div>
           <div><span>Output</span><p>A review framework linking technology, fleet operations, infrastructure, connectivity, cooperation, and pilots.</p></div>
         </div>
-        <div class="method-audit-trail" id="method-audit-trail">
+        <div class="method-audit-trail advanced-only" id="method-audit-trail">
           <div>
             <span>Representative query or audit rule</span>
             <code id="method-audit-query">("autonomous vehicle" OR "automated shuttle") AND (rural OR remote)</code>
@@ -986,7 +1072,7 @@
         <h2>Reference List</h2>
         <span class="date-pill" id="papers-range">2014~2026</span>
       </div>
-      <p class="section-lede">All references from the review bibliography, grouped by RAV module. Lists respect the filters and search above.</p>
+      <p class="section-lede">All references from the review bibliography, grouped by RAV module. In Advanced mode, this list also follows the Reference Explorer filters and search.</p>
       <div class="reference-list-toolbar card">
         <p id="reference-list-summary" role="status" aria-live="polite">All 118 references are shown below.</p>
         <div>
@@ -1045,7 +1131,7 @@
         <a href="mailto:Handong.Yao@uga.edu">Handong Yao</a>
       </p>
       <p>College of Engineering, University of Georgia</p>
-      <p class="footer-muted">Version 2.8 &middot; Updated August 8, 2026 &middot; 118 verified references</p>
+      <p class="footer-muted">Version 2.9 &middot; Updated August 8, 2026 &middot; 118 verified references</p>
     </div>
     <aside class="follow-card" aria-label="Follow UGA Mobility Lab">
       <img src="qr-uga-mobility-lab.png" width="112" height="112" alt="QR code linking to the UGA Mobility Lab homepage">
@@ -1064,8 +1150,8 @@
 </button>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-<script src="data.js?v=20260808e"></script>
-<script src="edges.js?v=20260808e"></script>
-<script src="app.js?v=20260808e"></script>
+<script src="data.js?v=20260808k"></script>
+<script src="edges.js?v=20260808k"></script>
+<script src="app.js?v=20260808k"></script>
 </body>
 </html>

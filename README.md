@@ -4,7 +4,7 @@ Interactive companion website for the TRAVELS Rural Autonomous Vehicle (RAV) lit
 
 **Live site:** https://uga-mobility-lab.github.io/rav-literature-review/
 
-**Current release:** Version 2.8 (August 8, 2026)
+**Current release:** Version 2.9 (August 8, 2026)
 
 ## Evidence base
 
@@ -16,7 +16,8 @@ Interactive companion website for the TRAVELS Rural Autonomous Vehicle (RAV) lit
 
 ## Interface
 
-- Start-here findings connect the website synthesis, framework, evidence, and recommendations; the narrative manuscript is clearly marked as forthcoming
+- A compact, expandable across-study synthesis links Tier 1, Tier 2, and field-pilot validation to consensus, contrasts, evidence gaps, and deployment implications; the narrative manuscript remains forthcoming
+- Basic mode is the default reading path, while Advanced mode progressively reveals comparison, decision, and research-workspace tools
 - Visible Evidence Map pin controls and direct pilot-location / show-all map controls
 - Stable continuous year-range filtering and a Reference List expanded by default, with explicit expand/collapse controls
 - Website-record exports in BibTeX, RIS, and EndNote XML; paper data export in CSV and BibTeX

@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.9 — 2026-08-08
+
+- Added a compact, expandable across-study synthesis that maps the literature argument to Tier 1, Tier 2, and field-pilot validation while preserving consensus, contrasts, evidence gaps, and deployment implications.
+- Added a Basic-by-default reading experience and an explicit Advanced mode that progressively reveals comparison, decision, and research-workspace tools.
+- Preserved the forthcoming manuscript status without advertising unavailable PDF or Word downloads.
+
 ## 2.8 — 2026-08-08
 
 - Added a start-here findings path and clearly marked the narrative manuscript as forthcoming, without advertising an unavailable document download.
