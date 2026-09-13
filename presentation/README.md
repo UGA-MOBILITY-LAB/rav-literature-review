@@ -14,3 +14,5 @@ The standalone fallback entry is `presentation/index.html`. It also includes a r
 Evidence points read the existing `../data.js`; the presentation does not maintain a second reference database. Current counts and narrative reflect the September 13, 2026 snapshot (118 records: 12 direct rural, 99 transferable, 7 context-limited). Update narrative totals if the evidence corpus changes. The route and connectivity scenario are conceptual diagrams, not measured experiments. Pilot descriptions concern the periods covered by the source records. The original review retains its existing external map dependencies.
 
 No build step or additional hosting service is required.
+
+Project photographs are embedded from May Mobility, ADASTEC and the National Park Service. Each image links to its original page and names its credit. The ADASTEC image is from its 2024 announcement; the park images depict the 2021 pilots. Remote photos require network access; if unavailable the source link remains visible.
