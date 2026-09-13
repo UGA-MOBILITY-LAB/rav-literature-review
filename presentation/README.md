@@ -17,14 +17,14 @@ No build step or additional hosting service is required.
 
 Project photographs are embedded from May Mobility, ADASTEC and the National Park Service. Each image links to its original page and names its credit. The ADASTEC image is from its 2024 announcement; the park images depict the 2021 pilots. Remote photos require network access; if unavailable the source link remains visible.
 
-## TRAVELS project opening
+## Mission opening
 
 Mission introduces the literature review at the level of rural mobility needs:
 
 1. A general research question introduces dependable access to everyday destinations.
-2. A manually played, silent 12-second camera/LiDAR excerpt from TRAVELS Intro slide 10 is explicitly identified as a campus sensing demo. Rural performance needs separate validation.
+2. A simple Request → Travel → Arrive diagram connects booking, safe travel and service continuity; the left review locates the service-model finding.
 3. The review connects operating needs, research evidence and conditions for testing.
 
-The user confirmed the recording was made on campus. It must not be used as rural environmental imagery or evidence of rural field validation. The opening has no site name, street addresses, route alternatives, lengths or speed limits. Route maps have been removed from the deployed assets. Original source decks and extracted maps remain local.
+The user requested no campus image in Mission. It contains no photograph or video, and no site name, street addresses, route alternatives, lengths or speed limits. Campus media and route maps have been removed from deployed assets; original source decks and extracted media remain local. The campus recording must never be presented as rural field validation. Selection history is recorded in `assets/SOURCES.md`.
 
-Video and poster are in `assets/`, with provenance in `assets/SOURCES.md`. No speaker script, internal database screenshot or development schedule is included.
+No speaker script, internal database screenshot or development schedule is included.

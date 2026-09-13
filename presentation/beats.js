@@ -7,9 +7,9 @@ const BEATS = [
       "overview"
     ],
     [
-      "Sensing inputs: a campus example",
-      "Our campus demo illustrates camera and LiDAR inputs. Rural roads introduce conditions that require separate testing.",
-      "finding:0"
+      "A complete journey, from request to arrival",
+      "A dependable service connects booking, safe travel and passenger support, including when a trip is interrupted.",
+      "finding:2"
     ],
     [
       "What evidence can guide the design?",
