@@ -2,14 +2,14 @@
 const BEATS = [
   [
     [
-      "A complete passenger journey",
-      "The question is whether the resident can complete the trip reliably, including interruptions.",
+      "A proposed trip from home to hospital",
+      "TRAVELS proposes a healthcare-access service in Hawkinsville, Georgia. Two candidate routes make the research question concrete.",
       "overview"
     ],
     [
-      "Driving capability and service capability",
-      "The vehicle, dispatch system, and passenger support have to work together.",
-      "findings"
+      "What the vehicle needs to observe",
+      "The project material pairs road-camera views with LiDAR. These observations are inputs to localization, planning and fallback.",
+      "finding:0"
     ],
     [
       "What evidence can guide the design?",
