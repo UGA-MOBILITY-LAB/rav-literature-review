@@ -31,5 +31,3 @@
     if (event.data && event.data.type === 'rav-exit-presentation') dialog.close();
   });
 })();
-
-
