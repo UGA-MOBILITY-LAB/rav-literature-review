@@ -21,10 +21,10 @@ Project photographs are embedded from May Mobility, ADASTEC and the National Par
 
 Mission introduces the literature review at the level of rural mobility needs:
 
-1. A road-camera image from the team's small demo illustrates the driving environment, alongside a question about dependable access to everyday destinations.
-2. A manually played, silent 12-second camera/LiDAR excerpt from TRAVELS Intro slide 10 illustrates sensing.
+1. A general research question introduces dependable access to everyday destinations.
+2. A manually played, silent 12-second camera/LiDAR excerpt from TRAVELS Intro slide 10 is explicitly identified as a campus sensing demo. Rural performance needs separate validation.
 3. The review connects operating needs, research evidence and conditions for testing.
 
-The demo supplies context, not a proposed service plan or field-validation claim. The opening has no site name, street addresses, route alternatives, lengths or speed limits. Route maps have been removed from the deployed assets. Original source decks and extracted maps remain local.
+The user confirmed the recording was made on campus. It must not be used as rural environmental imagery or evidence of rural field validation. The opening has no site name, street addresses, route alternatives, lengths or speed limits. Route maps have been removed from the deployed assets. Original source decks and extracted maps remain local.
 
 Video and poster are in `assets/`, with provenance in `assets/SOURCES.md`. No speaker script, internal database screenshot or development schedule is included.

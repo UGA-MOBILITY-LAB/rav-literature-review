@@ -7,8 +7,8 @@ const BEATS = [
       "overview"
     ],
     [
-      "What the vehicle needs to observe",
-      "Camera and LiDAR views illustrate the sensing task. A dependable service also needs positioning, planning and a response to interruptions.",
+      "Sensing inputs: a campus example",
+      "Our campus demo illustrates camera and LiDAR inputs. Rural roads introduce conditions that require separate testing.",
       "finding:0"
     ],
     [
