@@ -2,13 +2,13 @@
 const BEATS = [
   [
     [
-      "A proposed trip from home to hospital",
-      "TRAVELS proposes a healthcare-access service in Hawkinsville, Georgia. Two candidate routes make the research question concrete.",
+      "A dependable trip to essential services",
+      "What would it take for an autonomous service to connect rural residents with everyday destinations?",
       "overview"
     ],
     [
       "What the vehicle needs to observe",
-      "The project material pairs road-camera views with LiDAR. These observations are inputs to localization, planning and fallback.",
+      "Camera and LiDAR views illustrate the sensing task. A dependable service also needs positioning, planning and a response to interruptions.",
       "finding:0"
     ],
     [

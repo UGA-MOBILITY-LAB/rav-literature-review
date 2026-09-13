@@ -19,10 +19,12 @@ Project photographs are embedded from May Mobility, ADASTEC and the National Par
 
 ## TRAVELS project opening
 
-Mission now uses the supplied TRAVELS project materials, with three steps:
+Mission introduces the literature review at the level of rural mobility needs:
 
-1. Hawkinsville residence-to-hospital candidate routes (Intro slides 7–8). Both alternatives remain selectable; option 2 is the initial display, not a declaration that it was selected for deployment. The full source maps can be enlarged.
-2. A manually played, silent 12-second camera/LiDAR excerpt (Intro slide 10). The video illustrates sensing only; the deck does not establish that this recording is on the proposed hospital route or under autonomous control.
-3. The role of the literature review in linking operating needs, evidence and conditions for testing.
+1. A road-camera image from the team's small demo illustrates the driving environment, alongside a question about dependable access to everyday destinations.
+2. A manually played, silent 12-second camera/LiDAR excerpt from TRAVELS Intro slide 10 illustrates sensing.
+3. The review connects operating needs, research evidence and conditions for testing.
 
-Maps and the video excerpt are local assets under `assets/`, with provenance in `assets/SOURCES.md`. The original uploaded decks are unchanged and are not hosted here. No UW internal application/database screens, development schedules or old completion percentages are included.
+The demo supplies context, not a proposed service plan or field-validation claim. The opening has no site name, street addresses, route alternatives, lengths or speed limits. Route maps have been removed from the deployed assets. Original source decks and extracted maps remain local.
+
+Video and poster are in `assets/`, with provenance in `assets/SOURCES.md`. No speaker script, internal database screenshot or development schedule is included.
