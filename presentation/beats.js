@@ -3,7 +3,7 @@ const BEATS = [
   [
     [
       "A dependable trip to essential services",
-      "What would it take for an autonomous service to connect rural residents with everyday destinations?",
+      "TRAVELS explores autonomous services for healthcare, work and everyday travel.",
       "overview"
     ],
     [
@@ -24,8 +24,8 @@ const BEATS = [
       "finding:0"
     ],
     [
-      "A connection cannot be assumed",
-      "Loss of connectivity requires a previously tested fallback response.",
+      "Connectivity in a rural setting",
+      "A drone communications example makes the link visible. A road service needs to work when that link is unavailable.",
       "finding:1"
     ],
     [

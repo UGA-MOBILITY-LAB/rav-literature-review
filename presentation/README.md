@@ -15,16 +15,16 @@ Evidence points read the existing `../data.js`; the presentation does not mainta
 
 No build step or additional hosting service is required.
 
-Project photographs are embedded from May Mobility, ADASTEC and the National Park Service. Each image links to its original page and names its credit. The ADASTEC image is from its 2024 announcement; the park images depict the 2021 pilots. Remote photos require network access; if unavailable the source link remains visible.
+External pilot photographs are embedded from May Mobility, ADASTEC and the National Park Service. Each image links to its original page and names its credit. The ADASTEC image is from its 2024 announcement; the park images depict the 2021 pilots. Remote photos require network access; if unavailable the source link remains visible.
 
-## Mission opening
+## Supplied TRAVELS media
 
-Mission introduces the literature review at the level of rural mobility needs:
+Mission introduces rural mobility needs with the UGA research vehicle and UW–Madison research van side by side, from slide 4 of the March 30, 2026 TRAVELS kickoff deck. Both transparent PNGs are preserved unchanged and presented on white, with each university named. The UW van retains its Dataspeed branding and attribution. Service concepts (healthcare, work/daily needs, tourism/events) come from slides 12–14. The images identify research platforms, not a rural deployment or a test location.
 
-1. A general research question introduces dependable access to everyday destinations.
-2. A simple Request → Travel → Arrive diagram connects booking, safe travel and service continuity; the left review locates the service-model finding.
-3. The review connects operating needs, research evidence and conditions for testing.
+Mission continues with Request → Travel → Arrive and the role of research evidence. The left review locates the corresponding overview, service-model finding and methodology. No detailed demo routes, addresses, speeds or mileage appear.
 
-The user requested no campus image in Mission. It contains no photograph or video, and no site name, street addresses, route alternatives, lengths or speed limits. Campus media and route maps have been removed from deployed assets; original source decks and extracted media remain local. The campus recording must never be presented as rural field validation. Selection history is recorded in `assets/SOURCES.md`.
+Constraints step 2 includes an optional eight-second rural drone communications clip from kickoff slide 27 (source 00:05–00:13), encoded as H.264 MP4 without audio. Click Play 8-second clip; native controls, pause and replay remain available. No autoplay. Simulate connection loss switches to the conceptual road-route fallback scenario; Back to field example returns to the video. Both views correspond to the connectivity synthesis on the left. The six-chapter / 18-step timing remains ten minutes.
 
-No speaker script, internal database screenshot or development schedule is included.
+The clip illustrates drone communications research in a rural setting. It does not establish road-vehicle coverage, performance, or a passenger-service deployment. Campus videos and detailed route maps remain excluded. Original source decks and extracted media are preserved locally.
+
+Asset provenance and conversion details are in `assets/SOURCES.md`. No speaker script, internal database screenshot or development schedule is included.
