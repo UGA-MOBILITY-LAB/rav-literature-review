@@ -15,6 +15,8 @@ The default forward sequence follows the document order. It finishes at the cita
 
 ## Ten-minute sequence
 
+Separate rehearsal materials are available as a [Word speaker script](scripts/RAV_10_Minute_Web_Presentation_Script.docx) and [Markdown script with rehearsal notes](scripts/RAV_10_Minute_Web_Presentation_Script.md). The English script has 1,166 spoken words, timed cues for all 24 steps, and one source-popup demonstration. It is aligned to website version 20260914e and is not displayed in the audience interface.
+
 | Time | Chapter | Steps | What it explains |
 | --- | --- | --- | --- |
 | 0:00–0:40 | Overview | 1 | The rural-service question, research platforms and purpose of the review. |
@@ -44,4 +46,4 @@ The opening occupies one step at the overview. Continuing first locates the What
 
 Drone communications footage is excluded because it does not substantiate the ground-vehicle networking finding. Connectivity is explained through the review's cited evidence and its implications, with no video or simulated connection-loss demonstration. Campus videos and detailed route maps also remain excluded. Original source decks and extracted media are preserved locally.
 
-Asset provenance and exclusions are in `assets/SOURCES.md`. No speaker script, internal database screenshot or development schedule is included.
+Asset provenance and exclusions are in `assets/SOURCES.md`. The audience interface includes no speaker script, internal database screenshot or development schedule.

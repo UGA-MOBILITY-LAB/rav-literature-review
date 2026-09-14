@@ -23,6 +23,15 @@ Interactive companion website for the TRAVELS Rural Autonomous Vehicle (RAV) lit
 - Website-record exports in BibTeX, RIS, and EndNote XML; paper data export in CSV and BibTeX
 - Scroll-to-top, responsive layouts, keyboard access, and reduced-motion handling
 
+## Presentation speaker script
+
+The English ten-minute script follows the website's eight presentation chapters and all 24 steps. It contains 1,166 spoken words with timed click cues, automatic left-pane navigation, and a live source-inspection demonstration.
+
+- [Word speaker script](presentation/scripts/RAV_10_Minute_Web_Presentation_Script.docx)
+- [Markdown speaker script and rehearsal notes](presentation/scripts/RAV_10_Minute_Web_Presentation_Script.md)
+
+The files are separate rehearsal materials; the audience-facing presentation does not display the script. See the [presentation guide](presentation/README.md) for controls and the chapter sequence.
+
 ## Validation and updates
 
 The site is plain HTML, CSS, and JavaScript; there is no build step. The formal narrative manuscript is still in preparation, so the site does not advertise a PDF or Word download.
