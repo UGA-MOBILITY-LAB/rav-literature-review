@@ -41,17 +41,6 @@ main,body.embedded main{grid-template-columns:minmax(0,43fr) minmax(0,57fr)}
 .mission-platform .mission-purpose{font-size:clamp(27px,5.3vw,38px);margin:30px 0 22px}
 .mission-services{display:flex;flex-wrap:wrap;gap:10px 22px;padding-top:16px;border-top:1px solid #ddd;font-size:13px;color:#555}
 .mission-platform .caption{font-size:10px}
-.rural-communications{width:100%;border-top:1px solid #d7d9db;padding-top:18px}
-.communications-figure{margin:0}
-.communications-figure video{display:block;width:100%;height:auto;aspect-ratio:886/506;background:#e7ebe3}
-.communications-controls{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:12px}
-.communications-controls button{border-color:#a51c30;color:#a51c30;font-size:13px;padding:8px 12px}
-.communications-controls span{font-size:11px;color:#777;white-space:nowrap}
-.communications-figure figcaption{font-size:11px;line-height:1.7;color:#777;margin-top:15px}
-.connectivity-lesson{margin:24px 0 18px;padding-top:18px;border-top:1px solid #ddd}
-.connectivity-lesson strong{display:block;font:26px/1.25 Georgia,serif;font-weight:400;max-width:500px}
-.connectivity-lesson p{font-size:13px;line-height:1.7;color:#666;margin:12px 0 0}
-.rural-communications .caption{font-size:10px}
 @keyframes vehicle-arrive{from{opacity:0;transform:translateX(14px)}to{opacity:1;transform:translateX(0)}}
-@media(max-width:450px){.vehicle-pair{gap:14px}.vehicle-portrait figcaption strong{font-size:12px}.vehicle-portrait figcaption{font-size:10px}.mission-services{gap:9px 16px;font-size:12px}.communications-controls{flex-wrap:wrap}.connectivity-lesson strong{font-size:23px}}
+@media(max-width:450px){.vehicle-pair{gap:14px}.vehicle-portrait figcaption strong{font-size:12px}.vehicle-portrait figcaption{font-size:10px}.mission-services{gap:9px 16px;font-size:12px}}
 @media(prefers-reduced-motion:reduce){.vehicle-window img{animation:none}}

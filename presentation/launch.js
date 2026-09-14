@@ -17,7 +17,7 @@
   window.RAVClosePresentation = function () { dialog.close(); };
   var savedOverflow;
   button.addEventListener('click', function () {
-    if (!frame.src) frame.src = 'presentation/index.html?v=20260914a';
+    if (!frame.src) frame.src = 'presentation/index.html?v=20260914c';
     savedOverflow = document.documentElement.style.overflow;
     document.documentElement.style.overflow = 'hidden';
     dialog.showModal();
