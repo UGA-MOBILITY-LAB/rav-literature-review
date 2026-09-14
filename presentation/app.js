@@ -1,6 +1,6 @@
 const chapters=[
 {id:'overview',name:'Overview',time:'0:00–0:40',label:'01 / OVERVIEW',title:'From AV research to rural service'},
-{id:'findings',name:'Key findings',time:'0:40–3:00',label:'02 / WHAT THE LITERATURE SAYS',title:'What the evidence tells us'},
+{id:'findings',name:'What the Literature Says',time:'0:40–3:00',label:'02 / WHAT THE LITERATURE SAYS',title:'What the Literature Says'},
 {id:'framework',name:'Framework',time:'3:00–4:15',label:'03 / THE TWO-TIER FRAMEWORK',title:'How the capabilities fit together'},
 {id:'evidence',name:'Evidence Map',time:'4:15–5:30',label:'04 / EVIDENCE MAP',title:'From a theme to its sources'},
 {id:'recommendations',name:'Recommendations',time:'5:30–6:40',label:'05 / RECOMMENDATIONS',title:'What each stakeholder can do'},
@@ -45,7 +45,7 @@ $('#sourceDialog').addEventListener('click',e=>{if(e.target===$('#sourceDialog')
 if(new URLSearchParams(location.search).has('embedded'))document.body.classList.add('embedded');
 let beat=0;
 function lastBeat(){return BEATS[current].length-1;}
-function applyBeat(){const id=chapters[current].id;tier2=id==='framework'&&beat>0;focused=id==='findings'&&beat===3;if(id==='pilots')pilot=beat===0?0:beat===1?1:3;}
+function applyBeat(){const id=chapters[current].id;tier2=id==='framework'&&beat>0;focused=id==='findings'&&beat===4;if(id==='pilots')pilot=beat===0?0:beat===1?1:3;}
 function advance(delta){
  if(delta>0){if(beat<lastBeat())beat++;else if(current<chapters.length-1){current++;beat=0;}else return;}
  else{if(beat>0)beat--;else if(current>0){current--;beat=lastBeat();}else return;}

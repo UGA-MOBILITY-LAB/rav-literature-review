@@ -3,10 +3,10 @@
 The normal GitHub Pages entry remains the literature-review homepage. Its **Presentation view** button opens a full-window, two-column view without leaving the page. **Back to review** closes that view and restores the existing reading position.
 
 - Left: the original review, loaded from the same GitHub Pages repository in **Basic** mode so the visible section order matches the presentation.
-- Right: eight English chapters following the Basic webpage from top to bottom: Overview, Key findings, Framework, Evidence Map, Recommendations, Field pilots, Review Methodology, then References & citation.
+- Right: eight English chapters following the Basic webpage from top to bottom: Overview, What the Literature Says, Framework, Evidence Map, Recommendations, Field pilots, Review Methodology, then References & citation.
 - **Follow explanation: on** automatically scrolls the left column to the current step's source section. Relevant synthesis sections open, methodology cards select the corresponding review step, and the evidence walkthrough opens its actual theme detail. Recommendation steps scroll to their corresponding cards without activating them or switching to Advanced mode. Turn follow off for independent browsing; **Locate in review** remains a manual option.
 - The divider or width slider resizes the columns. **Expand explanation** temporarily hides the review.
-- Eight chapters contain 23 audience-facing steps, distributed as 1 / 5 / 3 / 3 / 3 / 3 / 3 / 2. Use the visible previous/next buttons or arrow keys to advance at your speaking pace. The timing bands total ten minutes, including pauses and interaction. No speaker script or Notes interface is included.
+- Eight chapters contain 24 audience-facing steps, distributed as 1 / 6 / 3 / 3 / 3 / 3 / 3 / 2. Use the visible previous/next buttons or arrow keys to advance at your speaking pace. The timing bands total ten minutes, including pauses and interaction. No speaker script or Notes interface is included.
 - Narrow screens switch between the review and explanation instead of squeezing both into unreadable columns.
 
 The standalone fallback entry is `presentation/index.html`. It also includes a return-to-review control. The embedded review hides its own launch button to prevent nested presentation windows.
@@ -18,7 +18,7 @@ The default forward sequence follows the document order. It finishes at the cita
 | Time | Chapter | Steps | What it explains |
 | --- | --- | --- | --- |
 | 0:00–0:40 | Overview | 1 | The rural-service question, research platforms and purpose of the review. |
-| 0:40–3:00 | Key findings | 5 | The onboard core, connectivity limits, service choices, limited direct rural evidence and staged validation. Each step follows the corresponding finding on the left. |
+| 0:40–3:00 | What the Literature Says | 6 | The section heading and three overview statements first, then the onboard core, connectivity limits, service choices, limited direct rural evidence and staged validation. Each step follows the corresponding finding on the left. |
 | 3:00–4:15 | Framework | 3 | Tier 1, Tier 2, then the connections between capabilities and supporting evidence. |
 | 4:15–5:30 | Evidence Map | 3 | The map's three evidence roles, a multi-sensor-fusion source trail and its adverse-weather validation question. |
 | 5:30–6:40 | Recommendations | 3 | Vehicle and fleet responsibilities, road and connectivity support, then program and pilot evaluation. |
@@ -40,7 +40,7 @@ External pilot photographs are embedded from May Mobility, ADASTEC and the Natio
 
 The opening places the UGA research vehicle and UW–Madison research van side by side, from slide 4 of the March 30, 2026 TRAVELS kickoff deck. Both transparent PNGs are preserved unchanged and presented on white, with each university named. The UW van retains its Dataspeed branding and attribution. Service concepts (healthcare, work/daily needs, tourism/events) come from slides 12–14. The images introduce the research platforms supporting the service-level question; they do not identify a rural deployment or a test location.
 
-The opening occupies one step at the overview. Continuing moves directly to the five findings in their webpage order. No detailed demo routes, addresses, speeds or mileage appear.
+The opening occupies one step at the overview. Continuing first locates the What the Literature Says heading and overview, then follows all five findings in their webpage order. No detailed demo routes, addresses, speeds or mileage appear.
 
 Drone communications footage is excluded because it does not substantiate the ground-vehicle networking finding. Connectivity is explained through the review's cited evidence and its implications, with no video or simulated connection-loss demonstration. Campus videos and detailed route maps also remain excluded. Original source decks and extracted media are preserved locally.
 
