@@ -14,11 +14,11 @@ The timestamps include clicks and short viewing pauses. Aim for a speaking pace 
 
 ### 0:00–0:40  Research question
 
-[Start on the ordinary homepage. After the first sentence, click **Presentation view**. Confirm right chapter 01, step 1/1. Point to the service question and the three-part review logic, then back to the original review on the left.]
+[Start on the ordinary homepage. After the first sentence, click **Presentation view**. Confirm right chapter 01, step 1/1. Point to the two vehicle images and their examples note, then to the service question and the three-part review logic.]
 
 Today, I’ll use the website itself to walk you through our rural autonomous vehicle literature review.
 
-The question is straightforward: what would it take for existing AV technology to support dependable rural transportation? This is a service question, not a showcase of any one vehicle or institution. We start with needs like healthcare and everyday travel, then connect them to service design and technical evidence.
+The question is straightforward: what would it take for existing AV technology to support dependable rural transportation? The vehicles on screen are examples from the broader collaboration, not a complete list of project partners. We start with needs like healthcare and everyday travel, then connect them to service design and technical evidence.
 
 We’ll move down the page together, with the review on the left and its main argument on the right.
 

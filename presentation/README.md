@@ -15,7 +15,7 @@ The default forward sequence follows the document order. It finishes at the cita
 
 ## Ten-minute sequence
 
-Separate rehearsal materials are available as a [Word speaker script](scripts/RAV_10_Minute_Web_Presentation_Script.docx) and [Markdown script with rehearsal notes](scripts/RAV_10_Minute_Web_Presentation_Script.md). The English script has 1,226 spoken words, timed cues for all 24 steps, and one source-popup demonstration. It is aligned to website version 20260914e and is not displayed in the audience interface.
+Separate rehearsal materials are available as a [Word speaker script](scripts/RAV_10_Minute_Web_Presentation_Script.docx) and [Markdown script with rehearsal notes](scripts/RAV_10_Minute_Web_Presentation_Script.md). The English script has 1,229 spoken words, timed cues for all 24 steps, and one source-popup demonstration. It is aligned to website version 20260914e and is not displayed in the audience interface.
 
 | Time | Chapter | Steps | What it explains |
 | --- | --- | --- | --- |
@@ -40,7 +40,7 @@ External pilot photographs are embedded from May Mobility, ADASTEC and the Natio
 
 ## Opening frame
 
-The opening presents the review as a service-level question rather than representing the broader collaboration through a subset of institutions or research vehicles. It connects community needs, service design and technical evidence, with healthcare access, work and daily needs, and tourism and events as example rural mobility needs.
+The opening displays two selected research-vehicle images as examples from the broader collaboration, not as a complete list of project partners. It avoids institution-by-institution cards and connects the examples to a service-level question spanning community needs, service design and technical evidence. Healthcare access, work and daily needs, and tourism and events remain example rural mobility needs.
 
 The opening occupies one step at the overview. Continuing first locates the What the Literature Says heading and overview, then follows all five findings in their webpage order. No detailed demo routes, addresses, speeds or mileage appear.
 

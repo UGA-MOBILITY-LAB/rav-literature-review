@@ -2,14 +2,14 @@
 
 ## Supplied kickoff-deck assets retained locally
 
-Source: `RAV_TRAVELS_Kickoff Presentation.pptx`, March 30, 2026. Two research-vehicle images were previously extracted from the fleet overview and remain in the repository for provenance, but they are no longer displayed in the public presentation.
+Source: `RAV_TRAVELS_Kickoff Presentation.pptx`, March 30, 2026. Two research-vehicle images were extracted from the fleet overview and appear in the opening as selected examples from the broader collaboration.
 
 | Asset | Source | Use |
 | --- | --- | --- |
-| uga-research-vehicle.png | Slide 4, original image25.png | UGA research vehicle. Unchanged 719×539 transparent PNG. Retained locally; not displayed in the public presentation. |
-| uw-research-van.png | Slide 4, original image22.png | UW–Madison research van. Unchanged 1024×1024 transparent PNG with original branding. Retained locally; not displayed in the public presentation. |
+| uga-research-vehicle.png | Slide 4, original image25.png | UGA research vehicle. Unchanged 719×539 transparent PNG, displayed as one selected platform example. |
+| uw-research-van.png | Slide 4, original image22.png | UW–Madison research van. Unchanged 1024×1024 transparent PNG with original branding, displayed as one selected platform example. |
 
-The opening is institution-neutral so that a pair of vehicle images does not imply that the broader collaboration consists of only two institutions. It frames the review around community needs, service design and technical evidence. Healthcare access, work and daily needs, and tourism and events appear only as example service needs, not as evidence of operational readiness or passenger-service outcomes.
+The two images are presented under one explicit note: “Selected research platforms · examples from the broader collaboration.” They are not institution-by-institution partner cards and are not a complete representation of the project team. The opening frames the review around community needs, service design and technical evidence. Healthcare access, work and daily needs, and tourism and events appear only as example service needs, not as evidence of operational readiness or passenger-service outcomes.
 
 ## Previously inspected material not used
 
