@@ -1,15 +1,15 @@
 # Presentation media sources
 
-## Published assets from the supplied kickoff deck
+## Supplied kickoff-deck assets retained locally
 
-Source: `RAV_TRAVELS_Kickoff Presentation.pptx`, March 30, 2026, TRAVELS consortium kickoff led by UW–Madison. The published selections are the UGA and UW–Madison research vehicles from the fleet overview.
+Source: `RAV_TRAVELS_Kickoff Presentation.pptx`, March 30, 2026. Two research-vehicle images were previously extracted from the fleet overview and remain in the repository for provenance, but they are no longer displayed in the public presentation.
 
 | Asset | Source | Use |
 | --- | --- | --- |
-| uga-research-vehicle.png | Slide 4, original image25.png | UGA research vehicle. Unchanged 719×539 transparent PNG, displayed on white. This identifies a research platform, not a rural deployment site. |
-| uw-research-van.png | Slide 4, original image22.png | UW–Madison research van as shown in the kickoff fleet overview. Unchanged 1024×1024 transparent PNG. Dataspeed branding and attribution retained. This identifies a research platform, not a rural deployment site. |
+| uga-research-vehicle.png | Slide 4, original image25.png | UGA research vehicle. Unchanged 719×539 transparent PNG. Retained locally; not displayed in the public presentation. |
+| uw-research-van.png | Slide 4, original image22.png | UW–Madison research van. Unchanged 1024×1024 transparent PNG with original branding. Retained locally; not displayed in the public presentation. |
 
-Service concepts in the opening draw from kickoff slides 12–14: healthcare, work and daily needs, and tourism and events. These are proposed application areas. The two vehicle images identify research platforms; they are not evidence of operational readiness or a rural passenger-service result.
+The opening is institution-neutral so that a pair of vehicle images does not imply that the broader collaboration consists of only two institutions. It frames the review around community needs, service design and technical evidence. Healthcare access, work and daily needs, and tourism and events appear only as example service needs, not as evidence of operational readiness or passenger-service outcomes.
 
 ## Previously inspected material not used
 

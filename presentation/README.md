@@ -15,11 +15,11 @@ The default forward sequence follows the document order. It finishes at the cita
 
 ## Ten-minute sequence
 
-Separate rehearsal materials are available as a [Word speaker script](scripts/RAV_10_Minute_Web_Presentation_Script.docx) and [Markdown script with rehearsal notes](scripts/RAV_10_Minute_Web_Presentation_Script.md). The English script has 1,166 spoken words, timed cues for all 24 steps, and one source-popup demonstration. It is aligned to website version 20260914e and is not displayed in the audience interface.
+Separate rehearsal materials are available as a [Word speaker script](scripts/RAV_10_Minute_Web_Presentation_Script.docx) and [Markdown script with rehearsal notes](scripts/RAV_10_Minute_Web_Presentation_Script.md). The English script has 1,226 spoken words, timed cues for all 24 steps, and one source-popup demonstration. It is aligned to website version 20260914e and is not displayed in the audience interface.
 
 | Time | Chapter | Steps | What it explains |
 | --- | --- | --- | --- |
-| 0:00–0:40 | Overview | 1 | The rural-service question, research platforms and purpose of the review. |
+| 0:00–0:40 | Overview | 1 | The rural-service question, review logic and purpose of the review. |
 | 0:40–3:00 | What the Literature Says | 6 | The section heading and three overview statements first, then the onboard core, connectivity limits, service choices, limited direct rural evidence and staged validation. Each step follows the corresponding finding on the left. |
 | 3:00–4:15 | Framework | 3 | Tier 1, Tier 2, then the connections between capabilities and supporting evidence. |
 | 4:15–5:30 | Evidence Map | 3 | The map's three evidence roles, a multi-sensor-fusion source trail and its adverse-weather validation question. |
@@ -38,12 +38,12 @@ No build step or additional hosting service is required.
 
 External pilot photographs are embedded from May Mobility, ADASTEC and the National Park Service. Each image links to its original page and names its credit. The ADASTEC image is from its 2024 announcement; the park images depict the 2021 pilots. Remote photos require network access; if unavailable the source link remains visible.
 
-## Supplied TRAVELS media
+## Opening frame
 
-The opening places the UGA research vehicle and UW–Madison research van side by side, from slide 4 of the March 30, 2026 TRAVELS kickoff deck. Both transparent PNGs are preserved unchanged and presented on white, with each university named. The UW van retains its Dataspeed branding and attribution. Service concepts (healthcare, work/daily needs, tourism/events) come from slides 12–14. The images introduce the research platforms supporting the service-level question; they do not identify a rural deployment or a test location.
+The opening presents the review as a service-level question rather than representing the broader collaboration through a subset of institutions or research vehicles. It connects community needs, service design and technical evidence, with healthcare access, work and daily needs, and tourism and events as example rural mobility needs.
 
 The opening occupies one step at the overview. Continuing first locates the What the Literature Says heading and overview, then follows all five findings in their webpage order. No detailed demo routes, addresses, speeds or mileage appear.
 
 Drone communications footage is excluded because it does not substantiate the ground-vehicle networking finding. Connectivity is explained through the review's cited evidence and its implications, with no video or simulated connection-loss demonstration. Campus videos and detailed route maps also remain excluded. Original source decks and extracted media are preserved locally.
 
-Asset provenance and exclusions are in `assets/SOURCES.md`. The audience interface includes no speaker script, internal database screenshot or development schedule.
+Media provenance and exclusions are in `assets/SOURCES.md`. The audience interface includes no speaker script, internal database screenshot or development schedule.

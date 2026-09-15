@@ -25,7 +25,7 @@ Interactive companion website for the TRAVELS Rural Autonomous Vehicle (RAV) lit
 
 ## Presentation speaker script
 
-The English ten-minute script follows the website's eight presentation chapters and all 24 steps. It contains 1,166 spoken words with timed click cues, automatic left-pane navigation, and a live source-inspection demonstration.
+The English ten-minute script follows the website's eight presentation chapters and all 24 steps. It contains 1,226 spoken words with timed click cues, automatic left-pane navigation, and a live source-inspection demonstration.
 
 - [Word speaker script](presentation/scripts/RAV_10_Minute_Web_Presentation_Script.docx)
 - [Markdown speaker script and rehearsal notes](presentation/scripts/RAV_10_Minute_Web_Presentation_Script.md)

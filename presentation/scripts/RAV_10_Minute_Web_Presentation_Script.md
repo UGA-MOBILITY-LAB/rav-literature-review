@@ -14,13 +14,13 @@ The timestamps include clicks and short viewing pauses. Aim for a speaking pace 
 
 ### 0:00–0:40  Research question
 
-[Start on the ordinary homepage. After the first sentence, click **Presentation view**. Confirm right chapter 01, step 1/1. Point to the two vehicle images, then back to the original review on the left.]
+[Start on the ordinary homepage. After the first sentence, click **Presentation view**. Confirm right chapter 01, step 1/1. Point to the service question and the three-part review logic, then back to the original review on the left.]
 
-Today I’ll walk through our literature review on rural autonomous vehicles, using the website itself.
+Today, I’ll use the website itself to walk you through our rural autonomous vehicle literature review.
 
-The research question is how existing AV capabilities could support a dependable rural transportation service. The UGA vehicle and UW–Madison van shown here are research platforms associated with TRAVELS. The service concepts include healthcare access and everyday travel.
+The question is straightforward: what would it take for existing AV technology to support dependable rural transportation? This is a service question, not a showcase of any one vehicle or institution. We start with needs like healthcare and everyday travel, then connect them to service design and technical evidence.
 
-I’ll follow the page from top to bottom, with the review on the left and its argument on the right.
+We’ll move down the page together, with the review on the left and its main argument on the right.
 
 ## 02 What the Literature Says
 
@@ -28,37 +28,37 @@ I’ll follow the page from top to bottom, with the review on the left and its a
 
 [Advance once. Confirm chapter 02, step 1/6. Point to **What the Literature Says** and its three overview statements on the left.]
 
-We begin with what the literature says. Rural conditions affect both the vehicle and the service: road guidance can be sparse, connectivity can vary, and trips are often dispersed. The section’s main argument is to keep the core self-reliant, add support selectively, and validate in stages.
+Let’s start with the big picture. Rural conditions shape both the technology and the service. Lane markings may be limited, connectivity may come and go, and trips are often spread out. The takeaway is to keep the vehicle self-reliant, add support where it helps, and validate the service step by step.
 
 ### 1:00–1:25  Finding 1
 
 [Advance once to step 2/6. The first finding opens on the left. Point to the evidence and implication rows on the right.]
 
-The first finding concerns the onboard safety baseline. The reviews identify sensing, localization, and mapping as capabilities we can build on. These need local evaluation, including a tested response to degraded conditions, because road markings, visibility, and available support may differ.
+First, the safety-critical basics have to stay on the vehicle. The literature gives us a solid foundation in sensing, localization, and mapping. But it does not prove that the same stack will work everywhere. We still need local testing when road markings fade, visibility drops, or roadside support is limited.
 
 ### 1:25–1:50  Finding 2
 
 [Advance once to step 3/6. Let the second finding settle into view.]
 
-The second finding concerns connectivity. Communication can support the vehicle and its operators, but coverage varies across a rural area. Before expanding a service, we need to test what the vehicle and the operator do when a link becomes unreliable.
+Second, connectivity can help, but it cannot be the only thing keeping the service safe. Coverage may vary along a rural route. Before scaling up, we need to know exactly how the vehicle and the operator will respond when the connection drops or becomes unreliable.
 
 ### 1:50–2:15  Finding 3
 
 [Advance once to step 4/6. Point to **Match the service to demand**.]
 
-The third finding moves from the vehicle to the operating model. Dispersed requests may favor demand-responsive service, while predictable circulation may suit a fixed route. Dispatch, charging, and passenger assistance have to fit that choice. The reviewed pilots illustrate different options, but they do not establish one model for every rural community.
+Third, service design has to match how people actually travel. Scattered trips may call for demand-responsive service, while regular travel along one corridor may fit a fixed route. That choice shapes dispatch, charging, and passenger assistance. The pilots offer several models, but none is a universal answer for rural communities.
 
 ### 2:15–2:40  Finding 4
 
 [Advance once to step 5/6. Point to the highlighted dots and **12 / 118**. Pause for two seconds so the audience can see the distribution. Do not open a dot here.]
 
-Each dot represents one source record. Only twelve of the one hundred and eighteen records are classified as direct rural evidence, about ten percent. Most are transferable to rural settings. That distinction highlights the need to examine the assumptions behind applying a result locally.
+Now, take a look at the dots. Each one is a source. Only twelve of the 118 records provide direct rural evidence, or about ten percent. Most of the rest may transfer to rural settings, but they were not tested there. That is why we need to check the assumptions behind every local application.
 
 ### 2:40–3:00  Finding 5
 
 [Advance once to step 6/6. Point to the statement about the review team’s synthesis.]
 
-The fifth finding brings these points together. We propose moving through local assessment, a resilient onboard baseline, selective support, and bounded field trials. This sequence is our synthesis across the literature. No single study validates the entire sequence, so each stage needs measurable criteria for proceeding.
+Putting those findings together, we see a staged path: understand the local setting, build a resilient onboard baseline, add support where it helps, and run field trials within clear limits. This is our synthesis, not a sequence validated by one study, so each stage needs clear measures.
 
 ## 03 Framework
 
@@ -66,19 +66,19 @@ The fifth finding brings these points together. We propose moving through local 
 
 [Advance once. Confirm chapter 03, step 1/3. Trace the two Tier 1 boxes with the cursor.]
 
-The next section organizes the capabilities into a framework. Tier one contains Autonomous Driving and Fleet Management. Autonomous Driving covers the vehicle’s ability to sense, locate itself, and respond safely. Fleet Management covers dispatch, charging, and supervision. Together, they connect vehicle capability with the continuity of the passenger service.
+Next, we group the capabilities into two tiers. Tier 1 covers Autonomous Driving and Fleet Management. One lets the vehicle sense, localize, and respond safely; the other handles dispatch, charging, and supervision. Both matter, because a capable vehicle alone does not guarantee a dependable passenger service.
 
 ### 3:25–3:50  Tier 2
 
 [Advance once to step 2/3. The three support modules become prominent on the right. Point across them.]
 
-Tier two adds Infrastructure, Communication, and Cooperative Driving. These modules address specific gaps in the baseline. For example, road improvements or additional information may help at a difficult location. The question is where that support provides enough benefit to justify its cost and maintenance. These tiers are organizational categories, not automation levels.
+Tier 2 covers Infrastructure, Communication, and Cooperative Driving. Think of these as targeted support for gaps in the baseline. A road upgrade or an extra source of information may help at a difficult location. The question is whether the benefit is worth the cost and upkeep. These are framework categories, not levels of vehicle automation.
 
 ### 3:50–4:15  Connections and validation
 
 [Advance once to step 3/3. Point to the framework explanation now located on the left, then the field-validation label on the right.]
 
-These capabilities operate together. A change in sensing can affect fallback behavior; a charging constraint can affect dispatch. Field pilots help us evaluate the combined system within defined conditions. The framework organizes those connections into questions we can test in the field.
+The pieces also interact. Better sensing can change the fallback strategy, and a charging constraint can change fleet dispatch. A field pilot lets us see how the whole system behaves under defined conditions. The framework turns those dependencies into questions we can test.
 
 ## 04 Evidence Map
 
@@ -86,21 +86,21 @@ These capabilities operate together. A change in sensing can affect fallback beh
 
 [Advance once. Confirm chapter 04, step 1/3. Point to the map on the left and its three evidence roles on the right.]
 
-The Evidence Map makes that reasoning inspectable. It organizes twenty-five themes into limitations, recommended directions, and reusable baselines. Selecting a theme shows its definition, supporting sources, and rural implications. The connections help us follow related questions; they do not score how ready a technology is for deployment.
+The Evidence Map makes that reasoning visible. It groups twenty-five themes into limitations, recommended directions, and reusable baselines. Select a theme to see what it means, which sources support it, and why it matters in a rural setting. The links show related questions; they are not deployment-readiness scores.
 
 ### 4:35–5:05  Inspect a source
 
 [Advance once to step 2/3. The left pane opens **Perception — multi-sensor fusion**. After the first sentence below, click the right-side source title beginning **[2] Building the Future of Transportation**. Point to **Review** and **Transferable to rural** in the popup. Close it with **×** before advancing. Stay on this website.]
 
-Let’s inspect multi-sensor fusion and open a supporting source to see the evidence behind it.
+Let’s open multi-sensor fusion and look at one of the sources behind it.
 
-This record is a review, coded as transferable to rural settings. Its evidence-strength label and its rural-relevance label answer different questions. We still need to establish how its conclusions apply to our operating conditions.
+This source is a review, and we coded it as transferable to rural settings. Notice that evidence strength and rural relevance are separate labels. A source can be scientifically strong and still leave an open question about whether its conclusions hold under local conditions.
 
 ### 5:05–5:30  Follow a validation question
 
 [After closing the popup, advance once to step 3/3. The left pane opens **Perception — adverse weather**. Point to the remaining limitation.]
 
-The next step follows the question into adverse weather. Combining sensors does not eliminate every shared failure condition. Rain, fog, or snow can affect several sensors together. The review therefore points toward testing the combined stack under local conditions and defining fallback thresholds. This is how a broad recommendation becomes a specific validation question.
+From there, the map takes us to adverse weather. Using several sensors helps, but it does not eliminate every shared failure mode. Rain, fog, or snow can affect multiple sensors at once. That gives us a concrete local test: run the combined system in those conditions and define when it should fall back.
 
 ## 05 Recommendations
 
@@ -108,19 +108,19 @@ The next step follows the question into adverse weather. Combining sensors does 
 
 [Advance once. Confirm chapter 05, step 1/3. Point to the vehicle and fleet recommendations. Do not click the left recommendation cards; advancing already locates them.]
 
-The Recommendations section assigns responsibilities. Vehicle teams need to validate the onboard stack on local roads and in local weather. Fleet operators need dispatch, charging, and passenger support suited to the demand pattern, including supervision when conditions degrade.
+Now we can turn the findings into specific tasks. Vehicle teams need to test the onboard system on local roads and in local weather. Fleet teams need dispatch, charging, and passenger support that fit the travel pattern, plus a clear supervision plan for degraded conditions.
 
 ### 5:55–6:20  Road and communication support
 
 [Advance once to step 2/3. Point to the road and connectivity responsibilities on the right.]
 
-For road agencies, the starting point is an assessment of the locations that create difficulty. Improvements can then target those locations. For connectivity partners, the task is to measure coverage and latency along the actual route. Those measurements should inform switching and fallback procedures before the service depends on external links.
+Road agencies should first identify locations that repeatedly cause problems, then focus improvements there. Connectivity partners need to measure coverage and latency along the actual route rather than rely on a general map. Those measurements should drive the switching and fallback plan before the service depends on an external connection.
 
 ### 6:20–6:40  Pilot evaluation
 
 [Advance once to step 3/3. Point to the proposed measures, giving the audience two seconds to scan them.]
 
-Program partners also need comparable reporting. Interventions and disconnections help describe technical performance. Waiting time, accessibility, and operator workload describe the service people experience. Reporting both lets a pilot answer a clear field question and helps determine whether a wider operating area is justified.
+Program partners also need comparable results. Interventions and disconnections tell us about technical performance. Waiting time, accessibility, and operator workload show what the service is like to use and operate. Together, these measures tell us whether the pilot answered its field question and whether a larger service area makes sense.
 
 ## 06 Field pilots
 
@@ -128,19 +128,19 @@ Program partners also need comparable reporting. Interventions and disconnection
 
 [Advance once. Confirm chapter 06, step 1/3 and the **goMARTI** tab. Point to the photograph and the service-type label.]
 
-goMARTI, in Grand Rapids, Minnesota, illustrates demand-responsive service in a rural community. The reviewed operation includes accessible passenger support and an onboard safety operator within a defined service area. It connects our earlier discussion of dispersed demand to a concrete operating arrangement, including the support needed around the vehicle.
+Let’s look at the pilots. goMARTI in Grand Rapids, Minnesota, is a demand-responsive rural service. It includes accessible passenger support and an onboard safety operator within a defined area. It shows how a service can respond to dispersed demand and what support still has to be in place around the vehicle.
 
 ### 7:10–7:35  Fixed route service
 
 [Advance once to step 2/3. **ADASTEC** is selected automatically. Point to **Fixed route** and the location. Keep the default tab selected to preserve the timed route.]
 
-ADASTEC at Sleeping Bear Dunes provides a different example: a defined route supporting scheduled circulation. TEDDY and CASSI add park and public-site experience to the comparison. These settings help us examine interruptions, supervision, and service organization, while keeping their differences from a general rural road network explicit.
+ADASTEC at Sleeping Bear Dunes gives us a different model: scheduled service on a defined route. TEDDY and CASSI add experience from parks and public sites. Together, they help us compare interruptions, supervision, and service organization. But these sites are not the same as an open rural road network.
 
 ### 7:35–8:00  Compare the programs
 
 [Advance once to step 3/3. Point to the two service patterns in the right summary; the left locates the final pilot card.]
 
-Read together, the programs show why the operating context matters. We should compare the trip pattern, passenger assistance, and response to interruptions before transferring a service model. Their common boundary is supervised operation within defined limits. They provide useful precedents for designing further tests, with clear limits on what we can generalize.
+Across these programs, context matters most. Before borrowing a service model, we need to compare the trip pattern, passenger support, and response to interruptions. Every program here operated under supervision and within defined limits. They are useful precedents for the next test, but they do not show that one model will work everywhere.
 
 ## 07 Review Methodology
 
@@ -148,19 +148,19 @@ Read together, the programs show why the operating context matters. We should co
 
 [Advance once. Confirm chapter 07, step 1/3. The left methodology detail opens automatically.]
 
-The Methodology section explains how the evidence base was assembled. The scope covers road-vehicle research from 2014 through 2026 across five technical modules, with field pilots providing operational evidence. Sources need either direct rural relevance or a documented connection that explains how their findings could inform rural use.
+A quick word on methodology. We reviewed road-vehicle research published from 2014 through 2026 across five technical modules, and used field pilots to capture operational experience. To be included, a source had to focus on rural operation or make a clear, documented connection to rural use.
 
 ### 8:20–8:45  Search and screening
 
 [Advance once to step 2/3. Follow the search, screening, and retention sequence on the right.]
 
-The search draws on scholarly sources, authoritative reports, official program records, and citation chaining. Screening removes duplicates and records that are unverifiable or unrelated to the review. The retained collection contains one hundred and eighteen records. The website organizes and synthesizes that collection; it does not present a quantitative meta-analysis.
+We searched scholarly publications, authoritative reports, and official program records, then followed citations. During screening, we removed duplicates, records we could not verify, and work outside the review’s scope. That left 118 records. The website organizes and interprets this evidence; it is not a quantitative meta-analysis.
 
 ### 8:45–9:10  Coding
 
 [Advance once to step 3/3. Point to the coding fields, especially study design, rural relevance, and evidence strength.]
 
-Each record is coded by what it studies and how it relates to rural operation. We distinguish study design, rural relevance, and evidence strength, with access status recorded separately. These labels make the interpretation more transparent. Evidence strength is a review-team assessment, rather than a formal risk-of-bias measure or a deployment-readiness score.
+For each record, we coded what it studied and how it related to rural operation. Study design, rural relevance, and evidence strength are separate fields, and access status is recorded on its own. That makes our interpretation easier to inspect. Evidence strength is our assessment, not a formal risk-of-bias measure or a deployment-readiness score.
 
 ## 08 References and citation
 
@@ -168,13 +168,13 @@ Each record is coded by what it studies and how it relates to rural operation. W
 
 [Advance once. Confirm chapter 08, step 1/2. Point to the bibliography on the left and reference [2] on the right. The source popup was demonstrated earlier; leave it closed here.]
 
-The reference list groups records by technical module and links to the original publications. Here is the same review we inspected earlier. Readers can move from a recommendation to its evidence and assess the assumptions involved in transferring a result to rural operation.
+Finally, the reference list groups sources by technical module and links directly to the original publications. Here is the same review we opened earlier. Readers can move from a recommendation to the evidence behind it, then decide whether its assumptions hold in a rural setting.
 
 ### 9:35–10:00  Closing
 
 [Advance once to step 2/2. The left locates the website citation. Deliver the closing while this remains visible. After “Thank you,” click **Back to review** and stop the timer.]
 
-The website ends with citation formats and exports for sharing this synthesis. Its contribution is to connect rural needs with technical capabilities and the evidence available to support them. The next research step is to test those choices with comparable rural operating data, so that any expansion rests on measured safety and service outcomes. Thank you.
+The site ends with citation and export options, so others can reuse and check the review. The takeaway is simple: rural service needs, vehicle capabilities, and evidence have to be considered together. Next, we need comparable data from real rural operations, so expansion decisions can rest on measured safety and service outcomes. Thank you.
 
 ## Rehearsal notes
 
