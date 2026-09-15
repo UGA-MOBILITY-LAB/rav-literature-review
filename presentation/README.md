@@ -15,20 +15,20 @@ The default forward sequence follows the document order. It finishes at the cita
 
 ## Ten-minute sequence
 
-Separate rehearsal materials are available as a [Word speaker script](scripts/RAV_10_Minute_Web_Presentation_Script.docx) and [Markdown script with rehearsal notes](scripts/RAV_10_Minute_Web_Presentation_Script.md). The English script has 1,229 spoken words, timed cues for all 24 steps, and one source-popup demonstration. It is aligned to website version 20260914e and is not displayed in the audience interface.
+Separate rehearsal materials are available as a [Word speaker script](scripts/RAV_10_Minute_Web_Presentation_Script.docx) and [Markdown script with rehearsal notes](scripts/RAV_10_Minute_Web_Presentation_Script.md). The English script has 1,357 spoken words, timed cues for all 24 steps, and one evidence-theme walkthrough. It is aligned to website version 20260914e and is not displayed in the audience interface.
 
 | Time | Chapter | Steps | What it explains |
 | --- | --- | --- | --- |
 | 0:00–0:40 | Overview | 1 | The rural-service question, review logic and purpose of the review. |
 | 0:40–3:00 | What the Literature Says | 6 | The section heading and three overview statements first, then the onboard core, connectivity limits, service choices, limited direct rural evidence and staged validation. Each step follows the corresponding finding on the left. |
 | 3:00–4:15 | Framework | 3 | Tier 1, Tier 2, then the connections between capabilities and supporting evidence. |
-| 4:15–5:30 | Evidence Map | 3 | The map's three evidence roles, a multi-sensor-fusion source trail and its adverse-weather validation question. |
+| 4:15–5:30 | Evidence Map | 3 | The map's three evidence roles, a single-sensor limitation, multi-sensor fusion and the adverse-weather validation question. |
 | 5:30–6:40 | Recommendations | 3 | Vehicle and fleet responsibilities, road and connectivity support, then program and pilot evaluation. |
 | 6:40–8:00 | Field pilots | 3 | Demand-responsive and fixed-route precedents, then comparison across the four programs. |
 | 8:00–9:10 | Review Methodology | 3 | Scope, search and screening, then source verification and evidence coding. |
-| 9:10–10:00 | References & citation | 2 | Trace a bibliography entry to its source, then cite the website and retain the review's evidence boundaries. |
+| 9:10–10:00 | References & citation | 2 | Show the bibliography and original-source links, then cite the website and retain the review's evidence boundaries. |
 
-The Evidence Map chapter starts at the map, automatically opens **Perception - multi-sensor fusion**, then opens **Perception - adverse weather** in the same detail area. Reference **[2]** demonstrates study-design, strength and rural-relevance coding; reference **[3]** supports the adverse-weather walkthrough. The theme names on the right also locate their corresponding left-side detail.
+The Evidence Map chapter starts at the map. The speaker then manually opens **Perception - single-sensor limitations** for the only extra click-through; the next two steps open **Perception - multi-sensor fusion** and **Perception - adverse weather** in the same detail area. The theme names on the right also locate their corresponding left-side detail.
 
 Recommendations locate the vehicle, road and program/pilot cards in page order. Each step explains the related stakeholder responsibilities without triggering a reference filter or a mode change. Later, the methodology chapter selects the left review's scope, screening and verification cards; search and screening are explained together within one presentation step. The final chapter proceeds from the Reference List to Citation.
 
