@@ -34,7 +34,7 @@ const BEATS = [
   [
     ['Define what belongs in the review', 'The scope covers 2014–2026 road-vehicle research across the above topics and modules related to rural areas or similar to rural conditions.', 'method:0'],
     ['Search broadly, retain a documented connection', 'Scholarly sources, official program records and citation chaining identify candidates. Screening removes duplicates and unverifiable or unrelated work.', 'method:2'],
-    ['Verify and code', '118 records were extracted for the literature review. Open access was recorded separately.', 'method:3']
+    ['Verify and review', '118 records were extracted for the literature review. Open access was recorded separately.', 'method:3']
   ],
   [
     ['The reference list keeps the claims inspectable', 'The full bibliography is grouped by module. Each record links its source, study design and rural relevance to the review.', 'papers'],
