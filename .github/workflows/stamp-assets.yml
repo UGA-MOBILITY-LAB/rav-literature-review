@@ -1,0 +1,44 @@
+name: Stamp asset versions
+
+# GitHub Pages serves this site straight from the branch, so a browser that cached
+# app.js?v=... keeps the old copy until that URL changes. This workflow rewrites every
+# local .js/.css reference with a hash of the file's contents after each push, so an edit
+# always reaches visitors and an unchanged file keeps its cached copy.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: stamp-assets
+  cancel-in-progress: false
+
+jobs:
+  stamp:
+    # The job's own commit triggers this workflow once more; that run finds nothing to do
+    # and stops here rather than committing again.
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Rewrite stamps from file contents
+        run: python3 tools/stamp_assets.py
+      - name: Commit if anything changed
+        run: |
+          if git diff --quiet; then
+            echo "asset stamps already current"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -am "Stamp asset versions from file contents"
+          git push

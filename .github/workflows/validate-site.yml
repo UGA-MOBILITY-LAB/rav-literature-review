@@ -21,6 +21,8 @@ jobs:
           python-version: "3.12"
       - name: Validate data and interface hooks
         run: python tools/validate_site.py
+      - name: Check asset stamps are current
+        run: python tools/stamp_assets.py --check
 
   source-links:
     if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'

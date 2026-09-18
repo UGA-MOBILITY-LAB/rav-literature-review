@@ -272,9 +272,10 @@ def main() -> None:
     assert len(theme_titles) == 25
     assert "Version 2.9" in index
     assert "Updated August 8, 2026" in index
-    assert "app.js?v=20260808k" in index
-    assert "style.css?v=20260808k" in index
-    assert "data.js?v=20260808k" in index and "edges.js?v=20260808k" in index
+    # Asset stamps are generated from file contents by tools/stamp_assets.py, so assert that
+    # each reference carries a stamp rather than pinning one literal value here.
+    for asset in ("app.js", "style.css", "data.js", "edges.js"):
+        assert re.search(re.escape(asset) + r"\?v=[0-9a-f]{8}", index), asset + " is missing its content stamp"
     assert "Current release:** Version 2.9" in readme
     assert re.search(r"^## 2\.9\b", changelog, re.M)
 
