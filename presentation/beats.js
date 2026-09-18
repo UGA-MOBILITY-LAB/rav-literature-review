@@ -5,20 +5,20 @@ const BEATS = [
   ],
   [
     ['Rural conditions change the whole service', 'Sparse road guidance, intermittent connectivity, long distances, and thin demand shape both the technical design and the operating model.', 'findings'],
-    ['Finding 1: keep the safety baseline onboard', 'Reviews converge on sensing, localization and fallback. Much of that evidence still needs validation on rural roads.', 'finding:0'],
-    ['Finding 2: connectivity adds support with limits', 'Rural links vary by location. External information can assist the vehicle, but the service needs a tested response to disconnection.', 'finding:1'],
-    ['Finding 3: the service model follows the setting', 'Dispersed demand and predictable circulation support different operating choices. The pilots do not establish one universal rural service model.', 'finding:2'],
-    ['Finding 4: direct rural evidence is still thin', 'Only 12 of 118 records are directly rural. No record primarily coded as Cooperative Driving is classified as direct rural evidence.', 'finding:3'],
-    ['Finding 5: deployment needs staged validation', 'The review combines technical and operational evidence into a sequence for testing. No single study validates that integrated sequence.', 'finding:4']
+    ['Finding 1: keep the safety baseline onboard', 'A solid foundation in sensing, localization, and mapping, but the same stack still needs tests on rural roads.', 'finding:0'],
+    ['Finding 2: connectivity adds support with limits', 'Connectivity can help, but may vary in rural areas.', 'finding:1'],
+    ['Finding 3: the service model follows the setting', 'The deployment does not establish one universal rural service model.', 'finding:2'],
+    ['Finding 4: direct rural evidence is still thin', 'Only 10% of records are directly rural. Most of the other studies were tested in different settings and may still be useful.', 'finding:3'],
+    ['Finding 5: deployment needs integrated validation', 'No single study validates the integrated sequence from rural needs, resilient onboard baselines, infrastructure support, to field tests and demonstrations.', 'finding:4']
   ],
   [
-    ['Tier 1 carries the service', 'Autonomous Driving keeps the vehicle moving safely. Fleet Management organizes dispatch, energy and service continuity.', 'tier:0'],
-    ['Tier 2 addresses gaps in that baseline', 'Infrastructure, Communication and Cooperative Driving add support where road conditions or operating needs justify it.', 'tier:1'],
-    ['Read the connections between capabilities', 'The framework links submodules and their supporting evidence. Field pilots test the combined system within explicit operating limits.', 'thesis-detail']
+    ['Tier 1 Existing RAV Tech ', 'Autonomous Driving keeps the vehicle moving safely. Fleet Management organizes dispatch, energy and service continuity.', 'tier:0'],
+    ['Tier 2 Advanced RAV Tech', 'Infrastructure, Communication and Cooperative Driving add support to RAV.', 'tier:1'],
+    ['Field Pilots', 'Field pilots test parts of the system under defined conditions.', 'thesis-detail']
   ],
   [
     ['Read the map as an evidence structure', 'The 25 sub-themes distinguish limitations, recommended directions and reusable baselines. Select a theme to see its evidence and rural implications.', 'evidence'],
-    ['Trace a theme to a real source', 'Multi-sensor fusion connects a recommended direction to supporting sources, trade-offs and a remaining validation question.', 'theme:Perception - multi-sensor fusion'],
+    ['Trace a theme to a real source', 'Sources, definition, pros and cons, and guidance to RAV.', 'theme:Perception - multi-sensor fusion'],
     ['Follow the next validation question', 'The map links fusion to adverse-weather performance. Local conditions and combined sensor failures still need testing.', 'theme:Perception - adverse weather']
   ],
   [
@@ -29,7 +29,7 @@ const BEATS = [
   [
     ['One operating logic: dispersed requests', 'goMARTI illustrates demand-responsive service in a rural community, with accessible support and supervised operation.', 'pilot:0'],
     ['Another operating logic: predictable circulation', 'ADASTEC, TEDDY and CASSI offer fixed-route park and public-site experience. Their operating contexts matter to interpretation.', 'pilot:1'],
-    ['Read across the four programs', 'Compare service patterns, interruptions and support needs. The programs provide supervised, bounded precedents for further testing.', 'pilot:3']
+    ['Read across the four programs', 'RAV is not a universal service mode for all. Compare service patterns, interruptions and support needs.', 'pilot:3']
   ],
   [
     ['Define what belongs in the review', 'The scope covers 2014–2026 road-vehicle research across five technical modules, plus evidence from field pilots.', 'method:0'],
