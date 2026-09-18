@@ -9,7 +9,7 @@ const BEATS = [
     ['Finding 2: connectivity adds support with limits', 'Connectivity can help, but may vary in rural areas.', 'finding:1'],
     ['Finding 3: the service follows the needs', 'The deployment does not establish one universal rural service model and needs both demand-responsive and fixed-route services.', 'finding:2'],
     ['Finding 4: direct rural evidence is still thin', 'Only 10% of records provide rural evidence. Most of the other studies were tested in different settings and may be useful.', 'finding:3'],
-    ['Finding 5: deployment needs integrated validation', 'No single study validates the integrated sequence from rural needs, resilient onboard baselines, infrastructure support, to field tests and demonstrations.', 'finding:4']
+    ['Finding 5: deployment needs integrated validation', 'No single study validates the integrated sequence from rural needs, resilient onboard baselines, infrastructure support, to demonstrations and deployments.', 'finding:4']
   ],
   [
     ['Tier 1 Existing RAV Tech', 'Autonomous Driving helps the vehicle sense, localize, and respond safely. Fleet Management handles dispatch, charging, and supervision.', 'tier:0'],
