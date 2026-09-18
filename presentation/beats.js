@@ -1,7 +1,7 @@
 // The guided route follows the visible Basic webpage from top to bottom.
 const BEATS = [
   [
-    ['What can AV research support in rural service?', 'This review connects rural mobility needs with technical capabilities, research evidence and field pilots.', 'overview']
+    ['What can AV research support in rural service?', 'This review connects rural mobility needs with technical capabilities, research evidence, and field pilots.', 'overview']
   ],
   [
     ['Rural conditions change the whole service', 'Sparse road guidance, intermittent connectivity, long distances and thin demand shape both the technical design and the operating model.', 'findings'],
