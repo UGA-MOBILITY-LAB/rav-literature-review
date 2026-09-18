@@ -4,7 +4,7 @@ const BEATS = [
     ['What can AV research support in rural service?', 'This review connects rural mobility needs with technical capabilities, research evidence, and field pilots.', 'overview']
   ],
   [
-    ['Rural conditions change the whole service', 'Sparse road guidance, intermittent connectivity, long distances and thin demand shape both the technical design and the operating model.', 'findings'],
+    ['Rural conditions change the whole service', 'Sparse road guidance, intermittent connectivity, long distances, and thin demand shape both the technical design and the operating model.', 'findings'],
     ['Finding 1: keep the safety baseline onboard', 'Reviews converge on sensing, localization and fallback. Much of that evidence still needs validation on rural roads.', 'finding:0'],
     ['Finding 2: connectivity adds support with limits', 'Rural links vary by location. External information can assist the vehicle, but the service needs a tested response to disconnection.', 'finding:1'],
     ['Finding 3: the service model follows the setting', 'Dispersed demand and predictable circulation support different operating choices. The pilots do not establish one universal rural service model.', 'finding:2'],
