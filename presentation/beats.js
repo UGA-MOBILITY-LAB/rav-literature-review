@@ -6,7 +6,7 @@ const BEATS = [
   [
     ['Not a copy-and-paste from urban AV deployments', 'Focus on three topics: vehicle, infrastructure, and rural deployment.', 'findings'],
     ['Finding 1: keep the safety baseline onboard', 'Provide a solid foundation in sensing, localization, and mapping, but need testing on rural roads.', 'finding:0'],
-    ['Finding 2: support with infrastructure and connectivity', 'Infrastructure, connectivity, and cooperative perception can help, but may vary in rural areas.', 'finding:1'],
+    ['Finding 2: support with infrastructure and connectivity', 'Infrastructure, connectivity, and cooperative operation can help, but may vary in rural areas.', 'finding:1'],
     ['Finding 3: follow the actual needs', 'Do not establish one universal rural operating model but need both demand-responsive and fixed-route services.', 'finding:2'],
     ['Finding 4: lack direct rural evidence', 'Only 10% provide rural evidence. Most studies were tested in different settings and need further testing and revisions.', 'finding:3'],
     ['Finding 5: deploy based on integrated validation', 'No single study validates the integrated sequence from rural needs, resilient onboard baselines, infrastructure support, to demonstrations and deployments.', 'finding:4']
