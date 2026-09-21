@@ -61,7 +61,7 @@ def stamp_file(source: Path, check: bool) -> list[str]:
 
     updated = ASSET.sub(replace, text)
     if changes and not check:
-        source.write_text(updated, encoding="utf-8")
+        source.write_text(updated, encoding="utf-8", newline="\n")
     return changes
 
 

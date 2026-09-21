@@ -1,0 +1,9 @@
+* text=auto
+
+# Content hashes must use the same bytes on Windows and GitHub's Linux runners.
+*.js text eol=lf
+*.css text eol=lf
+*.html text eol=lf
+*.py text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf

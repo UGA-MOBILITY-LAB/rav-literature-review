@@ -36,8 +36,31 @@ The files are separate rehearsal materials; the audience-facing presentation doe
 
 The site is plain HTML, CSS, and JavaScript; there is no build step. The formal narrative manuscript is still in preparation, so the site does not advertise a PDF or Word download.
 
+### Editing on GitHub
+
+Edit the content and commit to `main`; no manual cache-version changes are needed.
+For example, presentation wording lives in `presentation/beats.js`, while reference
+records live in `data.js`. Do not edit the generated `?v=...` values by hand.
+
+After each push, **Stamp asset versions** validates the site, updates local JavaScript
+and CSS URLs in the homepage and presentation entry pages, verifies the result, and
+commits any changed URLs automatically. The version is derived from each asset's
+contents, so unchanged files keep their cached copies. Wait for that workflow and
+the latest **pages build and deployment** run to finish, then reload the site.
+
+Push and pull-request checks generate the same URLs before checking them, so a
+content-only edit does not fail while the separate stamping workflow is running.
+Scheduled and manually requested validation still checks the committed versions
+without rewriting them. A superseded Pages deployment can show as cancelled;
+check the latest deployment rather than the earlier run.
+
+For local validation (generated URLs can also be committed locally):
+
 ```powershell
 python tools/validate_site.py
+python -m unittest discover -s tools -p "test_*.py"
+python tools/stamp_assets.py
+python tools/stamp_assets.py --check
 python tools/check_links.py
 python tools/enrich_reference_metadata.py --apply --fetch-oa
 ```

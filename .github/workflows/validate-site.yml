@@ -21,6 +21,13 @@ jobs:
           python-version: "3.12"
       - name: Validate data and interface hooks
         run: python tools/validate_site.py
+      - name: Test automatic asset versioning
+        run: python -m unittest discover -s tools -p "test_*.py"
+      # Push/PR commits may contain content edits only. The stamp workflow saves
+      # generated URLs on main; validate the same generated result in this checkout.
+      - name: Generate asset versions for content edits
+        if: github.event_name == 'push' || github.event_name == 'pull_request'
+        run: python tools/stamp_assets.py
       - name: Check asset stamps are current
         run: python tools/stamp_assets.py --check
 
