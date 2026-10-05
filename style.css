@@ -3310,3 +3310,61 @@ kbd {
   .scroll-to-top { right: 14px; bottom: 14px; width: 48px; height: 48px; }
   .scroll-to-top svg { width: 20px; height: 20px; }
 }
+
+/* TRAVELS branding: keep the parent-site link visible in split and mobile views. */
+.site-header .nav-row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto auto;
+  gap: 10px 16px;
+}
+.travels-brand { display: inline-flex; align-items: center; }
+.travels-brand img { display: block; width: 104px; height: auto; }
+.site-header .primary-nav { margin-left: auto; }
+.site-header .nav-pills { justify-content: flex-end; }
+.travels-home-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 8px 13px;
+  border: 1px solid var(--red);
+  border-radius: 5px;
+  color: var(--red);
+  background: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.3;
+  white-space: nowrap;
+  text-decoration: none;
+}
+.travels-home-link:hover { color: #fff; background: var(--red); }
+.travels-brand:focus-visible,
+.travels-home-link:focus-visible { outline: 2px solid var(--red); outline-offset: 4px; }
+@media (max-width: 1100px) {
+  .site-header .nav-row { grid-template-columns: minmax(0, 1fr) auto auto auto; }
+  .travels-brand { grid-column: 1; grid-row: 1; }
+  .travels-home-link { grid-column: 2; grid-row: 1; }
+  .site-header .command-trigger { grid-column: 3; grid-row: 1; margin: 0; }
+  .site-header .nav-toggle { display: inline-flex; grid-column: 4; grid-row: 1; }
+  .site-header .primary-nav {
+    display: none;
+    grid-column: 1 / -1;
+    grid-row: 2;
+    width: 100%;
+    margin: 0;
+    padding-top: 8px;
+    border-top: 1px solid var(--line);
+  }
+  .site-header.nav-open .primary-nav { display: block; }
+  .site-header .nav-pills { justify-content: flex-start; }
+}
+@media (max-width: 480px) {
+  .site-header .nav-row { grid-template-columns: minmax(0, 1fr) auto auto; gap: 8px 10px; }
+  .travels-brand { grid-row: 1 / 3; }
+  .travels-brand img { width: 94px; }
+  .travels-home-link { grid-column: 2 / 4; }
+  .site-header .command-trigger { grid-column: 2; grid-row: 2; justify-self: end; }
+  .site-header .nav-toggle { grid-column: 3; grid-row: 2; }
+  .site-header .primary-nav { grid-row: 3; }
+}
