@@ -23,7 +23,7 @@
 <link rel="manifest" href="site.webmanifest">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
 <script>document.documentElement.classList.add("js");</script>
-<link rel="stylesheet" href="style.css?v=5b697801">
+<link rel="stylesheet" href="style.css?v=d37dd53c">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -64,7 +64,7 @@
         <li><a class="pill" href="#cite">Cite website</a></li>
       </ul>
     </nav>
-    <button class="command-trigger" id="command-open" type="button" aria-haspopup="dialog" aria-controls="command-palette">
+    <button class="command-trigger" id="command-open" type="button" aria-label="Search the review" aria-haspopup="dialog" aria-controls="command-palette">
       <span>Search</span><kbd>Ctrl K</kbd>
     </button>
     <a class="travels-home-link" href="https://travels.project.wiscweb.wisc.edu/" target="_top"><span aria-hidden="true">&larr;</span> TRAVELS main site</a>
@@ -73,12 +73,15 @@
 
 <main id="main">
 
-  <section id="overview" class="section hero-section">
-    <span class="visually-hidden">Illustration of an autonomous vehicle traveling on a connected rural road.</span>
+  <section id="overview" class="section hero-section" aria-labelledby="review-title">
+    <picture class="hero-photo">
+      <source type="image/avif" srcset="assets/editorial/rural-georgia-road-720.avif 720w, assets/editorial/rural-georgia-road-1280.avif 1280w, assets/editorial/rural-georgia-road-1920.avif 1920w" sizes="100vw">
+      <img src="assets/editorial/rural-georgia-road-1280.webp" alt="" width="2288" height="1712" fetchpriority="high" decoding="async">
+    </picture>
     <div class="container hero-content">
-      <p class="kicker">Literature review companion site</p>
-      <h1>Rural Autonomous Vehicles</h1>
-      <p class="subtitle">A Literature Review Linking RAV Challenges to Research Evidence and AV Pilots</p>
+      <p class="kicker"><span>UGA Mobility Lab</span> / TRAVELS Literature Review</p>
+      <h1 id="review-title">Rural autonomous <span>vehicles</span></h1>
+      <p class="subtitle">Linking rural deployment challenges to research evidence and field pilots.</p>
       <p class="authors">
         <a href="mailto:Haohua.Que@uga.edu">Haohua Que</a> &middot;
         <a href="mailto:Tianle.Zhu@uga.edu">Tianle Zhu</a> &middot;
@@ -86,9 +89,26 @@
         College of Engineering, University of Georgia
       </p>
       <div class="hero-actions" aria-label="Start reading the review">
-        <a class="btn-primary button-link" href="#findings">Read the key findings</a>
-<button class="btn-primary" id="presentation-open" type="button" aria-haspopup="dialog">Presentation view</button>
-        <span class="forthcoming-status" role="status">Narrative review PDF &amp; Word: forthcoming</span>
+        <a class="btn-primary button-link" href="#findings">Read the key findings <span aria-hidden="true">&darr;</span></a>
+        <button class="btn-primary" id="presentation-open" type="button" aria-haspopup="dialog">Presentation view <span aria-hidden="true">&nearr;</span></button>
+      </div>
+      <div class="hero-footer">
+        <a class="hero-credit" href="https://uga-mobility-lab.github.io/.github/credits.html#rural-georgia">Mitchell County, Georgia <span aria-hidden="true">&middot;</span> USDA backdrop <span aria-hidden="true">&nearr;</span></a>
+        <figure class="hero-vehicle">
+          <img src="assets/editorial/uga-research-vehicle.webp" alt="White University of Georgia research vehicle with a roof-mounted sensor rig" width="719" height="539" decoding="async">
+          <figcaption>UGA Mobility Lab research vehicle</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <div class="review-tools">
+    <div class="container">
+      <div class="stat-chips" aria-label="Review statistics">
+        <span class="stat-chip"><strong id="stat-count">118</strong> references</span>
+        <span class="stat-chip"><strong id="stat-cats">5</strong> RAV modules</span>
+        <span class="stat-chip"><strong id="stat-years">2014&ndash;2026</strong> years covered</span>
+        <span class="stat-chip"><strong>4</strong> named pilot programs</span>
       </div>
       <div class="experience-panel" aria-labelledby="experience-mode-title">
         <div>
@@ -101,36 +121,34 @@
         <p id="experience-mode-description">Basic follows the review argument. Advanced adds comparison, statistics, planning, and filtering tools.</p>
         <span class="visually-hidden" id="experience-mode-status" role="status" aria-live="polite"></span>
       </div>
-      <div class="stat-chips" aria-label="Review statistics">
-        <span class="stat-chip"><strong id="stat-count">118</strong> references</span>
-        <span class="stat-chip"><strong id="stat-cats">5</strong> RAV modules</span>
-        <span class="stat-chip"><strong id="stat-years">2014&ndash;2026</strong> coverage</span>
-        <span class="stat-chip"><strong>4</strong> named pilot programs</span>
-      </div>
+      <a class="forthcoming-status manuscript-link" href="#manuscript-status">Narrative review PDF &amp; Word forthcoming <span aria-hidden="true">&darr;</span></a>
     </div>
-  </section>
+  </div>
 
   <section id="findings" class="section narrative-section">
     <div class="container">
       <div class="section-head">
-        <h2>What the Literature Says</h2>
         <span class="date-pill">Start here &middot; evidence synthesis</span>
+        <h2>What the Literature Says</h2>
       </div>
       <p class="narrative-intro">Rural autonomous-vehicle deployment is not simply an urban AV system moved onto a quieter road. Sparse markings and mapping, intermittent connectivity, long service distances, thin demand, and limited roadside support change both the technical design and the operating model. The literature follows the framework below: Tier 1 carries the service, Tier 2 extends it selectively, and field pilots validate each expansion step.</p>
       <div class="narrative-flow" aria-label="Narrative logic of the literature review">
         <article>
+          <span class="finding-number" aria-hidden="true">01</span>
           <span>Tier 1 &middot; Drive + Operate</span>
           <h3>Keep the core self-reliant</h3>
           <p>Autonomous Driving and Fleet Management form the existing-technology baseline: perception, localization, planning, fallback, dispatch, charging, and remote supervision must remain workable with sparse rural support.</p>
           <a href="#framework">See Tier 1 in the framework <span aria-hidden="true">&rarr;</span></a>
         </article>
         <article>
+          <span class="finding-number" aria-hidden="true">02</span>
           <span>Tier 2 &middot; Road + Connect + Cooperate</span>
           <h3>Add support selectively</h3>
           <p>Infrastructure, multi-channel communication, and cooperative driving extend that baseline at high-value corridors and hazards. The evidence supports targeted augmentation, not universal dependence on continuous connectivity or roadside automation.</p>
           <a href="#framework">See Tier 2 in the framework <span aria-hidden="true">&rarr;</span></a>
         </article>
         <article>
+          <span class="finding-number" aria-hidden="true">03</span>
           <span>Validation &middot; Field pilots</span>
           <h3>Validate in stages, then scale</h3>
           <p>Supervised, low-speed, geofenced pilots provide the strongest near-term path to rural learning. Comparable reporting on interventions, connectivity loss, accessibility, energy, and operator workload is needed before broader operation.</p>
@@ -198,7 +216,7 @@
           <span>Reference numbers link to the complete list. Evidence labels are transparent review-team coding, not effect sizes or a formal meta-analysis.</span>
         </aside>
       </article>
-      <aside class="manuscript-status-card" aria-label="Narrative review availability">
+      <aside class="manuscript-status-card" id="manuscript-status" aria-label="Narrative review availability">
         <div>
           <p class="rec-kicker">Manuscript status</p>
           <h3>Narrative review in preparation</h3>
