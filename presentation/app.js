@@ -13,8 +13,55 @@ const $=s=>document.querySelector(s),esc=s=>String(s??'').replace(/[&<>"']/g,c=>
 function showDialog(html){$('#sourceContent').innerHTML=html;$('#sourceDialog').showModal()}
 function paper(n){const p=PAPERS.find(p=>p.n===n);if(!p)return;const url=p.doi?'https://doi.org/'+p.doi:p.arxiv?'https://arxiv.org/abs/'+p.arxiv:p.url;showDialog(`<span class="tag">REFERENCE ${p.n} / ${esc(p.rural)}</span><h2>${esc(p.title)}</h2><p>${esc(p.authors)} · ${p.year}</p><p>${esc(p.venue)}</p><p><strong>${esc(p.cat)}</strong><br>${esc(p.etype)} · Evidence strength: ${esc(p.strength)}</p><p>${esc(p.rav)}</p><a class="source-link" href="${esc(url)}" target="_blank" rel="noopener noreferrer">Open original source ↗</a><p><small>Labels reflect the review team’s coding. They are not formal risk-of-bias or deployment-readiness scores.</small></p>`)}
 function sources(ns){showDialog(`<span class="tag">SUPPORTING SOURCES</span><h2>Inspect the evidence</h2>${ns.map(n=>{let p=PAPERS.find(p=>p.n===n);return `<p><button data-paper="${n}">[${n}] ${esc(p.title)} (${p.year})</button></p>`}).join('')}`)}
-function framework(){return `<div class="map-title">CAPABILITIES AND VALIDATION</div><svg viewBox="0 0 650 520" role="img" aria-label="Tier one vehicle and fleet, tier two infrastructure communication and cooperation, with field validation"><text x="35" y="70" class="map-small">TIER 1 / OPERATING BASELINE</text><rect class="module-box" x="35" y="90" width="275" height="110" rx="8"/><rect class="module-box" x="330" y="90" width="285" height="110" rx="8"/><text x="55" y="125" class="module-label">Autonomous Driving</text><text x="55" y="163" class="map-small">Sensing · positioning · fallback</text><text x="350" y="125" class="module-label">Fleet Management</text><text x="350" y="163" class="map-small">Dispatch · charging · supervision</text><g id="tierSupport" opacity="${tier2?1:.15}" style="transition:opacity .5s"><path d="M170 200V250M470 200V250" stroke="#315b78" stroke-width="2"/><text x="35" y="240" class="map-small">TIER 2 / SELECTIVE SUPPORT</text>${['Infrastructure','Communication','Cooperative Driving'].map((t,i)=>`<rect class="module-box t2" x="${35+i*198}" y="260" width="184" height="90" rx="8"/><text x="${47+i*198}" y="310" class="module-label" style="font-size:15px">${t}</text>`).join('')}</g><path d="M325 355V400" stroke="#a51c30" stroke-width="2"/><text x="325" y="438" text-anchor="middle" fill="#a51c30" font-size="24">Field pilots validate the limits</text><text x="325" y="474" text-anchor="middle" class="map-small">Defined conditions before broader operation</text></svg><div class="caption">The tiers organize the review. They are not SAE automation levels.</div>`}
-function evidence(){return `<div class="legend"><span><i style="background:var(--red)"></i>12 direct rural</span><span><i style="background:#c3c8cd"></i>99 transferable</span><span><i style="background:var(--gold)"></i>7 context-limited</span></div><div class="point-area ${focused?'focus':''}">${PAPERS.map(p=>`<button class="point ${p.rural==='Direct rural evidence'?'direct':p.rural==='Context-limited'?'context':''}" data-paper="${p.n}" aria-label="Reference ${p.n}: ${esc(p.title)}. ${esc(p.rural)}" title="[${p.n}] ${esc(p.title)}"></button>`).join('')}</div><div class="evidence-stat"><b>10.2%</b><span>direct rural relevance<br>12 / 118 source records</span></div>`}
+function framework(){
+  const supportModules=[
+    ['Infrastructure','infrastructure'],
+    ['Communication','communication'],
+    ['Cooperative Driving','cooperation']
+  ];
+  return `<div class="map-title">CAPABILITIES AND VALIDATION</div>
+    <svg class="framework-diagram" viewBox="0 54 650 451" role="img" aria-label="Tier one vehicle and fleet, tier two infrastructure communication and cooperation, with field validation">
+      <text x="35" y="70" class="map-small">TIER 1 / OPERATING BASELINE</text>
+      <g class="module-driving">
+        <rect class="module-box" x="35" y="90" width="275" height="110" rx="8"/>
+        <text x="55" y="125" class="module-label">Autonomous Driving</text>
+        <text x="55" y="163" class="module-detail">Sensing · positioning · fallback</text>
+      </g>
+      <g class="module-fleet">
+        <rect class="module-box" x="330" y="90" width="285" height="110" rx="8"/>
+        <text x="350" y="125" class="module-label">Fleet Management</text>
+        <text x="350" y="163" class="module-detail">Dispatch · charging · supervision</text>
+      </g>
+      <g id="tierSupport" class="${tier2?'':'tier-preview'}">
+        <path class="module-connector" d="M170 201V222M470 201V222"/>
+        <text x="35" y="240" class="map-small">TIER 2 / SELECTIVE SUPPORT</text>
+        ${supportModules.map(([label,key],i)=>`
+          <g class="module-${key}">
+            <rect class="module-box" x="${35+i*198}" y="260" width="184" height="90" rx="8"/>
+            <text x="${47+i*198}" y="310" class="module-label">${label}</text>
+          </g>`).join('')}
+      </g>
+      <path class="module-connector" d="M325 350V397"/>
+      <g class="module-pilots">
+        <rect class="module-box" x="153" y="397" width="344" height="92" rx="8"/>
+        <text x="325" y="437" text-anchor="middle" class="module-label">Field pilots validate the limits</text>
+        <text x="325" y="463" text-anchor="middle" class="module-detail">Defined conditions before broader operation</text>
+      </g>
+    </svg>
+    <div class="caption">The tiers organize the review. They are not SAE automation levels.</div>`;
+}
+
+function evidence(){
+  return `<div class="legend">
+    <span><i class="evidence-swatch direct" aria-hidden="true"></i>12 direct rural</span>
+    <span><i class="evidence-swatch" aria-hidden="true"></i>99 transferable</span>
+    <span><i class="evidence-swatch context" aria-hidden="true"></i>7 context-limited</span>
+  </div>
+  <div class="point-area ${focused?'focus':''}">
+    ${PAPERS.map(p=>`<button class="point ${p.rural==='Direct rural evidence'?'direct':p.rural==='Context-limited'?'context':''}" data-paper="${p.n}" aria-label="Reference ${p.n}: ${esc(p.title)}. ${esc(p.rural)}" title="[${p.n}] ${esc(p.title)}"></button>`).join('')}
+  </div>
+  <div class="evidence-stat"><b>10.2%</b><span>direct rural relevance<br>12 / 118 source records</span></div>`;
+}
 const pilots=[['goMARTI','Grand Rapids, Minnesota','On-demand','Flexible booking and accessible support for dispersed riders. The reviewed operation is low-speed and geofenced with an onboard safety operator.',[14,15]],['ADASTEC','Sleeping Bear Dunes, Michigan','Fixed route','A defined route supports a scheduled service, with supervised operation and energy and interruption planning.',[16]],['TEDDY','Yellowstone National Park','Fixed route','Remote park service connects weather, communication and service interruptions within a bounded operating setting.',[116]],['CASSI','Wright Brothers + North Carolina sites','Fixed route','Multiple public sites provide operating experience. Comparable reporting helps identify recurring barriers.',[116,117]]];
 function photoView(i){const p=PHOTOS[i];return `<figure class="field-photo"><div class="photo-window"><img class="photo-shot" src="${esc(p.src)}" alt="${esc(p.alt)}" decoding="async" referrerpolicy="no-referrer"></div><figcaption><span>PROJECT PHOTOGRAPH</span><a href="${esc(p.url)}" target="_blank" rel="noopener noreferrer">${esc(p.credit)} ↗</a></figcaption></figure>`;}
 function mission(){
