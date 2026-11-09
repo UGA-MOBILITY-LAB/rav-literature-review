@@ -17,17 +17,12 @@
   ];
 
   var CAT_COLORS = {
-    "Autonomous Driving": "var(--module-drive)",
-    "Fleet Management": "var(--module-fleet)",
-    "Infrastructure": "var(--module-road)",
-    "Communication": "var(--module-connect)",
-    "Cooperative Driving": "var(--module-cooperate)",
-    "Pilots": "var(--module-pilots)"
-  };
-  var EVIDENCE_COLORS = {
-    g: "var(--evidence-baseline)",
-    m: "var(--evidence-direction)",
-    r: "var(--evidence-limitation)"
+    "Autonomous Driving": "#1F4E94",
+    "Fleet Management": "#00A3AD",
+    "Infrastructure": "#BA0C2F",
+    "Communication": "#E08A3C",
+    "Cooperative Driving": "#7E6BB0",
+    "Pilots": "#4B8B3B"
   };
 
   var VENUE_TYPES = ["Journal", "Conference", "Preprint", "Report", "Industry"];
@@ -1342,7 +1337,7 @@
       }));
       var bar = svgEl("rect", {
         x: bx, y: baseline - h, width: barW, height: h,
-        fill: "var(--red)", "class": "stat-bar"
+        fill: "#BA0C2F", "class": "stat-bar"
       });
       var t = svgEl("title");
       t.textContent = yy + ": " + n + (n === 1 ? " reference" : " references") + ". Select to filter.";
@@ -1431,9 +1426,9 @@
         button.setAttribute("aria-pressed", "false");
         button.setAttribute("aria-label", cat + ", " + value + ": " + count +
           (count === 1 ? " reference" : " references") + ". Select to filter.");
-        var intensity = count ? Math.round(12 + (count / max) * 77) : 3;
-        button.style.background = "color-mix(in srgb, var(--red) " + intensity + "%, white)";
-        button.style.color = intensity >= 76 ? "#fff" : "var(--black)";
+        var alpha = count ? 0.12 + (count / max) * 0.65 : 0.03;
+        button.style.background = "rgba(31, 78, 148, " + alpha.toFixed(2) + ")";
+        button.style.color = alpha > 0.48 ? "#FFFFFF" : "#1A1A1A";
         button.addEventListener("click", function () { setStatPair(cat, value); });
         box.appendChild(button);
       });
@@ -2302,15 +2297,15 @@
       if (score >= 72) {
         postureText = "Pilot-ready with safeguards";
         summaryText = "The scenario can start with existing technology, route-specific validation, and explicit safety gates.";
-        scoreColor = EVIDENCE_COLORS.g;
+        scoreColor = "#4B8B3B";
       } else if (score >= 48) {
         postureText = "Adapt before deployment";
         summaryText = "Use a resilient onboard core, close the highlighted rural gaps, and validate them in a supervised pilot.";
-        scoreColor = EVIDENCE_COLORS.m;
+        scoreColor = "#D99114";
       } else {
         postureText = "High-assurance pilot only";
         summaryText = "The combined road, weather, communications, and service risks require a tightly scoped operational design domain.";
-        scoreColor = EVIDENCE_COLORS.r;
+        scoreColor = "#BA0C2F";
       }
 
       scoreBox.style.setProperty("--score-angle", score + "%");
@@ -2350,7 +2345,7 @@
 
     function scenarioCard(snapshot, slot) {
       var card = el("article", "scenario-snapshot");
-      card.style.setProperty("--snapshot-color", snapshot.score >= 72 ? EVIDENCE_COLORS.g : (snapshot.score >= 48 ? EVIDENCE_COLORS.m : EVIDENCE_COLORS.r));
+      card.style.setProperty("--snapshot-color", snapshot.score >= 72 ? "#4B8B3B" : (snapshot.score >= 48 ? "#D99114" : "#BA0C2F"));
       card.appendChild(el("span", "scenario-label", "Scenario " + slot));
       card.appendChild(el("h5", null, snapshot.label.replace(/\//g, " · ")));
       var score = el("p", "scenario-score-line");
@@ -2706,7 +2701,7 @@
     });
 
     programs.forEach(function (program, index) {
-      var color = program.mode === "on-demand" ? "var(--pilot-on-demand)" : "var(--pilot-fixed)";
+      var color = program.mode === "on-demand" ? "#00A3AD" : "#4B8B3B";
       var icon = L.divIcon({
         className: "pilot-marker-icon",
         html: '<span class="pilot-marker" style="--marker-color:' + color + '"><b>' + (index + 1) + '</b></span>',
@@ -3338,9 +3333,9 @@
     ];
     window.RAV_THEMES = THEMES;
     var STATUS = {
-      g: ["Reusable baseline", EVIDENCE_COLORS.g],
-      m: ["Recommended direction — rural validation needed", EVIDENCE_COLORS.m],
-      r: ["Limitation / unresolved RAV problem", EVIDENCE_COLORS.r]
+      g: ["Reusable baseline", "#4B8B3B"],
+      m: ["Recommended direction — rural validation needed", "#D99114"],
+      r: ["Limitation / unresolved RAV problem", "#BA0C2F"]
     };
     var STATUS_SHORT = { g: "Baseline", m: "Direction", r: "Limitation" };
     var byNum = {};
@@ -3655,9 +3650,9 @@
     if (!root || !graph || !themes.length) { return; }
 
     var statusMeta = {
-      g: { label: "Reusable baseline", short: "Baseline", color: EVIDENCE_COLORS.g },
-      m: { label: "Recommended direction", short: "Direction", color: EVIDENCE_COLORS.m },
-      r: { label: "Limitation / unresolved problem", short: "Limitation", color: EVIDENCE_COLORS.r }
+      g: { label: "Reusable baseline", short: "Baseline", color: "#4B8B3B" },
+      m: { label: "Recommended direction", short: "Direction", color: "#D99114" },
+      r: { label: "Limitation / unresolved problem", short: "Limitation", color: "#BA0C2F" }
     };
     var paperByNumber = {};
     PAPERS.forEach(function (paper) { paperByNumber[paper.n] = paper; });
@@ -4656,13 +4651,13 @@
     "type-bars",
     "etype",
     EVIDENCE_TYPES,
-    ["var(--module-cooperate)"]
+    ["#1F4E94", "#00A3AD", "#7E6BB0", "#4B8B3B", "#E08A3C", "#BA0C2F"]
   );
   renderHtmlBars(
     "rural-bars",
     "rural",
     RURAL_LEVELS,
-    ["var(--red)", "#726961", "#8D6D5B"]
+    ["#4B8B3B", "#D99114", "#8B949E"]
   );
   renderHeatmap();
   render();
