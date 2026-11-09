@@ -980,7 +980,16 @@ html.js body[data-experience="basic"] .emap .mrow.is-open .mcells { display: fle
 
 /* ---------- interactive core-thesis ---------- */
 .lede-hint { color: var(--red); font-weight: 600; white-space: normal; overflow-wrap: anywhere; }
-.thesis-card { padding: 12px; }
+.thesis-card {
+  --module-color: #363233;
+  --framework-connector: #8c8076;
+  padding: 12px;
+}
+.thesis-card [data-cat="Fleet Management"] { --module-color: #494445; }
+.thesis-card [data-cat="Infrastructure"] { --module-color: var(--red); }
+.thesis-card [data-cat="Communication"] { --module-color: var(--uw-red); }
+.thesis-card [data-cat="Cooperative Driving"] { --module-color: #861F36; }
+.thesis-card [data-cat="Pilots"] { --module-color: #554F47; }
 .thesis-scroll {
   border: 1px solid var(--line);
   border-radius: 6px;
@@ -990,10 +999,11 @@ html.js body[data-experience="basic"] .emap .mrow.is-open .mcells { display: fle
 }
 .thesis-svg { width: 100%; min-width: 720px; height: auto; display: block; }
 
-.thesis-svg .flow { stroke: #9aa0a6; stroke-width: 2; }
+.thesis-svg .flow { stroke: var(--framework-connector); stroke-width: 2; }
+.thesis-svg marker path { fill: var(--framework-connector); }
 .thesis-svg .extension-flow { stroke-dasharray: 5 4; }
-.thesis-svg .sub-flow { stroke: #6F88AD; stroke-width: 1.4; fill: none; }
-.thesis-svg .loop-seg { fill: none; stroke: #9aa0a6; stroke-width: 1.6; stroke-dasharray: 6 5; }
+.thesis-svg .sub-flow { stroke: var(--framework-connector); stroke-width: 1.4; fill: none; }
+.thesis-svg .loop-seg { fill: none; stroke: var(--framework-connector); stroke-width: 1.6; stroke-dasharray: 6 5; }
 
 .pillar { cursor: pointer; }
 .pillar rect { transition: transform .15s ease, filter .15s ease; transform-box: fill-box; transform-origin: center; }
@@ -1033,14 +1043,19 @@ html.js body[data-experience="basic"] .emap .mrow.is-open .mcells { display: fle
 
 /* framework pillars reuse thesis styling */
 .fw-pillar { cursor: pointer; }
-.fw-pillar rect { transition: transform .15s ease, filter .15s ease; transform-box: fill-box; transform-origin: center; }
+.fw-pillar rect {
+  fill: var(--module-color);
+  transition: transform .15s ease, filter .15s ease;
+  transform-box: fill-box;
+  transform-origin: center;
+}
 .fw-pillar:hover rect, .fw-pillar:focus-visible rect, .fw-pillar.active rect {
   filter: drop-shadow(0 3px 8px rgba(0,0,0,0.28)); transform: scale(1.03);
 }
 .fw-pillar:focus { outline: none; }
-.fw-pillar .chip-kicker { fill: #fff; font-size: 11px; font-weight: 700; letter-spacing: .12em; text-anchor: middle; opacity: .9; }
+.fw-pillar .chip-kicker { fill: #fff; font-size: 11px; font-weight: 700; letter-spacing: .12em; text-anchor: middle; }
 .fw-pillar .chip-main { fill: #fff; font-size: 16px; font-weight: 800; text-anchor: middle; font-family: var(--display); }
-.fw-pillar .chip-sub { fill: #fff; font-size: 12px; text-anchor: middle; opacity: .88; }
+.fw-pillar .chip-sub { fill: #fff; font-size: 12px; text-anchor: middle; }
 .fw-pillar .pilot-line { font-size: 10.8px; }
 .fw-pillar .pilot-summary {
   fill: #fff;
@@ -1048,19 +1063,23 @@ html.js body[data-experience="basic"] .emap .mrow.is-open .mcells { display: fle
   letter-spacing: .05em;
   text-anchor: middle;
   text-transform: uppercase;
-  opacity: .78;
+  opacity: .92;
 }
-.fw-subpillar { cursor: pointer; }
+.fw-subpillar {
+  --module-surface: color-mix(in srgb, var(--module-color) 7%, #fff);
+  --module-line: color-mix(in srgb, var(--module-color) 74%, #fff);
+  cursor: pointer;
+}
 .fw-subpillar rect {
-  fill: #EAF0F9;
-  stroke: #1F4E94;
+  fill: var(--module-surface);
+  stroke: var(--module-line);
   stroke-width: 1.2;
   transition: transform .15s ease, filter .15s ease, fill .15s ease;
   transform-box: fill-box;
   transform-origin: center;
 }
 .fw-subpillar text {
-  fill: #173B70;
+  fill: var(--module-color);
   font: 700 10.5px var(--sans);
   text-anchor: middle;
   pointer-events: none;
@@ -1068,41 +1087,25 @@ html.js body[data-experience="basic"] .emap .mrow.is-open .mcells { display: fle
 .fw-subpillar:hover rect,
 .fw-subpillar:focus-visible rect,
 .fw-subpillar.active rect {
-  fill: #D8E5F6;
-  filter: drop-shadow(0 2px 5px rgba(31, 78, 148, 0.24));
-  transform: scale(1.025);
+  fill: var(--module-color);
+  stroke: var(--module-color);
+}
+.fw-subpillar:hover text,
+.fw-subpillar:focus-visible text,
+.fw-subpillar.active text {
+  fill: #fff;
 }
 .fw-subpillar:focus { outline: none; }
-.fleet-subpillar rect { fill: #E3F6F7; stroke: #008C94; }
-.fleet-subpillar text { fill: #006A70; }
-.fleet-subpillar:hover rect,
-.fleet-subpillar:focus-visible rect,
-.fleet-subpillar.active rect { fill: #CDEFF1; }
-.advanced-flow { stroke: #9AA0A6 !important; }
 .advanced-subpillar text { font-size: 8.4px; }
-.infrastructure-subpillar rect { fill: #FCECEF; stroke: #BA0C2F; }
-.infrastructure-subpillar text { fill: #8F0926; }
-.infrastructure-subpillar:hover rect,
-.infrastructure-subpillar:focus-visible rect,
-.infrastructure-subpillar.active rect { fill: #F7D9E0; }
-.communication-subpillar rect { fill: #FFF1E4; stroke: #CE7125; }
-.communication-subpillar text { fill: #9A4C10; }
-.communication-subpillar:hover rect,
-.communication-subpillar:focus-visible rect,
-.communication-subpillar.active rect { fill: #FBE1C9; }
-.cooperative-subpillar rect { fill: #F0ECFA; stroke: #7E6BB0; }
-.cooperative-subpillar text { fill: #5D4B92; }
-.cooperative-subpillar:hover rect,
-.cooperative-subpillar:focus-visible rect,
-.cooperative-subpillar.active rect { fill: #E1D9F3; }
-.tier-label { font: 700 12px var(--sans); letter-spacing: .14em; }
+.tier-label { fill: var(--ink); font: 700 11px var(--display); letter-spacing: .14em; }
+.tier-label.advanced { fill: var(--red); }
 .thesis-svg { min-width: 860px; }
 .framework-mobile { display: none; }
 .mobile-tier { display: grid; justify-items: stretch; }
 .mobile-tier + .mobile-tier { margin-top: 14px; }
 .mobile-tier-label {
   margin: 0 0 10px;
-  color: #1F4E94;
+  color: var(--ink);
   font: 800 11px var(--sans);
   letter-spacing: .13em;
   text-transform: uppercase;
@@ -1111,9 +1114,10 @@ html.js body[data-experience="basic"] .emap .mrow.is-open .mcells { display: fle
 .mobile-framework-card {
   width: 100%;
   border: 0;
-  border-radius: 10px;
+  border-radius: 7px;
   padding: 13px 16px;
   color: #fff;
+  background: var(--module-color);
   text-align: center;
   cursor: pointer;
   box-shadow: 0 3px 10px rgba(20, 32, 48, .10);
@@ -1127,14 +1131,9 @@ html.js body[data-experience="basic"] .emap .mrow.is-open .mcells { display: fle
 }
 .mobile-framework-card strong { display: block; margin-top: 2px; font: 800 17px var(--display); }
 .mobile-framework-card small { display: block; margin-top: 7px; font: 600 11px var(--sans); opacity: .9; }
-.mobile-framework-card.drive { background: #1F4E94; }
-.mobile-framework-card.operate { background: #00A3AD; }
-.mobile-framework-card.road { background: #BA0C2F; }
-.mobile-framework-card.connect { background: #E08A3C; }
-.mobile-framework-card.cooperate { background: #7E6BB0; }
-.mobile-framework-card.validate { background: #4B8B3B; }
 .mobile-framework-card:hover,
-.mobile-framework-card:focus-visible { outline: 3px solid rgba(31, 78, 148, .22); outline-offset: 2px; }
+.mobile-framework-card:focus-visible,
+.mobile-framework-card.active { outline: 2px solid var(--module-color); outline-offset: 2px; }
 .mobile-submodules {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1143,25 +1142,26 @@ html.js body[data-experience="basic"] .emap .mrow.is-open .mcells { display: fle
 }
 .mobile-submodules .fw-subpillar {
   min-height: 42px;
-  border: 1px solid #1F4E94;
+  border: 1px solid var(--module-line);
   border-radius: 7px;
-  background: #EAF0F9;
-  color: #173B70;
+  background: var(--module-surface);
+  color: var(--module-color);
   padding: 8px 7px;
   font: 700 11px/1.25 var(--sans);
   cursor: pointer;
 }
-.mobile-submodules.fleet .fw-subpillar { border-color: #008C94; background: #E3F6F7; color: #006A70; }
-.mobile-submodules.road .fw-subpillar { border-color: #BA0C2F; background: #FCECEF; color: #8F0926; }
-.mobile-submodules.communication .fw-subpillar { border-color: #CE7125; background: #FFF1E4; color: #9A4C10; }
-.mobile-submodules.cooperative .fw-subpillar { border-color: #7E6BB0; background: #F0ECFA; color: #5D4B92; }
 .mobile-submodules .fw-subpillar:hover,
-.mobile-submodules .fw-subpillar:focus-visible { outline: 2px solid currentColor; outline-offset: 1px; }
+.mobile-submodules .fw-subpillar:focus-visible,
+.mobile-submodules .fw-subpillar.active {
+  background: var(--module-color);
+  color: #fff;
+}
+.mobile-submodules .fw-subpillar:focus-visible { outline: 2px solid var(--module-color); outline-offset: 1px; }
 .mobile-submodules .span-two { grid-column: 1 / -1; }
 .mobile-flow-arrow {
   display: block;
   margin: 8px auto;
-  color: #8D949B;
+  color: var(--framework-connector);
   font-size: 22px;
   line-height: 1;
   text-align: center;
@@ -2856,10 +2856,10 @@ kbd {
 .framework-detail-actions { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 9px; }
 .thesis-card.flow-mode .fw-pillar,
 .thesis-card.flow-mode .fw-subpillar {
-  transition: opacity .18s ease, filter .18s ease;
+  transition: filter .18s ease;
 }
-.thesis-card.flow-mode .flow-dim { opacity: .68; filter: grayscale(.4); }
-.thesis-card.flow-mode .flow-active { opacity: 1; filter: drop-shadow(0 1px 3px rgba(186,12,47,.24)); }
+.thesis-card.flow-mode .flow-dim { filter: saturate(.42); }
+.thesis-card.flow-mode .flow-active { filter: drop-shadow(0 1px 3px rgba(39,35,35,.22)); }
 
 .evidence-multiselect {
   display: grid;
