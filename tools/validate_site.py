@@ -264,20 +264,20 @@ def main() -> None:
     assert 'body[data-experience="basic"] .advanced-only' in style
     assert 'body[data-experience="advanced"] .basic-only' in style
     assert "Add to Compare Board" not in app + index
-    assert "Version 2.9" in style
     assert ".epill-wrap" in style and ".scroll-to-top.is-visible" in style
     chart_summary_style = re.search(r"\.chart-card > summary\s*\{([^}]+)\}", style)
     assert chart_summary_style and "display: list-item" in chart_summary_style.group(1)
     assert 'class="scroll-to-top-label"' in index and ">Top</span>" in index
     assert len(theme_titles) == 25
-    assert "Version 2.9" in index
-    assert "Updated August 8, 2026" in index
+    release = re.search(r"\*\*Current release:\*\* Version (\d+\.\d+)", readme)
+    assert release, "README is missing a release version"
+    version = release.group(1)
+    assert f"Version {version} &middot;" in index
+    assert re.search(r"^## " + re.escape(version) + r"\b", changelog, re.M)
     # Asset stamps are generated from file contents by tools/stamp_assets.py, so assert that
     # each reference carries a stamp rather than pinning one literal value here.
     for asset in ("app.js", "style.css", "data.js", "edges.js"):
         assert re.search(re.escape(asset) + r"\?v=[0-9a-f]{8}", index), asset + " is missing its content stamp"
-    assert "Current release:** Version 2.9" in readme
-    assert re.search(r"^## 2\.9\b", changelog, re.M)
 
     print(
         f"Validated {expected_count} papers, {len(theme_titles)} themes, "

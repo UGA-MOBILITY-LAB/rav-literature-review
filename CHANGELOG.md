@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.0 — 2026-11-08
+
+- Redesigned the review around the Mobility Lab's display type, UGA red accents, and a compact chapter layout. A static cutout of the UGA research vehicle overlaps the Mitchell County road photograph.
+- Unified the presentation of the framework, evidence map, analysis workspace, recommendations, field pilots, and methodology. Added direct navigation to field pilots.
+- Reflowed bibliography rows for narrow screens and brought citation shortcuts and exports into the main reading path.
+
 ## 2.9 — 2026-08-08
 
 - Added a compact, expandable across-study synthesis that maps the literature argument to Tier 1, Tier 2, and field-pilot validation while preserving consensus, contrasts, evidence gaps, and deployment implications.

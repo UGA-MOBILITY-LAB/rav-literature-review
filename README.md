@@ -4,7 +4,7 @@ Interactive companion website for the TRAVELS Rural Autonomous Vehicle (RAV) lit
 
 **Live site:** https://uga-mobility-lab.github.io/rav-literature-review/
 
-**Current release:** Version 2.9 (August 8, 2026)
+**Current release:** Version 3.0 (November 8, 2026)
 
 ## Evidence base
 

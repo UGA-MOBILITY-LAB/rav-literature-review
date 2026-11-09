@@ -52,3 +52,26 @@ main,body.embedded main{grid-template-columns:minmax(0,43fr) minmax(0,57fr)}
 @media(prefers-reduced-motion:reduce){.platform-frame img{animation:none}}
 
 @media(max-width:540px){body.embedded nav{display:none}}
+
+/* Match the typography and campus accents of the review. */
+@font-face {
+  font-family: Manrope;
+  src: url("../assets/fonts/manrope-latin-wght-normal.woff2") format("woff2");
+  font-weight: 200 800;
+  font-style: normal;
+  font-display: swap;
+}
+:root {
+  --red: #BA0C2F;
+  --uw-red: #C5050C;
+  --display: 'Avenir Next', Manrope, 'Segoe UI', sans-serif;
+}
+h1, body.embedded h1, dialog h2 {
+  font-family: var(--display);
+  font-weight: 800;
+  letter-spacing: -.045em;
+}
+.eyebrow, body.embedded .eyebrow { color: var(--uw-red); font-weight: 800; }
+.action { background: var(--red); border-color: var(--red); font-weight: 700; }
+.route-active { stroke: var(--red); }
+body.embedded nav button[aria-current=true]:before { background: var(--red); }

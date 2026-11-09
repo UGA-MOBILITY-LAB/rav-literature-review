@@ -1575,6 +1575,8 @@
         titleButton.setAttribute("aria-expanded", "false");
         titleButton.setAttribute("aria-controls", "paper-detail-" + p.n);
         tdTitle.appendChild(titleButton);
+        var publication = [p.year, p.authors, p.venue].filter(Boolean).join(" · ");
+        tdTitle.appendChild(el("span", "paper-mobile-meta", publication));
         tr.appendChild(tdTitle);
         tr.appendChild(el("td", "t-authors", p.authors || "—"));
         tr.appendChild(el("td", "t-venue", p.venue || "—"));
@@ -1595,6 +1597,7 @@
         var detailCell = el("td");
         detailCell.colSpan = 6;
         var detail = el("div", "paper-detail");
+        detail.appendChild(el("p", "paper-mobile-detail", publication));
         var tags = el("div", "paper-tags");
         [p.etype, p.rural, p.strength + " evidence", p.access + " access"].forEach(function (tagText) {
           tags.appendChild(el("span", "paper-tag", tagText));
@@ -2888,7 +2891,7 @@
 
   /* ---------- nav scroll spy ---------- */
 
-  var sections = Array.prototype.slice.call(document.querySelectorAll("main > section[id]"));
+  var sections = Array.prototype.slice.call(document.querySelectorAll("main > section[id], #pilot-comparison"));
   var navLinks = {};
   Array.prototype.forEach.call(document.querySelectorAll(".nav-pills a"), function (a) {
     navLinks[a.getAttribute("href").slice(1)] = a;
@@ -2898,15 +2901,21 @@
   function spy() {
     spyPending = false;
     var activeId = sections[0].id;
+    var headerBottom = document.querySelector(".site-header").getBoundingClientRect().bottom;
     for (var i = 0; i < sections.length; i++) {
-      if (sections[i].getBoundingClientRect().top <= 110) { activeId = sections[i].id; }
+      if (sections[i].getClientRects().length && sections[i].getBoundingClientRect().top <= headerBottom + 40) {
+        activeId = sections[i].id;
+      }
     }
     if (window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 4) {
       activeId = sections[sections.length - 1].id;
     }
     for (var id in navLinks) {
       if (Object.prototype.hasOwnProperty.call(navLinks, id)) {
-        navLinks[id].classList.toggle("active", id === activeId);
+        var active = id === activeId;
+        navLinks[id].classList.toggle("active", active);
+        if (active) navLinks[id].setAttribute("aria-current", "location");
+        else navLinks[id].removeAttribute("aria-current");
       }
     }
   }
