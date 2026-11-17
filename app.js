@@ -1932,6 +1932,7 @@
     authors: [
       { given: "Haohua", family: "Que" },
       { given: "Tianle", family: "Zhu" },
+      { given: "Qianyi", family: "Wu" },
       { given: "Handong", family: "Yao" }
     ],
     year: 2026,
@@ -1941,9 +1942,9 @@
     url: "https://uga-mobility-lab.github.io/rav-literature-review/"
   };
   var siteCitations = {
-    apa: "Que, H., Zhu, T., & Yao, H. (2026). Rural autonomous vehicles: A literature review linking RAV challenges to research evidence and AV pilots [Interactive website]. College of Engineering, University of Georgia. https://uga-mobility-lab.github.io/rav-literature-review/",
-    ieee: 'H. Que, T. Zhu, and H. Yao, "Rural Autonomous Vehicles: A Literature Review Linking RAV Challenges to Research Evidence and AV Pilots," interactive website, College of Engineering, University of Georgia, 2026. [Online]. Available: https://uga-mobility-lab.github.io/rav-literature-review/',
-    chicago: 'Que, Haohua, Tianle Zhu, and Handong Yao. "Rural Autonomous Vehicles: A Literature Review Linking RAV Challenges to Research Evidence and AV Pilots." Interactive website. College of Engineering, University of Georgia, 2026. https://uga-mobility-lab.github.io/rav-literature-review/.'
+    apa: "Que, H., Zhu, T., Wu, Q., & Yao, H. (2026). Rural autonomous vehicles: A literature review linking RAV challenges to research evidence and AV pilots [Interactive website]. College of Engineering, University of Georgia. https://uga-mobility-lab.github.io/rav-literature-review/",
+    ieee: 'H. Que, T. Zhu, Q. Wu, and H. Yao, "Rural Autonomous Vehicles: A Literature Review Linking RAV Challenges to Research Evidence and AV Pilots," interactive website, College of Engineering, University of Georgia, 2026. [Online]. Available: https://uga-mobility-lab.github.io/rav-literature-review/',
+    chicago: 'Que, Haohua, Tianle Zhu, Qianyi Wu, and Handong Yao. "Rural Autonomous Vehicles: A Literature Review Linking RAV Challenges to Research Evidence and AV Pilots." Interactive website. College of Engineering, University of Georgia, 2026. https://uga-mobility-lab.github.io/rav-literature-review/.'
   };
   var citationButtons = document.querySelectorAll("[data-citation-style]");
   function applyCitationStyle(style) {

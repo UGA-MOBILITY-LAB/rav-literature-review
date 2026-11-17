@@ -6,6 +6,7 @@ var WEBSITE_CITATION = {
   "authors": [
     {"given": "Haohua", "family": "Que"},
     {"given": "Tianle", "family": "Zhu"},
+    {"given": "Qianyi", "family": "Wu"},
     {"given": "Handong", "family": "Yao"}
   ],
   "year": 2026,

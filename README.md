@@ -67,6 +67,6 @@ python tools/enrich_reference_metadata.py --apply --fetch-oa
 
 The GitHub Actions workflow validates every push and runs a scheduled source-link audit each Monday. See `CHANGELOG.md` for release history.
 
-Haohua Que (Haohua.Que@uga.edu) · Tianle Zhu (Tianle.Zhu@uga.edu) · Handong Yao (Handong.Yao@uga.edu)
+Haohua Que (Haohua.Que@uga.edu) · Tianle Zhu (Tianle.Zhu@uga.edu) · Qianyi Wu · Handong Yao (Handong.Yao@uga.edu)
 
 College of Engineering, University of Georgia · June 2026
