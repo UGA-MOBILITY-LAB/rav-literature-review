@@ -2894,7 +2894,7 @@
 
   var sections = Array.prototype.slice.call(document.querySelectorAll("main > section[id], #pilot-comparison"));
   var navLinks = {};
-  Array.prototype.forEach.call(document.querySelectorAll(".nav-pills a"), function (a) {
+  Array.prototype.forEach.call(document.querySelectorAll('.nav-pills a[href^="#"]'), function (a) {
     navLinks[a.getAttribute("href").slice(1)] = a;
   });
 
@@ -4246,7 +4246,7 @@
     if (!dialog || !openButton || !input || !resultsBox) { return; }
     var resultItems = [];
     var activeIndex = 0;
-    var sectionItems = Array.prototype.slice.call(document.querySelectorAll(".nav-pills a")).map(function (link) {
+    var sectionItems = Array.prototype.slice.call(document.querySelectorAll('.nav-pills a[href^="#"]')).map(function (link) {
       return {
         type: "Section",
         title: link.textContent.trim(),
